@@ -1,0 +1,280 @@
+main {
+    margin: 0;
+    background: url("/Fondos/FondoJugadores4.jpg");
+    filter: brightness(70%);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Espacio de Login */
+.EspacioLogin {
+    opacity: 0.95;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px;
+    width: 55%;
+    height: 100%;
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        200px 100%
+    );
+    z-index: 1;
+    transform-origin: right; 
+    transform: scaleX(0);
+
+    animation: expandirRightaLeft 1.2s forwards ease-out;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 180px;
+    margin-bottom: 0;
+}
+
+.logo h2 {
+    color: white;
+    margin-top: 0px;
+}
+.trebolT{
+    color: #167834;
+}
+.trebolL{
+    color: #3dae8d;
+}
+
+.form {
+    width: 50%;
+}
+
+label {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #666;
+    background: #111;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+.inputUsu{
+    border: 3px solid #ffffff;
+}
+.inputContra{
+    border: 3px solid #ffffff;
+    margin-bottom: 8px;
+}
+
+.inputUsu:hover{
+    border: 3px solid #167834;
+    box-shadow: 0 0 10px #167834;
+}
+.inputUsu:focus{
+    border: 3px solid #167834;
+    box-shadow: 0 0 10px #167834;
+}
+.inputContra:hover{
+    border: 3px solid #167834;
+    box-shadow: 0 0 10px #167834;
+}
+.inputContra:focus{
+    border: 3px solid #167834;
+    box-shadow: 0 0 10px #167834;
+}
+
+.checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-left: 5px;
+}
+.mostrarContraseña{
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+}
+.mostrarContraseña:hover{
+    border: 1px solid #167834;
+    box-shadow: 0 0 10px #167834;
+}
+
+.checkbox p{
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.olvidadoContra{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0;
+    opacity: 0.7;
+    font-size: 12px;
+    font-style: italic;
+    cursor: pointer;
+}
+.olvidadoContra:hover{
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.login-btnDIV{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-btn {
+    width: 50%;
+    background: white;
+    font-style: italic;
+    color: black;
+    padding: 8px;
+    border-radius: 15px;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px #000000;
+    transition: transform 0.3s ease-in-out;
+}
+.login-btn:hover{
+    background: #167834;
+    transform: scale(1.1);
+}
+
+hr{
+    width: 100%;
+    height: 2px;
+    background-color: white;
+}
+.social {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+.social-logo{
+    width: 80px;
+    height: 60px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.social-logo-img {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.5s ease-in-out;
+}
+.social-logo:hover{
+    transform: scale(1.1);
+}
+
+.social-logo-imgApple{
+    width: 55px;
+    height: 55px;
+}
+
+.links {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    font-style: italic;
+}
+.links_registrarse{
+    font-size: 18px;
+    cursor: pointer;
+}
+.links_registrarse:hover{
+    text-decoration: underline;
+}
+
+/* Animaciones */
+@keyframes expandirRightaLeft {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+@keyframes subirYAgitar {
+    0% {
+        transform: translateY(100%);
+    }
+    70% {
+        transform: translateY(0);
+    }
+
+    80% {
+        transform: translateY(0) rotate(0deg);
+    }
+    85% {
+        transform: translateY(3px) rotate(2deg);
+    }
+    90% {
+        transform: translateY(-3px) rotate(-2deg);
+    }
+    95% {
+        transform: translateY(2px) rotate(1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+@keyframes bajarYAgitar {
+
+    0% {
+        transform: translateY(-100%);
+    }
+    70% {
+        transform: translateY(0);
+    }
+
+    80% {
+        transform: translateY(0) rotate(0deg);
+    }
+    85% {
+        transform: translateY(-3px) rotate(2deg);
+    }
+    90% {
+        transform: translateY(3px) rotate(-2deg);
+    }
+    95% {
+        transform: translateY(-2px) rotate(1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
