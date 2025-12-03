@@ -6,17 +6,22 @@
         </div>
 
         <div class="form">
-            <label>Correo Electrónico</label>
-            <input class="inputUsu" type="text" placeholder="ejemplo123@ejem.com" 
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required/>
-
-            <label>Nombre de usuario</label>
-            <input class="inputUsu" type="text" placeholder="Enrique_33" 
+            <label>Correo Electrónico o Nombre de usuario</label>
+            <input class="inputUsu" type="text" placeholder="ejemplo123@ejem.com / Enrique_33" 
             pattern=".{6,}" required/>
+
+            <label>REPETIR Correo Electrónico o Nombre de usuario</label>
+            <input class="inputUsu" type="text" 
+            pattern=".{6,}" required/>
+            
 
             <label>Contraseña</label>
             <input class="inputContra" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="password" 
             placeholder="Ejemplo@123" 
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required/>
+            
+            <label>REPETIR Contraseña</label>
+            <input class="inputContra" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="Reppassword"
             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required/>
 
             <div class="checkbox">
@@ -29,9 +34,9 @@
             </div>
 
             <div class="login-btnDIV">
-                <button class="login-btn" type="submit">Iniciar sesión</button>
+                <button class="login-btn" type="submit">Registrarse</button>
             </div>
-            <div class="links">¿No tienes cuenta? entonces dale click a <a class="links_registrarse" routerLink="/register" routerLinkActive="true"><b>registrarse</b></a></div>
+            <div class="links">¿Ya tienes cuenta? entonces dale click a <a class="links_registrarse" routerLink="/login" routerLinkActive="true"><b>iniciar sesión</b></a></div>
             <hr>
             <div class="social">
                 <div class="social-logo">

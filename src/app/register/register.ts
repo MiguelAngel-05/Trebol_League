@@ -3,14 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from "@angular/router"; 
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [FormsModule, RouterLink, RouterLinkActive],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './register.html',
+  styleUrl: './register.css',
 })
-export class Login {
+export class Register {
   mostrarPassword = false;
   password: string = "";
+  Reppassword: string = "";
+  
 
   togglePassword() {
     this.mostrarPassword = !this.mostrarPassword;
