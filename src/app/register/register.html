@@ -5,50 +5,101 @@
             <h2><b class="trebolT">T</b>rebol <b class="trebolL">L</b>eague</h2>
         </div>
 
-        <div class="form">
-            <label>Correo Electrónico o Nombre de usuario</label>
-            <input class="inputUsu" type="text" placeholder="ejemplo123@ejem.com / Enrique_33" 
-            pattern=".{6,}" required/>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="conjuntoInput">
+            <label>Correo Electrónico</label>
+            <input class="inputUsu" id="correoInput" type="text" placeholder="ejemplo123@ejem.com" formControlName="correo"/>
+            @if (correo?.invalid && correo?.touched) {
+                <span class="error"> {{getErrorMessage('correo')}}</span><br>
+            } @else {
+                {{getErrorMessage('correoCorrecto')}}
+            }
+        </div>
+        <div class="conjuntoInput">
+            <label>REPETIR Correo Electrónico</label>
+            <input class="inputUsu" id="correoRepInput" type="text" placeholder="ejemplo123@ejem.com" formControlName="correoRep"/>
+            @if (correoRep?.invalid && correoRep?.touched) {
+                <span class="error"> {{getErrorMessage('correoRep')}}</span>
+            } @else {
+                {{getErrorMessage('correoRepCorrecto')}}
+            }
+        </div>
 
-            <label>REPETIR Correo Electrónico o Nombre de usuario</label>
-            <input class="inputUsu" type="text" 
-            pattern=".{6,}" required/>
-            
+        <div class="conjuntoInput">
+        <label>Nombre de usuario</label>
+            <input class="inputUsu" id="usuarioInput" type="text" placeholder="Enrique_33" formControlName="usuario"/>
+            @if (usuario?.invalid && usuario?.touched) {
+                <span class="error"> {{getErrorMessage('usuario')}}</span><br>
+            } @else {
+                {{getErrorMessage('usuarioCorrecto')}}
+            }
+        </div>
 
-            <label>Contraseña</label>
-            <input class="inputContra" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="password" 
-            placeholder="Ejemplo@123" 
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required/>
-            
-            <label>REPETIR Contraseña</label>
-            <input class="inputContra" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="Reppassword"
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required/>
+        <div class="conjuntoInput">
+        <label>Contraseña</label>
+            <input class="inputContra" id="contraInput" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="password" 
+            placeholder="Ejemplo@123" formControlName="contra"/>
+                @for (rule of passwordRules; track $index) {
+                <p class="ValContra">
+                    @if (rule.pattern.test(contra?.value || '')) {
+                    <span style="color:green">✔ {{rule.label}}</span>
+                    } @else {
+                    <span style="color:red">✖ {{rule.label}}</span>
+                    }
+                </p>
+                }
+            @if (contra?.invalid && contra?.touched) {
+                <span class="error"> {{getErrorMessage('contra')}}</span><br>
+            } @else {
+                {{getErrorMessage('contraCorrecto')}}
+            }
+        </div>
+        <div class="conjuntoInput">
+        <label>REPETIRContraseña</label>
+            <input class="inputContra" id="contraRepInput" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="Reppassword"
+            placeholder="Ejemplo@123" formControlName="contraRep"/>
+            @if (contraRep?.invalid && contraRep?.touched) {
+                <span class="error"> {{getErrorMessage('contraRep')}}</span>
+            } @else {
+                {{getErrorMessage('contraRepCorrecto')}}
+            }
+        </div>
 
-            <div class="checkbox">
-                <input class="mostrarContraseña" type="checkbox" (change)="togglePassword()"/>
-                <p>Mostrar contraseña</p>
-            </div>
-            
-            <div class="olvidadoContra">
-                <p>He olvidado la contraseña</p>
-            </div>
+        <div class="checkbox">
+            <input class="mostrarContraseña" type="checkbox" (change)="togglePassword()"/>
+            <p>Mostrar contraseña</p>
+        </div>
+        
+        <!-- <div class="olvidadoContra">
+            <p>He olvidado la contraseña</p>
+        </div> -->
 
-            <div class="login-btnDIV">
-                <button class="login-btn" type="submit">Registrarse</button>
+        <div class="login-btnDIV">
+            <button class="login-btn" [disabled]="registerForm.invalid" type="submit">Registrarse</button>
+        </div>
+
+        <div class="errorsNoCoincide">
+            @if (registerForm.errors?.['correoNoCoincide']) {
+                <span class="errorNoCoincide">Los correos no coinciden</span>
+            }
+            @if (registerForm.errors?.['noCoincide']) {
+                <span class="errorNoCoincide">Las contraseñas no coinciden</span>
+            }
+        </div>
+
+        <div class="links">¿Ya tienes cuenta? entonces dale click a <a class="links_registrarse" routerLink="/login" routerLinkActive="true"><b>iniciar sesion</b></a></div>
+        <!-- <hr>
+        <div class="social">
+            <div class="social-logo">
+                <img class="social-logo-img" src="/Logos/LogoGoogle.png" alt="Google" />
             </div>
-            <div class="links">¿Ya tienes cuenta? entonces dale click a <a class="links_registrarse" routerLink="/login" routerLinkActive="true"><b>iniciar sesión</b></a></div>
-            <hr>
-            <div class="social">
-                <div class="social-logo">
-                    <img class="social-logo-img" src="/Logos/LogoGoogle.png" alt="Google" />
-                </div>
-                <div class="social-logo">
-                    <img class="social-logo-img" src="/Logos/LogoFacebook.png" alt="Facebook" />
-                </div>
-                <div class="social-logo">
-                    <img class="social-logo-imgApple" src="/Logos/LogoApple.png" alt="Apple" />
-                </div>
+            <div class="social-logo">
+                <img class="social-logo-img" src="/Logos/LogoFacebook.png" alt="Facebook" />
             </div>
-    </div>
+            <div class="social-logo">
+                <img class="social-logo-imgApple" src="/Logos/LogoApple.png" alt="Apple" />
+            </div>
+        </div> -->
+    </form>
     </div>
 </main>

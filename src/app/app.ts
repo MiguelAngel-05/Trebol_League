@@ -11,5 +11,4 @@ import { Login } from "./login/login";
 })
 export class App {
   protected readonly title = signal('Trebol_League');
-  
 }
