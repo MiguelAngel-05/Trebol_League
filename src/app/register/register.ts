@@ -114,7 +114,7 @@ export class Register {
       password: this.contra?.value
     };
 
-    this.http.post('http://localhost:3000/api/register', user).subscribe({
+    this.http.post('https://api-trebol-league.vercel.app/api/register', user).subscribe({
       next: (res) => {
         console.log('Registrado:', res);
         this.router.navigate(['/login']);

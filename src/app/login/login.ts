@@ -79,7 +79,7 @@ export class Login {
       password: this.contra?.value
     };
 
-    this.http.post('http://localhost:3000/api/login', data).subscribe({
+    this.http.post('https://api-trebol-league.vercel.app/api/login', data).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.router.navigate(['/TrebolLeague/menu']);
@@ -87,5 +87,4 @@ export class Login {
       error: (err) => console.error(err)
     });
    }  
-
 }
