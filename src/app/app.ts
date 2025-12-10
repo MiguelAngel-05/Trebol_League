@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
   selector: 'app-root',
   imports: [RouterOutlet, Login, HttpClientModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('Trebol_League');

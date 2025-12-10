@@ -1,21 +1,22 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, FormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router"; 
-import { AuthService } from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule, AuthService],
+  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrls: ['./register.css'],
+
 })
 export class Register {
   private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private router = inject(Router);
   mostrarPassword = false;
   password: string = "";
   Reppassword: string = "";
-
-  constructor(private auth: AuthService, private router: Router) {}
 
   passwordRules = [
   { label: 'Minúscula', pattern: /[a-z]/ },
@@ -105,7 +106,6 @@ export class Register {
   }
 
   onSubmit() {
-    
     if (this.registerForm.invalid) return;
 
     const user = {
@@ -114,7 +114,7 @@ export class Register {
       password: this.contra?.value
     };
 
-    this.auth.register(user).subscribe({
+    this.http.post('http://localhost:3000/api/register', user).subscribe({
       next: (res) => {
         console.log('Registrado:', res);
         this.router.navigate(['/login']);

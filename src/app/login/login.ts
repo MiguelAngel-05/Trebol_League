@@ -1,18 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router"; 
-import { AuthService } from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule, AuthService],
+  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css'],
 })
 export class Login {
 
   private fb = inject(FormBuilder);
-  private auth = inject(AuthService);
+  private http = inject(HttpClient); 
   private router = inject(Router);
   mostrarPassword = false;
   password: string = "";
@@ -71,22 +71,21 @@ export class Login {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-  onSubmit() {
-
+   onSubmit() {
     if (this.loginForm.invalid) return;
 
-      const data = {
-        username: this.usuario?.value,
-        password: this.contra?.value
-      };
+    const data = {
+      username: this.usuario?.value,
+      password: this.contra?.value
+    };
 
-      this.auth.login(data).subscribe({
-        next: (res) => {
-          localStorage.setItem('token', res.token);
-          this.router.navigate(['/TrebolLeague/menu']);
-        },
-        error: (err) => console.error(err)
-      });
-  }
+    this.http.post('http://localhost:3000/api/login', data).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('token', res.token);
+        this.router.navigate(['/TrebolLeague/menu']);
+      },
+      error: (err) => console.error(err)
+    });
+   }  
 
 }
