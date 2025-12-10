@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, FormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from "@angular/router"; 
+import { Router, RouterLink, RouterLinkActive } from "@angular/router"; 
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule],
+  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule, AuthService],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -13,6 +14,8 @@ export class Register {
   mostrarPassword = false;
   password: string = "";
   Reppassword: string = "";
+
+  constructor(private auth: AuthService, private router: Router) {}
 
   passwordRules = [
   { label: 'Minúscula', pattern: /[a-z]/ },
@@ -102,7 +105,22 @@ export class Register {
   }
 
   onSubmit() {
-    this.registerForm.reset();
+    
+    if (this.registerForm.invalid) return;
+
+    const user = {
+      username: this.usuario?.value,
+      email: this.correo?.value,
+      password: this.contra?.value
+    };
+
+    this.auth.register(user).subscribe({
+      next: (res) => {
+        console.log('Registrado:', res);
+        this.router.navigate(['/login']);
+      },
+      error: (err) => console.error(err)
+    });
   }
 }
 

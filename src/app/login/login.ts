@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from "@angular/router"; 
+import { Router, RouterLink, RouterLinkActive } from "@angular/router"; 
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule],
+  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule, AuthService],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
 
   private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
   mostrarPassword = false;
   password: string = "";
 
@@ -69,7 +72,21 @@ export class Login {
   }
 
   onSubmit() {
-    this.loginForm.reset();
+
+    if (this.loginForm.invalid) return;
+
+      const data = {
+        username: this.usuario?.value,
+        password: this.contra?.value
+      };
+
+      this.auth.login(data).subscribe({
+        next: (res) => {
+          localStorage.setItem('token', res.token);
+          this.router.navigate(['/TrebolLeague/menu']);
+        },
+        error: (err) => console.error(err)
+      });
   }
 
 }
