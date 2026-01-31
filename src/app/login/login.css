@@ -1,299 +1,304 @@
+/* Importamos fuente moderna */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
 main {
     margin: 0;
+    overflow: hidden; 
     background: url("/Fondos/FondoJugadores4.jpg");
-    filter: brightness(70%);
+    background-color: rgba(0,0,0,0.5); 
+    background-blend-mode: overlay;
     background-size: cover;
-    width: 100%;
-    height: 100%;
+    background-position: top;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* Espacio de Login */
+/* === CONTENEDOR PRINCIPAL (GLASSMORPHISM) === */
 .EspacioLogin {
-    opacity: 0.95;
-    background-color: black;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding: 0px;
-    width: 60%;
+    
+    padding: 20px 60px 20px 100px; 
+    width: 55%; 
     height: 100%;
+    box-sizing: border-box;
+
     clip-path: polygon(
-        0 0,
+        150px 0, 
         100% 0,
         100% 100%,
-        240px 100%
+        0% 100%
     );
+    
     z-index: 1;
     transform-origin: right; 
     transform: scaleX(0);
-
-    animation: expandirRightaLeft 1.2s forwards ease-out;
+    animation: expandirRightaLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-
+/* LOGO */
 .logo {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .logo img {
     width: 120px;
-    margin-bottom: 0;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 10px rgba(22, 120, 52, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.logo:hover img {
+    transform: scale(1.05);
 }
 
 .logo h2 {
     color: white;
-    margin-top: 0px;
-    margin-bottom: 0;
-}
-.trebolT{
-    color: #167834;
-    margin-bottom: 0;
-}
-.trebolL{
-    color: #3dae8d;
-    margin-bottom: 0;
+    font-size: 2rem;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
+.trebolT { color: #167834; }
+.trebolL { color: #3dae8d; }
+
+/* FORMULARIO */
 form {
-    width: 50%;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 label {
-    font-size: 16px;
-    color: rgb(255, 255, 255);
+    font-size: 14px;
+    font-weight: 500;
+    color: #e0e0e0;
+    margin-bottom: 5px;
+    display: block;
 }
 
+/* INPUTS MODERNOS */
 input {
-    width: 95%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #666;
-    background: #111;
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    background: rgba(255, 255, 255, 0.05); 
     color: white;
-    margin-top: 2px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-.conjuntoInput{
-    margin-bottom: 12px;
+.conjuntoInput {
+    position: relative;
 }
 
-.inputUsu{
-    border: 3px solid #ffffff;
-}
-.inputContra{
-    border: 3px solid #ffffff;
-}
-
-.inputUsu:hover{
-    border: 3px solid #167834;
-    box-shadow: 0 0 10px #167834;
-}
-.inputUsu:focus{
-    border: 3px solid #167834;
-    box-shadow: 0 0 10px #167834;
-}
-.inputContra:hover{
-    border: 3px solid #167834;
-    box-shadow: 0 0 10px #167834;
-}
-.inputContra:focus{
-    border: 3px solid #167834;
-    box-shadow: 0 0 10px #167834;
+/* Estados de Focus */
+input:focus {
+    background: rgba(22, 120, 52, 0.1); 
+    border-color: #3dae8d;
+    box-shadow: 0 0 15px rgba(22, 120, 52, 0.4);
 }
 
-.errorInput{
-    border: 3px solid #ff0000;
+/* Estado de Error (Clase aplicada por Angular) */
+.errorInput {
+    border-color: #ff4d4d !important;
+    background: rgba(255, 77, 77, 0.05) !important;
+    box-shadow: 0 0 5px rgba(255, 77, 77, 0.3);
 }
-.errorInput:hover{
-    border: 3px solid #ff0000;
-    box-shadow: 0 0 10px #ff0000;
-}
-.error{
-    color: #ff0000;
+
+.error {
+    color: #ff6b6b;
     font-size: 12px;
-    margin: 0;
+    margin-top: 4px;
+    display: block;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease;
 }
 
+/* CHECKBOX */
 .checkbox {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    margin-left: 5px;
-}
-.mostrarContraseña{
-    width: 15px;
-    height: 15px;
-    margin: 0;
-    border-radius: 50%;
-    background: white;
-    border: 1px solid #ffffff;
+    gap: 10px;
+    margin-top: 5px;
     cursor: pointer;
 }
-.mostrarContraseña:hover{
-    border: 1px solid #167834;
-    box-shadow: 0 0 10px #167834;
-}
 
-.checkbox p{
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0;
-}
-
-.olvidadoContra{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    margin: 0;
-    opacity: 0.7;
-    font-size: 12px;
-    font-style: italic;
+.mostrarContraseña {
+    width: 18px;
+    height: 18px;
+    accent-color: #167834;
     cursor: pointer;
-}
-.olvidadoContra:hover{
-    opacity: 1;
-    text-decoration: underline;
+    margin: 0;
 }
 
-.login-btnDIV{
+.checkbox p {
+    color: #ccc;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* BOTÓN */
+.login-btnDIV {
     display: flex;
     justify-content: center;
-    align-items: center;
-}
-.login-btn {
-    width: 50%;
-    background: white;
-    font-style: italic;
-    color: black;
-    padding: 8px;
-    border-radius: 15px;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: inset 0 0 10px #000000;
-    transition: transform 0.3s ease-in-out;
-}
-.login-btn:hover{
-    background: #167834;
-    transform: scale(1.1);
-}
-
-hr{
-    width: 100%;
-    height: 2px;
-    background-color: white;
-}
-.social {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
     margin-top: 20px;
 }
 
-.social-logo{
-    width: 80px;
-    height: 60px;
-    background-color: #ffffff;
-    border-radius: 20px;
+.login-btn {
+    width: 100%;
+    background: white;
+    color: #1a1a1a;
+    padding: 12px;
+    border-radius: 30px;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
     display: flex;
-    justify-content: center;
     align-items: center;
-    cursor: pointer;}
-.social-logo-img {
-    width: 50px;
-    height: 50px;
-    transition: transform 0.5s ease-in-out;
-}
-.social-logo:hover{
-    transform: scale(1.1);
+    justify-content: center;
 }
 
-.social-logo-imgApple{
-    width: 55px;
-    height: 55px;
+.login-btn:hover:not(:disabled) {
+    background: linear-gradient(90deg, #167834, #3dae8d);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(22, 120, 52, 0.4);
 }
 
+.login-btn:disabled {
+    background: #555;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* SPINNER DE CARGA */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(0,0,0,0.2);
+    border-radius: 50%;
+    border-top-color: #1a1a1a;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+}
+.login-btn:hover .spinner {
+    border-top-color: white;
+    border-color: rgba(255,255,255,0.3);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* LINKS */
 .links {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 25px;
     font-size: 14px;
-    font-style: italic;
+    color: #aaa;
 }
-.links_registrarse{
-    font-size: 18px;
+
+.links_registrarse {
+    color: #3dae8d;
+    font-size: 15px;
     cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
 }
-.links_registrarse:hover{
+
+.links_registrarse:hover {
+    color: #167834;
     text-decoration: underline;
 }
 
-/* Animaciones */
+/* === NOTIFICACIÓN FLOTANTE (TOAST) === */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: 5px solid; 
+    
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 280px;
+    
+    animation: slideIn 0.5s ease-out;
+}
+
+.toast-notification.success { border-left-color: #2ed573; }
+.toast-notification.success .toast-icon { color: #2ed573; }
+
+.toast-notification.error { border-left-color: #ff4757; }
+.toast-notification.error .toast-icon { color: #ff4757; }
+
+.toast-icon { font-size: 24px; }
+
+.toast-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 14px;
+}
+.toast-message {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #ccc;
+}
+
+/* ANIMACIONES */
 @keyframes expandirRightaLeft {
-    from {
-        transform: scaleX(0);
-    }
-    to {
-        transform: scaleX(1);
-    }
+    from { transform: scaleX(0); opacity: 0; }
+    to { transform: scaleX(1); opacity: 1; }
 }
-@keyframes subirYAgitar {
-    0% {
-        transform: translateY(100%);
-    }
-    70% {
-        transform: translateY(0);
-    }
 
-    80% {
-        transform: translateY(0) rotate(0deg);
-    }
-    85% {
-        transform: translateY(3px) rotate(2deg);
-    }
-    90% {
-        transform: translateY(-3px) rotate(-2deg);
-    }
-    95% {
-        transform: translateY(2px) rotate(1deg);
-    }
-
-    100% {
-        transform: translateY(0) rotate(0deg);
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-@keyframes bajarYAgitar {
 
-    0% {
-        transform: translateY(-100%);
-    }
-    70% {
-        transform: translateY(0);
-    }
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
 
-    80% {
-        transform: translateY(0) rotate(0deg);
-    }
-    85% {
-        transform: translateY(-3px) rotate(2deg);
-    }
-    90% {
-        transform: translateY(3px) rotate(-2deg);
-    }
-    95% {
-        transform: translateY(-2px) rotate(1deg);
-    }
-
-    100% {
-        transform: translateY(0) rotate(0deg);
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .EspacioLogin {
+        width: 100%;
+        clip-path: none;
+        padding: 20px;
     }
 }

@@ -1,67 +1,92 @@
 <main>
-    
     <div class="EspacioLogin">
         <div class="logo">
             <img src="/Logos/LogoTrebolLeague.png" alt="Trebol League" />
             <h2><b class="trebolT">T</b>rebol <b class="trebolL">L</b>eague</h2>
         </div>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="conjuntoInput">
-            <label>Correo Electrónico</label>
-            <input class="inputUsu" id="correoInput" type="text" placeholder="ejemplo123@ejem.com" formControlName="correo"/>
-            @if (correo?.invalid && correo?.touched) {
-                <span class="error"> {{getErrorMessage('correo')}}</span><br>
-            } @else {
-                {{getErrorMessage('correoCorrecto')}}
-            }
-        </div>
 
-        <div class="conjuntoInput">
-        <label>Nombre de usuario</label>
-            <input class="inputUsu" id="usuarioInput" type="text" placeholder="Enrique_33" formControlName="usuario"/>
-            @if (usuario?.invalid && usuario?.touched) {
-                <span class="error"> {{getErrorMessage('usuario')}}</span><br>
-            } @else {
-                {{getErrorMessage('usuarioCorrecto')}}
-            }
-        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            
+            <div class="conjuntoInput">
+                <label>Correo Electrónico</label>
+                <input 
+                    class="inputUsu" 
+                    id="correoInput" 
+                    type="text" 
+                    placeholder="ejemplo123@ejem.com" 
+                    formControlName="correo"
+                    [class.errorInput]="correo?.invalid && correo?.touched" 
+                />
+                
+                @if (correo?.invalid && correo?.touched) {
+                    <span class="error"> {{getErrorMessage('correo')}}</span>
+                }
+            </div>
 
-        <div class="conjuntoInput">
-        <label>Contraseña</label>
-            <input class="inputContra" id="contraInput" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="password" 
-            placeholder="Ejemplo@123" formControlName="contra"/>
-            @if (contra?.invalid && contra?.touched) {
-                <span class="error"> {{getErrorMessage('contra')}}</span><br>
-            } @else {
-                {{getErrorMessage('contraCorrecto')}}
-            }
-        </div>
+            <div class="conjuntoInput">
+                <label>Nombre de usuario</label>
+                <input 
+                    class="inputUsu" 
+                    id="usuarioInput" 
+                    type="text" 
+                    placeholder="Enrique_33" 
+                    formControlName="usuario"
+                    [class.errorInput]="usuario?.invalid && usuario?.touched"
+                />
+                
+                @if (usuario?.invalid && usuario?.touched) {
+                    <span class="error"> {{getErrorMessage('usuario')}}</span>
+                }
+            </div>
 
-        <div class="checkbox">
-            <input class="mostrarContraseña" type="checkbox" (change)="togglePassword()"/>
-            <p>Mostrar contraseña</p>
-        </div>
+            <div class="conjuntoInput">
+                <label>Contraseña</label>
+                <input 
+                    class="inputContra" 
+                    id="contraInput" 
+                    [type]="mostrarPassword ? 'text' : 'password'" 
+                    placeholder="Ejemplo@123" 
+                    formControlName="contra"
+                    [class.errorInput]="contra?.invalid && contra?.touched"
+                />
+                
+                @if (contra?.invalid && contra?.touched) {
+                    <span class="error"> {{getErrorMessage('contra')}}</span>
+                }
+            </div>
+
+            <div class="checkbox" (click)="togglePassword()">
+                <input class="mostrarContraseña" type="checkbox" [checked]="mostrarPassword" (click)="$event.stopPropagation(); togglePassword()"/>
+                <p>Mostrar contraseña</p>
+            </div>
         
-        <!-- <div class="olvidadoContra">
-            <p>He olvidado la contraseña</p>
-        </div> -->
+            <div class="login-btnDIV">
+                <button class="login-btn" [disabled]="loginForm.invalid || isLoading" type="submit">
+                    @if (isLoading) {
+                        <div class="spinner"></div> Procesando...
+                    } @else {
+                        Iniciar sesión
+                    }
+                </button>
+            </div>
 
-        <div class="login-btnDIV">
-            <button class="login-btn" [disabled]="loginForm.invalid" type="submit">Iniciar sesión</button>
-        </div>
-        <div class="links">¿No tienes cuenta? entonces dale click a <a class="links_registrarse" routerLink="/register" routerLinkActive="true"><b>registrarse</b></a></div>
-        <!-- <hr>
-        <div class="social">
-            <div class="social-logo">
-                <img class="social-logo-img" src="/Logos/LogoGoogle.png" alt="Google" />
+            <div class="links">
+                ¿No tienes cuenta? entonces dale click a 
+                <a class="links_registrarse" routerLink="/register" routerLinkActive="true"><b>registrarse</b></a>
             </div>
-            <div class="social-logo">
-                <img class="social-logo-img" src="/Logos/LogoFacebook.png" alt="Facebook" />
-            </div>
-            <div class="social-logo">
-                <img class="social-logo-imgApple" src="/Logos/LogoApple.png" alt="Apple" />
-            </div>
-        </div> -->
-    </form>
+
+        </form>
     </div>
+
+    @if (notificationMsg) {
+        <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+            <div class="toast-icon">
+                {{ isSuccess ? '✔' : '✖' }}
+            </div>
+            <div class="toast-content">
+                <p class="toast-title">{{ isSuccess ? '¡Éxito!' : 'Aviso' }}</p>
+                <p class="toast-message">{{ notificationMsg }}</p>
+            </div>
+        </div>
+    }
 </main>

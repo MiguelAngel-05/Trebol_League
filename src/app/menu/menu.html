@@ -1,1 +1,83 @@
-<p>menu works!</p>
+<main class="main-container">
+    <img class="logoTrebol" src="Logos/LogoTrebolLeague.png" alt="logo de trebol league">
+    
+    <header class="main-header">
+        <div class="header-options top-row">          
+            <div class="option-group">
+                <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+                <p>{{user?.username || 'Usuario'}}</p>
+            </div>
+            <span class="separator-header">/</span>
+            <div class="option-group">
+                <p>1.034.500</p>
+                <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+            </div>
+        </div>
+        
+        <div class="header-optionsB bottom-row">
+            <div class="option-group icon-hover">
+                <img class="pinchar" src="Utensilios/Emojis/flecha-retroceso.png" alt="Atras" (click)="volverAtras()">
+            </div>
+            <span class="separator-header">/</span>
+            <div class="option-group icon-hover">
+                <img class="pinchar" src="Utensilios/Emojis/info-blanco.png" alt="Info" (click)="verInfo()">
+            </div>
+            <span class="separator-header">/</span>
+            <div class="option-group icon-hover">
+                <img class="pinchar" src="Utensilios/Emojis/carrito-blanco.png" alt="Tienda" (click)="irATienda()">
+            </div>
+        </div>
+
+        <div class="div-img-user">
+           <img class="img-user" src="Ejemplos/img-user.jpeg" alt="imagen de usuario"> 
+        </div>
+    </header>
+
+    <section class="home-content">
+        
+        <div class="home-left glass-panel">
+            <div class="panel-header">
+                <h2 class="plantilla-title">Mi Plantilla</h2>
+                <div class="badge-plantilla">11 Titulares</div>
+            </div>
+            <div class="campo-futbol">
+                <img src="/Utensilios/Jugadores/plantilla.png" alt="Campo de fútbol">
+            </div>
+        </div>
+
+        <div class="home-right">
+            <div class="home-card mercado" (click)="irAMercado()">
+                <div class="card-overlay"></div>
+                <p class="p-card">MERCADO</p> 
+            </div>
+            
+            <div class="home-card calendario" (click)="irACalendario()">
+                <div class="card-overlay"></div>
+                <p class="p-card">CALENDARIO</p> 
+            </div>
+            
+            <div class="home-card clasificacion" (click)="irAClasificacion()">
+                <div class="card-overlay"></div>
+                <p class="p-card">CLASIFICACIÓN</p>
+            </div>
+            
+            <div class="home-card ligas" (click)="volverAtras()">
+                <div class="card-overlay"></div>
+                <p class="p-card">LIGAS</p>
+            </div>
+        </div>
+    </section>
+
+    @if (notificationMsg) {
+        <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+            <div class="toast-icon">
+                {{ isSuccess ? '✔' : 'i' }}
+            </div>
+            <div class="toast-content">
+                <p class="toast-title">{{ isSuccess ? '¡Vamos!' : 'Ups...' }}</p>
+                <p class="toast-message">{{ notificationMsg }}</p>
+            </div>
+        </div>
+    }
+
+</main>

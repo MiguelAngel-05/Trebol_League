@@ -1,0 +1,106 @@
+<main class="main-container">
+    
+    <header class="main-header">
+        <div class="header-options top-row">          
+            <div class="option-group">
+                <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+                <p>{{user?.username || 'Usuario'}}</p>
+            </div>
+            <span class="separator-header">/</span>
+            <div class="option-group">
+                <p>1.034.500</p> <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+            </div>
+        </div>
+        
+        <div class="header-optionsB bottom-row">
+            <div class="option-group icon-hover">
+                <img class="pinchar" src="Utensilios/Emojis/flecha-retroceso.png" alt="Atras" (click)="volverAtras()">
+            </div>
+        </div>
+
+        <div class="div-img-user">
+           <img class="img-user" src="Ejemplos/img-user.jpeg" alt="imagen de usuario"> 
+        </div>
+    </header>
+
+    <img class="logoTrebol" src="Logos/LogoTrebolLeague.png" alt="logo de trebol league">
+
+    <section class="content">
+        <div class="titulo-ligas">
+            <h1>Mis Ligas</h1>
+        </div>
+        
+        <div class="contenedor-ligas">
+            @for (liga of ligas; track $index) {
+                <div class="div-liga" (click)="irALiga(liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
+                    <div class="div-img-liga">
+                        <img class="img-liga" [src]="liga.img" alt="escudo">
+                    </div>
+                    
+                    <div class="div-nombre-liga">
+                        <p>{{liga.nombre}}</p>
+                    </div>
+                    
+                    <div class="div-info-liga">
+                        <p>{{liga.miembros}}</p>
+                        <span class="separator">|</span>
+                        <p>{{liga.pts}} pts</p>
+                        <span class="separator">|</span>
+                        <p class="valor-tc">{{liga.valor | number}} Tc</p>
+                    </div>
+                    
+                    <div class="div-opciones-liga" (click)="toggleMenu($index, $event)">
+                        <img class="icon" src="Utensilios/Emojis/tres-puntos.png" alt="opciones">
+
+                        @if (activeMenuIndex === $index) {
+                            <div class="dropdown-menu">
+                                <div class="menu-item salir" (click)="salirDeLiga($index, $event)">
+                                    <span>Salir de la liga</span>
+                                    <span class="trash-icon">🗑️</span>
+                                </div>
+                                </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="acciones-ligas">
+            <div class="btn-liga crear" (click)="crearLiga()">
+                Crear liga
+            </div>
+            <div class="btn-liga unirse" (click)="unirseLiga()">
+                Unirse a liga
+            </div>
+        </div>
+    </section>
+
+    @if (notificationMsg) {
+        <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+            <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+            <div class="toast-content">
+                <p class="toast-message">{{ notificationMsg }}</p>
+            </div>
+        </div>
+    }
+    @if (mostrarModal) {
+        <div class="modal-overlay" (click)="cerrarModal()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>Crear Nueva Liga</h2>
+                    <span class="close-btn" (click)="cerrarModal()">&times;</span>
+                </div>
+                
+                <div class="modal-body">
+                    <label>Nombre de la liga:</label>
+                    <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                    <button class="btn-confirmar" (click)="confirmarCreacion()">Crear</button>
+                </div>
+            </div>
+        </div>
+    }
+</main>

@@ -6,100 +6,125 @@
         </div>
 
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <div class="conjuntoInput">
-            <label>Correo Electrónico</label>
-            <input class="inputUsu" id="correoInput" type="text" placeholder="ejemplo123@ejem.com" formControlName="correo"/>
-            @if (correo?.invalid && correo?.touched) {
-                <span class="error"> {{getErrorMessage('correo')}}</span><br>
-            } @else {
-                {{getErrorMessage('correoCorrecto')}}
-            }
-        </div>
-        <div class="conjuntoInput">
-            <label>REPETIR Correo Electrónico</label>
-            <input class="inputUsu" id="correoRepInput" type="text" placeholder="ejemplo123@ejem.com" formControlName="correoRep"/>
-            @if (correoRep?.invalid && correoRep?.touched) {
-                <span class="error"> {{getErrorMessage('correoRep')}}</span>
-            } @else {
-                {{getErrorMessage('correoRepCorrecto')}}
-            }
-        </div>
-
-        <div class="conjuntoInput">
-        <label>Nombre de usuario</label>
-            <input class="inputUsu" id="usuarioInput" type="text" placeholder="Enrique_33" formControlName="usuario"/>
-            @if (usuario?.invalid && usuario?.touched) {
-                <span class="error"> {{getErrorMessage('usuario')}}</span><br>
-            } @else {
-                {{getErrorMessage('usuarioCorrecto')}}
-            }
-        </div>
-
-        <div class="conjuntoInput">
-        <label>Contraseña</label>
-            <input class="inputContra" id="contraInput" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="password" 
-            placeholder="Ejemplo@123" formControlName="contra"/>
-                @for (rule of passwordRules; track $index) {
-                <p class="ValContra">
-                    @if (rule.pattern.test(contra?.value || '')) {
-                    <span style="color:green">✔ {{rule.label}}</span>
-                    } @else {
-                    <span style="color:red">✖ {{rule.label}}</span>
-                    }
-                </p>
+            
+            <div class="conjuntoInput">
+                <label>Correo Electrónico</label>
+                <input class="inputUsu" 
+                       type="text" 
+                       placeholder="ejemplo123@ejem.com" 
+                       formControlName="correo"
+                       [class.errorInput]="correo?.invalid && correo?.touched"/>
+                
+                @if (correo?.invalid && correo?.touched) {
+                    <span class="error">{{getErrorMessage('correo')}}</span>
                 }
-            @if (contra?.invalid && contra?.touched) {
-                <span class="error"> {{getErrorMessage('contra')}}</span><br>
-            } @else {
-                {{getErrorMessage('contraCorrecto')}}
-            }
-        </div>
-        <div class="conjuntoInput">
-        <label>REPETIRContraseña</label>
-            <input class="inputContra" id="contraRepInput" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="Reppassword"
-            placeholder="Ejemplo@123" formControlName="contraRep"/>
-            @if (contraRep?.invalid && contraRep?.touched) {
-                <span class="error"> {{getErrorMessage('contraRep')}}</span>
-            } @else {
-                {{getErrorMessage('contraRepCorrecto')}}
-            }
-        </div>
-
-        <div class="checkbox">
-            <input class="mostrarContraseña" type="checkbox" (change)="togglePassword()"/>
-            <p>Mostrar contraseña</p>
-        </div>
-        
-        <!-- <div class="olvidadoContra">
-            <p>He olvidado la contraseña</p>
-        </div> -->
-
-        <div class="login-btnDIV">
-            <button class="login-btn" [disabled]="registerForm.invalid" type="submit">Registrarse</button>
-        </div>
-
-        <div class="errorsNoCoincide">
-            @if (registerForm.errors?.['correoNoCoincide']) {
-                <span class="errorNoCoincide">Los correos no coinciden</span>
-            }
-            @if (registerForm.errors?.['noCoincide']) {
-                <span class="errorNoCoincide">Las contraseñas no coinciden</span>
-            }
-        </div>
-
-        <div class="links">¿Ya tienes cuenta? entonces dale click a <a class="links_registrarse" routerLink="/login" routerLinkActive="true"><b>iniciar sesion</b></a></div>
-        <!-- <hr>
-        <div class="social">
-            <div class="social-logo">
-                <img class="social-logo-img" src="/Logos/LogoGoogle.png" alt="Google" />
             </div>
-            <div class="social-logo">
-                <img class="social-logo-img" src="/Logos/LogoFacebook.png" alt="Facebook" />
+
+            <div class="conjuntoInput">
+                <label>Repetir Correo</label>
+                <input class="inputUsu" 
+                       type="text" 
+                       placeholder="Confirmar correo" 
+                       formControlName="correoRep"
+                       [class.errorInput]="correoRep?.invalid && correoRep?.touched || registerForm.errors?.['correoNoCoincide'] && correoRep?.touched"/>
+                
+                @if (correoRep?.invalid && correoRep?.touched) {
+                    <span class="error">{{getErrorMessage('correoRep')}}</span>
+                }
             </div>
-            <div class="social-logo">
-                <img class="social-logo-imgApple" src="/Logos/LogoApple.png" alt="Apple" />
+
+            <div class="conjuntoInput">
+                <label>Nombre de usuario</label>
+                <input class="inputUsu" 
+                       type="text" 
+                       placeholder="Enrique_33" 
+                       formControlName="usuario"
+                       [class.errorInput]="usuario?.invalid && usuario?.touched"/>
+                
+                @if (usuario?.invalid && usuario?.touched) {
+                    <span class="error">{{getErrorMessage('usuario')}}</span>
+                }
             </div>
-        </div> -->
-    </form>
+
+            <div class="conjuntoInput">
+                <label>Contraseña</label>
+                <input class="inputContra" 
+                       [type]="mostrarPassword ? 'text' : 'password'" 
+                       placeholder="Tu contraseña" 
+                       formControlName="contra"
+                       [class.errorInput]="contra?.invalid && contra?.touched"/>
+                
+                <div class="reglas-container">
+                    @for (rule of passwordRules; track $index) {
+                        <p class="ValContra">
+                            @if (rule.pattern.test(contra?.value || '')) {
+                                <span style="color:#2ed573">✔ {{rule.label}}</span>
+                            } @else {
+                                <span style="color:#777">• {{rule.label}}</span> 
+                            }
+                        </p>
+                    }
+                </div>
+                
+                @if (contra?.invalid && contra?.touched) {
+                    <span class="error">{{getErrorMessage('contra')}}</span>
+                }
+            </div>
+
+            <div class="conjuntoInput">
+                <label>Repetir Contraseña</label>
+                <input class="inputContra" 
+                       [type]="mostrarPassword ? 'text' : 'password'" 
+                       placeholder="Confirmar contraseña" 
+                       formControlName="contraRep"
+                       [class.errorInput]="contraRep?.invalid && contraRep?.touched || registerForm.errors?.['noCoincide'] && contraRep?.touched"/>
+                
+                @if (contraRep?.invalid && contraRep?.touched) {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="checkbox" (click)="togglePassword()">
+                <input class="mostrarContraseña" type="checkbox" [checked]="mostrarPassword" (click)="$event.stopPropagation(); togglePassword()"/>
+                <p>Mostrar contraseña</p>
+            </div>
+
+            <div class="errorsNoCoincide">
+                @if (registerForm.errors?.['correoNoCoincide'] && (correoRep?.touched || correoRep?.dirty)) {
+                    <span class="errorNoCoincide">Los correos no coinciden</span>
+                }
+                @if (registerForm.errors?.['noCoincide'] && (contraRep?.touched || contraRep?.dirty)) {
+                    <span class="errorNoCoincide" style="margin-top: 5px;">Las contraseñas no coinciden</span>
+                }
+            </div>
+
+            <div class="login-btnDIV">
+                <button class="login-btn" [disabled]="registerForm.invalid || isLoading" type="submit">
+                    @if (isLoading) {
+                        <div class="spinner"></div> Registrando...
+                    } @else {
+                        Registrarse
+                    }
+                </button>
+            </div>
+
+            <div class="links">
+                ¿Ya tienes cuenta? 
+                <a class="links_registrarse" routerLink="/login" routerLinkActive="true"><b>Iniciar sesión</b></a>
+            </div>
+
+        </form>
     </div>
+
+    @if (notificationMsg) {
+        <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+            <div class="toast-icon">
+                {{ isSuccess ? '✔' : '✖' }}
+            </div>
+            <div class="toast-content">
+                <p class="toast-title">{{ isSuccess ? '¡Éxito!' : 'Aviso' }}</p>
+                <p class="toast-message">{{ notificationMsg }}</p>
+            </div>
+        </div>
+    }
 </main>

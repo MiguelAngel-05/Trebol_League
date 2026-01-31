@@ -1,0 +1,41 @@
+<section class="home-content">
+
+  <!-- PANEL IZQUIERDO -->
+  <div class="home-left">
+    <h2 class="plantilla-title">Plantilla - Enrique_33</h2>
+    <p class="plantilla-subtitle">4-2-3-1</p>
+
+    <div class="campo-futbol">
+      <!-- Simulación de posiciones -->
+      <div class="jugador gk"></div>
+
+      <div class="linea defensa">
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+      </div>
+
+      <div class="linea medio">
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+      </div>
+
+      <div class="linea ataque">
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+        <div class="jugador"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO -->
+  <div class="home-right">
+    <div class="home-card mercado">Mercado</div>
+    <div class="home-card calendario">Calendario</div>
+    <div class="home-card clasificacion">Clasificación</div>
+    <div class="home-card ligas">Ligas</div>
+  </div>
+
+</section>
