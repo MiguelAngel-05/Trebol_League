@@ -135,7 +135,7 @@ cerrarModalUnirse() {
       });
   }
 
-  irALiga(nombreLiga: string, id_liga: number) {
+  irALiga(id_liga: number, nombreLiga: string) {
     this.mostrarNotificacion(`Entrando a ${nombreLiga}...`, true);
     setTimeout(() => {
       this.router.navigate(['/ligas', id_liga, 'menu']); // Ajusta a tu ruta real
