@@ -2,14 +2,8 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
-
-interface Jugador {
-  nombre: string;
-  posicion: 'DL' | 'MC' | 'DF' | 'PT';
-  puntos: number;
-  valor: number;
-  equipo?: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { Jugador } from '../models/Jugador';
 
 @Component({
   selector: 'app-mercado',
@@ -21,9 +15,14 @@ interface Jugador {
 export class Mercado {
   user: any = null;
   id_liga!: number;
+  jugadores: Jugador[] = [];
+  jugadoresMostrados: Jugador[] = [];
+
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+
 
   // Variables UI
   filtroActivo: string = 'TODOS';
@@ -33,45 +32,57 @@ export class Mercado {
   notificationMsg = '';
   isSuccess = false;
 
-  // Datos de prueba
-  allJugadores: Jugador[] = [
-    { nombre: 'Vinicius Jr', posicion: 'DL', puntos: 32, valor: 26000400 },
-    { nombre: 'Haaland', posicion: 'DL', puntos: 32, valor: 26000400 },
-    { nombre: 'Bellingham', posicion: 'MC', puntos: 32, valor: 26000400 },
-    { nombre: 'Rodri', posicion: 'MC', puntos: 28, valor: 18000000 },
-    { nombre: 'Van Dijk', posicion: 'DF', puntos: 32, valor: 26000400 },
-    { nombre: 'Rüdiger', posicion: 'DF', puntos: 15, valor: 12000000 },
-    { nombre: 'Courtois', posicion: 'PT', puntos: 32, valor: 26000400 },
-    { nombre: 'Mbappe', posicion: 'DL', puntos: 32, valor: 26000400 },
-  ];
-
-  // Jugadores que se muestran (filtrados)
-  jugadoresMostrados: Jugador[] = [];
-
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
+
     const token = localStorage.getItem('token');
     if (token) {
-        try {
-            this.user = jwtDecode(token);
-        } catch (e) { console.error(e); }
+      try {
+        this.user = jwtDecode(token);
+      } catch (e) {}
     }
-    this.jugadoresMostrados = [...this.allJugadores];
+
+    this.cargarMercado();
   }
+
 
   // Filtrado
   filtrarPor(posicion: string) {
     this.filtroActivo = posicion;
-    
-    this.jugadoresMostrados = []; 
-    setTimeout(() => {
-        if (posicion === 'TODOS') {
-            this.jugadoresMostrados = [...this.allJugadores];
-        } else {
-            this.jugadoresMostrados = this.allJugadores.filter(j => j.posicion === posicion);
-        }
-    }, 50);
+
+    if (posicion === 'TODOS') {
+      this.jugadoresMostrados = [...this.jugadores];
+    } else {
+      this.jugadoresMostrados = this.jugadores.filter(
+        j => j.posicion === posicion
+      );
+    }
   }
+
+
+  cargarMercado() {
+  this.isLoading = true;
+
+  this.http.get<Jugador[]>(
+    `https://TU_BACKEND/api/mercado/${this.id_liga}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+  ).subscribe({
+    next: jugadores => {
+      this.jugadores = jugadores;
+      this.jugadoresMostrados = [...jugadores];
+      this.isLoading = false;
+    },
+    error: () => {
+      this.isLoading = false;
+    }
+  });
+}
+
+
 
   // Acciones
   comprarJugador(jugador: Jugador) {

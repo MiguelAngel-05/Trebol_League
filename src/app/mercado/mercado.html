@@ -1,144 +1,136 @@
 <main class="main-container">
-    
-    <header class="main-header">
-        <div class="header-options top-row">          
-            <div class="option-group">
-                <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
-                <p>{{user?.username || 'Usuario'}}</p>
-            </div>
-            <span class="separator-header">/</span>
-            <div class="option-group">
-                <p>1.034.500</p>
-                <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
-            </div>
+
+  <header class="main-header">
+    <div class="header-options top-row">
+      <div class="option-group">
+        <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+        <p>{{ user?.username || 'Usuario' }}</p>
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group">
+        <p>1.034.500</p>
+        <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+      </div>
+    </div>
+
+    <div class="header-optionsB bottom-row">
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/home-blanco.png" alt="Inicio" (click)="volverAtras()">
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/info-blanco.png" alt="Info" (click)="verInfo()">
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/carrito-blanco.png" alt="Tienda" (click)="irATienda()">
+      </div>
+    </div>
+
+    <div class="div-img-user">
+      <img class="img-user" src="Ejemplos/img-user.jpeg" alt="imagen de usuario">
+    </div>
+  </header>
+
+  <aside class="sidebar-filters">
+    <h1 class="page-title">Mercado</h1>
+
+    <div class="filters-list">
+      <div class="filter-item" [class.active]="filtroActivo === 'TODOS'" (click)="filtrarPor('TODOS')">
+        <div class="dot-indicator"></div>
+        <span class="filter-name">Todos</span>
+      </div>
+
+      <div class="filter-item" [class.active]="filtroActivo === 'DL'" (click)="filtrarPor('DL')">
+        <div class="dot-indicator"></div>
+        <div class="tag dl">DL</div>
+        <span class="filter-name">Delanteros</span>
+      </div>
+
+      <div class="filter-item" [class.active]="filtroActivo === 'MC'" (click)="filtrarPor('MC')">
+        <div class="dot-indicator"></div>
+        <div class="tag mc">MC</div>
+        <span class="filter-name">Medios</span>
+      </div>
+
+      <div class="filter-item" [class.active]="filtroActivo === 'DF'" (click)="filtrarPor('DF')">
+        <div class="dot-indicator"></div>
+        <div class="tag df">DF</div>
+        <span class="filter-name">Defensas</span>
+      </div>
+
+      <div class="filter-item" [class.active]="filtroActivo === 'PT'" (click)="filtrarPor('PT')">
+        <div class="dot-indicator"></div>
+        <div class="tag pt">PT</div>
+        <span class="filter-name">Porteros</span>
+      </div>
+    </div>
+  </aside>
+
+  <section class="content-area">
+    <div class="scrollable-content">
+
+      <div class="league-banner">
+        <div class="banner-image-placeholder"></div>
+        <div class="banner-overlay">
+          <div class="banner-top-tag">LIGA DE FÚTBOL</div>
+          <h2>Trebol League</h2>
+          <div class="banner-bottom-site">REALLYGREATSITE.COM</div>
         </div>
-        
-        <div class="header-optionsB bottom-row">
-            <div class="option-group icon-hover">
-                <img class="pinchar" src="Utensilios/Emojis/home-blanco.png" alt="Inicio" (click)="volverAtras()">
-            </div>
-            <span class="separator-header">/</span>
-            <div class="option-group icon-hover">
-                <img class="pinchar" src="Utensilios/Emojis/info-blanco.png" alt="Info" (click)="verInfo()">
-            </div>
-            <span class="separator-header">/</span>
-            <div class="option-group icon-hover">
-                <img class="pinchar" src="Utensilios/Emojis/carrito-blanco.png" alt="Tienda" (click)="irATienda()">
-            </div>
+      </div>
+
+      <div class="balance-cards">
+        <div class="card-balance green-theme">
+          <div class="icon-circle-thick">C</div>
+          <div class="balance-text">
+            <span class="label-balance">Mi saldo:</span>
+            <span class="amount positive">1.034.500 Tc</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="players-list-container">
+        <div class="list-header">
+          <span style="flex: 2;">Jugador</span>
+          <span style="flex: 1; text-align: right;">Precio</span>
         </div>
 
-        <div class="div-img-user">
-           <img class="img-user" src="Ejemplos/img-user.jpeg" alt="imagen de usuario"> 
+        <div class="list-scroll">
+          <div
+            class="player-row"
+            *ngFor="let jugador of jugadoresMostrados; let i = index"
+            [style.animation-delay]="i * 0.05 + 's'"
+            (click)="comprarJugador(jugador)"
+          >
+            <div class="col-name">
+              <div class="player-avatar-placeholder"></div>
+              <span class="name-text">{{ jugador.nombre }}</span>
+              <div class="pos-badge" [ngClass]="jugador.posicion.toLowerCase()">
+                {{ jugador.posicion }}
+              </div>
+            </div>
+
+            <div class="col-value">
+              {{ formatearDinero(jugador.precio) }} Tc
+            </div>
+          </div>
+
+          @if (jugadoresMostrados.length === 0) {
+            <div class="empty-msg">No hay jugadores en esta posición</div>
+          }
         </div>
-    </header>
-    
-    <aside class="sidebar-filters">
-        <h1 class="page-title">Mercado</h1>
+      </div>
 
-        <div class="filters-list">
-            <div class="filter-item" [class.active]="filtroActivo === 'TODOS'" (click)="filtrarPor('TODOS')">
-                <div class="dot-indicator"></div>
-                <span class="filter-name">Todos</span>
-            </div>
+    </div>
+  </section>
 
-            <div class="filter-item" [class.active]="filtroActivo === 'DL'" (click)="filtrarPor('DL')">
-                <div class="dot-indicator"></div>
-                <div class="tag dl">DL</div>
-                <span class="filter-name">Delanteros</span>
-            </div>
-
-            <div class="filter-item" [class.active]="filtroActivo === 'MC'" (click)="filtrarPor('MC')">
-                <div class="dot-indicator"></div>
-                <div class="tag mc">MC</div>
-                <span class="filter-name">Medios</span>
-            </div>
-
-            <div class="filter-item" [class.active]="filtroActivo === 'DF'" (click)="filtrarPor('DF')">
-                <div class="dot-indicator"></div>
-                <div class="tag df">DF</div>
-                <span class="filter-name">Defensas</span>
-            </div>
-
-            <div class="filter-item" [class.active]="filtroActivo === 'PT'" (click)="filtrarPor('PT')">
-                <div class="dot-indicator"></div>
-                <div class="tag pt">PT</div>
-                <span class="filter-name">Porteros</span>
-            </div>
-        </div>
-    </aside>
-
-    <section class="content-area">
-        <div class="scrollable-content">
-        
-            <div class="league-banner">
-                <div class="banner-image-placeholder"></div> 
-                <div class="banner-overlay">
-                    <div class="banner-top-tag">LIGA DE FÚTBOL</div>
-                    <h2>Trebol League</h2>
-                    <div class="banner-bottom-site">REALLYGREATSITE.COM</div>
-                </div>
-            </div>
-
-            <div class="balance-cards">
-                <div class="card-balance green-theme">
-                    <div class="icon-circle-thick">C</div>
-                    <div class="balance-text">
-                        <span class="label-balance">Mi saldo:</span>
-                        <span class="amount positive">1.034.500 Tc</span>
-                    </div>
-                </div>
-                <div class="card-balance red-theme">
-                    <div class="icon-circle-thick red-icon">C</div>
-                    <div class="balance-text">
-                        <span class="label-balance">Saldo futuro:</span>
-                        <span class="amount negative">- 324.200 Tc</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="players-list-container">
-                <div class="list-header">
-                    <span style="flex: 2;">Jugador</span>
-                    <span style="flex: 0.5; text-align: center;">Pts.</span>
-                    <span style="flex: 0.5; text-align: center;">Equipo</span>
-                    <span style="flex: 1; text-align: right;">Valor</span>
-                </div>
-
-                <div class="list-scroll">
-                    <div class="player-row" 
-                         *ngFor="let jugador of jugadoresMostrados; let i = index" 
-                         [style.animation-delay]="i * 0.05 + 's'"
-                         (click)="comprarJugador(jugador)">
-                        
-                        <div class="col-name">
-                            <div class="player-avatar-placeholder"></div>
-                            <span class="name-text">{{ jugador.nombre }}</span>
-                            <div class="pos-badge" [ngClass]="jugador.posicion.toLowerCase()">
-                                {{ jugador.posicion }}
-                            </div>
-                        </div>
-                        <div class="col-pts">{{ jugador.puntos }}</div>
-                        <div class="col-team">
-                            <div class="team-placeholder"></div>
-                        </div>
-                        <div class="col-value">{{ formatearDinero(jugador.valor) }} Tc</div>
-                    </div>
-                    
-                    @if (jugadoresMostrados.length === 0) {
-                        <div class="empty-msg">No hay jugadores en esta posición</div>
-                    }
-                </div>
-            </div>
-        </div> 
-    </section>
-
-    @if (notificationMsg) {
-        <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
-            <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-            <div class="toast-content">
-                <p class="toast-message">{{ notificationMsg }}</p>
-            </div>
-        </div>
-    }
+  @if (notificationMsg) {
+    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+      <div class="toast-content">
+        <p class="toast-message">{{ notificationMsg }}</p>
+      </div>
+    </div>
+  }
 
 </main>
