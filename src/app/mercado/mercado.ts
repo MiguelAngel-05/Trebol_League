@@ -72,8 +72,8 @@ export class Mercado {
         }
       }
     ).subscribe({
-      next: (response: any) => {
-        this.jugadores = response.jugadores;
+      next: (response: Jugador[]) => {
+        this.jugadores = response;
         this.jugadoresMostrados = [...this.jugadores];
         this.isLoading = false;
       },
