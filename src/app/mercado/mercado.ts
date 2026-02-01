@@ -63,28 +63,25 @@ export class Mercado {
 
 
   cargarMercado() {
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.http.get<Jugador[]>(
-    `${this.apiBase}/api/mercado/${this.id_liga}`,
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+    this.http.get<Jugador[]>(`${this.apiBase}/api/mercado/${this.id_liga}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       }
-    }
-  ).subscribe({
-    next: jugadores => {
-      this.jugadores = jugadores;
-      this.jugadoresMostrados = [...jugadores];
-      this.isLoading = false;
-    },
-    error: () => {
-      this.isLoading = false;
-    }
-  });
-}
-
-
+    ).subscribe({
+      next: (response: any) => {
+        this.jugadores = response.jugadores;
+        this.jugadoresMostrados = [...this.jugadores];
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
+  }
 
   // Acciones
   comprarJugador(jugador: Jugador) {
