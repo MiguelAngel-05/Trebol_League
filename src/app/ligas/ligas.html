@@ -92,15 +92,15 @@
             </div>
 
             <div class="modal-body">
-                <label>ID de la liga:</label>
-                <input type="number" [(ngModel)]="idLigaUnirse" placeholder="Ej: 2" autofocus>
+                <label>Nombre de la liga:</label>
+                <input type="text" [(ngModel)]="NombreLigaUnirse" placeholder="Ej: Treboliners" autofocus>
                 <label>Clave de la liga:</label>
                 <input type="text" [(ngModel)]="claveLigaUnirse" placeholder="Ej: 1234abcd">
             </div>
 
             <div class="modal-footer">
                 <button class="btn-cancelar" (click)="cerrarModalUnirse()">Cancelar</button>
-                <button class="btn-confirmar" (click)="unirseLiga(idLigaUnirse, claveLigaUnirse)">Unirse</button>
+                <button class="btn-confirmar" (click)="unirseLiga(NombreLigaUnirse, claveLigaUnirse)">Unirse</button>
             </div>
         </div>
     </div>

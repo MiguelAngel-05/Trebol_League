@@ -4,17 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from "@angular/forms";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Liga } from '../models/Liga';
 
-// Modelo actualizado de Liga
-export interface Liga {
-  id_liga: number;
-  nombre: string;
-  numero_jugadores: number;
-  clave?: string;
-  dinero?: number;
-  puntos?: number;
-  rol?: string;
-}
 
 @Component({
   selector: 'app-ligas',
@@ -38,7 +29,7 @@ export class Ligas {
   claveNuevaLiga: string = '';
   maxUsuariosNuevaLiga: number = 0;
 
-  idLigaUnirse: number = 0;
+  NombreLigaUnirse: string = " ";
   claveLigaUnirse: string = '';
 
   notificationMsg = '';
@@ -118,18 +109,18 @@ export class Ligas {
   // --- UNIRSE A LIGA ---
   cerrarModalUnirse() {
     this.mostrarModalUnirse = false;
-    this.idLigaUnirse = 0;
+    this.NombreLigaUnirse = " ";
     this.claveLigaUnirse = '';
   }
 
-  unirseLiga(id_liga: number, clave: string) {
-    if (!id_liga || !clave.trim()) {
-      this.mostrarNotificacion('ID y clave son obligatorios', false);
+  unirseLiga(nombre: String, clave: string) {
+    if (!nombre || !clave.trim()) {
+      this.mostrarNotificacion('Nombre y clave son obligatorios', false);
       return;
     }
 
     const body = { clave };
-    this.http.post<any>(`${this.apiBase}/api/ligas/${id_liga}/join`, body, this.getAuthHeaders())
+    this.http.post<any>(`${this.apiBase}/api/ligas/${nombre}/join`, body, this.getAuthHeaders())
       .subscribe({
         next: () => {
           this.mostrarNotificacion('Te has unido a la liga', true);
