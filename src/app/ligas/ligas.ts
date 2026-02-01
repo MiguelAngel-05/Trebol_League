@@ -30,7 +30,7 @@ export class Ligas {
   maxUsuariosNuevaLiga: number = 0;
   id_liga: number = 0;
 
-  NombreLigaUnirse: string = " ";
+  NombreLigaUnirse: string = '';
   claveLigaUnirse: string = '';
 
   notificationMsg = '';
@@ -115,45 +115,48 @@ export class Ligas {
   }
 
   unirseLiga(nombre: string, clave: string) {
-      if (!nombre.trim() || !clave.trim()) {
-        this.mostrarNotificacion('Nombre y clave son obligatorios', false);
-        return;
-      }
-
-      this.http.post<any>(
-        `${this.apiBase}/api/ligas/get-id-by-credentials`,
-        { nombre, clave },
-        this.getAuthHeaders()
-      ).subscribe({
-        next: (res) => {
-          const idLiga = res.id_liga;
-
-          this.http.post<any>(
-            `${this.apiBase}/api/ligas/${idLiga}/join`,
-            { clave },
-            this.getAuthHeaders()
-          ).subscribe({
-            next: () => {
-              this.mostrarNotificacion('Te has unido a la liga', true);
-              this.cargarMisLigas();
-              this.cerrarModalUnirse();
-            },
-            error: (err) => {
-              this.mostrarNotificacion(
-                err.error?.message || 'Error al unirse a la liga',
-                false
-              );
-            }
-          });
-        },
-        error: (err) => {
-          this.mostrarNotificacion(
-            err.error?.message || 'Liga no encontrada',
-            false
-          );
-        }
-      });
+    if (!nombre || !nombre.trim() || !clave || !clave.trim()) {
+      this.mostrarNotificacion('Nombre y clave son obligatorios', false);
+      return;
     }
+
+    this.http.post<any>(
+      `${this.apiBase}/api/ligas/get-id-by-credentials`,
+      { nombre, clave },
+      this.getAuthHeaders()
+    ).subscribe({
+      next: (res) => {
+        const idLigaEncontrada = res.id_liga;
+
+        const bodyJoin = { clave };
+        
+        this.http.post<any>(
+          `${this.apiBase}/api/ligas/${idLigaEncontrada}/join`, 
+          bodyJoin, 
+          this.getAuthHeaders()
+        ).subscribe({
+          next: () => {
+            this.mostrarNotificacion('¡Te has unido a la liga correctamente!', true);
+            this.cargarMisLigas();
+            this.cerrarModalUnirse();
+          },
+          error: (errJoin) => {
+            console.error(errJoin);
+            this.mostrarNotificacion(errJoin.error?.message || 'Error al unirse', false);
+          }
+        });
+
+      },
+      error: (errFind) => {
+        console.error(errFind);
+        if (errFind.status === 404) {
+           this.mostrarNotificacion('No existe ninguna liga con ese nombre y clave', false);
+        } else {
+           this.mostrarNotificacion('Error al buscar la liga', false);
+        }
+      }
+    });
+  }
 
   // --- NAVEGACION ---
   irALiga(id_liga: number, nombreLiga: string) {
