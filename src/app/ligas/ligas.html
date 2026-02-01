@@ -31,38 +31,37 @@
         </div>
         
         <div class="contenedor-ligas">
-            @for (liga of ligas; track $index) {
-                <div class="div-liga" (click)="irALiga(liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
-                    <div class="div-img-liga">
-                        <img class="img-liga" src="Utensilios/Emojis/escudo-ejemplo.svg" alt="escudo">
-                    </div>
-                    
-                    <div class="div-nombre-liga">
-                        <p>{{liga.nombre}}</p>
-                    </div>
-                    
-                    <div class="div-info-liga">
-                        <p>{{liga.numero_jugadores}}/10</p>
-                        <span class="separator">|</span>
-                        <p>0 pts</p>
-                        <span class="separator">|</span>
-                        <p class="valor-tc">10000000 Tc</p>
-                    </div>
-                    
-                    <div class="div-opciones-liga" (click)="toggleMenu($index, $event)">
-                        <img class="icon" src="Utensilios/Emojis/tres-puntos.png" alt="opciones">
+            <div *ngFor="let liga of ligas; let i = index" class="div-liga" 
+                 (click)="irALiga(liga.nombre, liga.id_liga)" 
+                 [style.animation-delay]="i * 0.1 + 's'">
+                 
+                <div class="div-img-liga">
+                    <img class="img-liga" src="Utensilios/Emojis/escudo-ejemplo.svg" alt="escudo">
+                </div>
+                
+                <div class="div-nombre-liga">
+                    <p>{{liga.nombre}}</p>
+                </div>
+                
+                <div class="div-info-liga">
+                    <p>{{liga.numero_jugadores}}/10</p>
+                    <span class="separator">|</span>
+                    <p>{{liga.puntos || 0}} pts</p>
+                    <span class="separator">|</span>
+                    <p class="valor-tc">{{liga.dinero || 0}} Tc</p>
+                </div>
+                
+                <div class="div-opciones-liga" (click)="toggleMenu(i, $event)">
+                    <img class="icon" src="Utensilios/Emojis/tres-puntos.png" alt="opciones">
 
-                        @if (activeMenuIndex === $index) {
-                            <div class="dropdown-menu">
-                                <div class="menu-item salir" (click)="salirDeLiga($index, $event)">
-                                    <span>Salir de la liga</span>
-                                    <span class="trash-icon">🗑️</span>
-                                </div>
-                                </div>
-                        }
+                    <div *ngIf="activeMenuIndex === i" class="dropdown-menu">
+                        <div class="menu-item salir" (click)="salirDeLiga(i, $event)">
+                            <span>Salir de la liga</span>
+                            <span class="trash-icon">🗑️</span>
+                        </div>
                     </div>
                 </div>
-            }
+            </div>
         </div>
 
         <div class="acciones-ligas">
@@ -75,36 +74,33 @@
         </div>
     </section>
 
-    @if (notificationMsg) {
-        <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
-            <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-            <div class="toast-content">
-                <p class="toast-message">{{ notificationMsg }}</p>
-            </div>
+    <div *ngIf="notificationMsg" class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+        <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+        <div class="toast-content">
+            <p class="toast-message">{{ notificationMsg }}</p>
         </div>
-    }
-    @if (mostrarModal) {
-        <div class="modal-overlay" (click)="cerrarModal()">
-            <div class="modal-content" (click)="$event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>Crear Nueva Liga</h2>
-                    <span class="close-btn" (click)="cerrarModal()">&times;</span>
-                </div>
-                
-                <div class="modal-body">
-                    <label>Nombre de la liga:</label>
-                    <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
-                    <label>Usuarios máximos:</label>
-                    <input type="text" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Maximo: 10" autofocus>
-                    <label>Clave de la liga:</label>
-                    <input type="text" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd" autofocus>
-                </div>
+    </div>
 
-                <div class="modal-footer">
-                    <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-                    <button class="btn-confirmar" (click)="confirmarCreacion()">Crear</button>
-                </div>
+    <div *ngIf="mostrarModal" class="modal-overlay" (click)="cerrarModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Crear Nueva Liga</h2>
+                <span class="close-btn" (click)="cerrarModal()">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                <label>Nombre de la liga:</label>
+                <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
+                <label>Usuarios máximos:</label>
+                <input type="number" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Maximo: 10">
+                <label>Clave de la liga:</label>
+                <input type="text" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                <button class="btn-confirmar" (click)="confirmarCreacion()">Crear</button>
             </div>
         </div>
-    }
+    </div>
 </main>
