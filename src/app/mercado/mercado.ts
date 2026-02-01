@@ -49,7 +49,7 @@ export class Mercado {
   jugadoresMostrados: Jugador[] = [];
 
   ngOnInit() {
-    this.id_liga = Number(this.route.snapshot.paramMap.get('id'));
+    this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
     const token = localStorage.getItem('token');
     if (token) {
         try {
