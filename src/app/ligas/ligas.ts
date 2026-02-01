@@ -79,6 +79,17 @@ export class Ligas {
     this.maxUsuariosNuevaLiga = 0;
   }
 
+  // Para modal unirse a liga
+idLigaUnirse: number = 0;
+claveLigaUnirse: string = '';
+mostrarModalUnirse: boolean = false;
+
+cerrarModalUnirse() {
+  this.mostrarModalUnirse = false;
+  this.idLigaUnirse = 0;
+  this.claveLigaUnirse = '';
+}
+
   confirmarCreacion() {
     if (this.maxUsuariosNuevaLiga < 1 || this.maxUsuariosNuevaLiga > 10) {
       this.mostrarNotificacion('El número máximo de usuarios debe estar entre 1 y 10', false);
