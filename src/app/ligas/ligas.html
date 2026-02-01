@@ -32,7 +32,7 @@
         
         <div class="contenedor-ligas">
             @for (liga of ligas; track $index) {
-                <div class="div-liga" (click)="irALiga(liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
+                <div class="div-liga" (click)="irALiga(liga.id_liga, liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
                     <div class="div-img-liga">
                         <img class="img-liga" src="Utensilios/Emojis/escudo-ejemplo.svg" alt="escudo">
                     </div>
