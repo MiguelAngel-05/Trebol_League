@@ -23,7 +23,6 @@ export class Mercado {
   filtroActivo: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT' = 'TODOS';
   isLoading = false;
 
-  // Toast
   notificationMsg = '';
   isSuccess = false;
 
@@ -50,7 +49,7 @@ export class Mercado {
   cargarMercado() {
     this.isLoading = true;
 
-    this.http.get<Jugador[]>(
+    this.http.get<any[]>(
       `${this.apiBase}/api/mercado/${this.id_liga}`,
       {
         headers: {
@@ -58,9 +57,13 @@ export class Mercado {
         }
       }
     ).subscribe({
-      next: (jugadores) => {
-        this.jugadores = jugadores;
-        this.jugadoresMostrados = [...jugadores];
+      next: (response) => {
+        this.jugadores = response.map(j => ({
+          ...j,
+          posicion: this.normalizarPosicion(j.posicion)
+        }));
+
+        this.jugadoresMostrados = [...this.jugadores];
         this.isLoading = false;
       },
       error: () => {
@@ -68,6 +71,18 @@ export class Mercado {
         this.mostrarNotificacion('Error al cargar el mercado', false);
       }
     });
+  }
+
+  // NORMALIZADOR POSICIÓN
+  normalizarPosicion(pos: string): 'DL' | 'MC' | 'DF' | 'PT' {
+    const p = pos.toLowerCase();
+
+    if (p.includes('del')) return 'DL';
+    if (p.includes('med') || p.includes('cen')) return 'MC';
+    if (p.includes('def')) return 'DF';
+    if (p.includes('por') || p.includes('pt')) return 'PT';
+
+    return 'MC';
   }
 
   // FILTROS
