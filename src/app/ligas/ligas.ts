@@ -113,14 +113,14 @@ export class Ligas {
     this.claveLigaUnirse = '';
   }
 
-  unirseLiga(nombre: String, clave: string) {
-    if (!nombre || !clave.trim()) {
+  unirseLiga(id_liga: String, clave: string) {
+    if (!id_liga || !clave.trim()) {
       this.mostrarNotificacion('Nombre y clave son obligatorios', false);
       return;
     }
 
     const body = { clave };
-    this.http.post<any>(`${this.apiBase}/api/ligas/${nombre}/join`, body, this.getAuthHeaders())
+    this.http.post<any>(`${this.apiBase}/api/ligas/${id_liga}/join`, body, this.getAuthHeaders())
       .subscribe({
         next: () => {
           this.mostrarNotificacion('Te has unido a la liga', true);
