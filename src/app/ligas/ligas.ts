@@ -163,7 +163,7 @@ export class Ligas {
     this.mostrarNotificacion(`Entrando a ${nombreLiga}...`, true);
     setTimeout(() => {
       this.router.navigate(['/ligas', id_liga, 'menu']);
-      this.router.navigate(['/ligas', id_liga, 'menu']); // ajusta según tu router
+      this.router.navigate(['/ligas', id_liga, 'menu']);
     }, 800);
   }
 

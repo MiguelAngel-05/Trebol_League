@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
 
@@ -11,14 +11,19 @@ import { CommonModule } from '@angular/common';
   styleUrl: './menu.css',
 })
 export class Menu {
-  user: any = null;
-  private router = inject(Router);
 
-  // Variables para Toast
+  user: any = null;
+  id_liga!: number;
+
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   notificationMsg = '';
   isSuccess = false;
 
   ngOnInit() {
+    this.id_liga = Number(this.route.snapshot.paramMap.get('id_liga'));
+
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -29,15 +34,16 @@ export class Menu {
     }
   }
 
+
   // Navegación
   volverAtras() {
-    this.router.navigate(['/TrebolLeague/ligas']);
+    this.router.navigate(['/ligas']);
   }
 
   irAMercado() {
     this.mostrarNotificacion('Entrando al Mercado...', true);
     setTimeout(() => {
-        this.router.navigate(['/TrebolLeague/mercado']);
+        this.router.navigate(['/ligas', this.id_liga, 'mercado']);
     }, 500);
   }
 
