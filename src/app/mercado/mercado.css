@@ -144,6 +144,12 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .name-text { font-size: 1.1rem; font-weight: 500; }
 .empty-msg { text-align: center; color: #aaa; margin-top: 20px; font-style: italic; }
 
+.card-balance {
+  animation: pulse 2s infinite;
+}
+
+
+
 
 /* TOAST */
 .toast-notification {
@@ -166,3 +172,8 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 rgba(46,213,115,0.4); }
+  50% { box-shadow: 0 0 20px rgba(46,213,115,0.6); }
+  100% { box-shadow: 0 0 0 rgba(46,213,115,0.4); }
+}
