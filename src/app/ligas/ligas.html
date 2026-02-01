@@ -34,7 +34,7 @@
             @for (liga of ligas; track $index) {
                 <div class="div-liga" (click)="irALiga(liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
                     <div class="div-img-liga">
-                        <img class="img-liga" [src]="liga.img" alt="escudo">
+                        <img class="img-liga" src="Utensilios/Emojis/escudo-ejemplo.svg" alt="escudo">
                     </div>
                     
                     <div class="div-nombre-liga">
@@ -42,11 +42,11 @@
                     </div>
                     
                     <div class="div-info-liga">
-                        <p>{{liga.miembros}}</p>
+                        <p>{{liga.numero_jugadores}}/10</p>
                         <span class="separator">|</span>
-                        <p>{{liga.pts}} pts</p>
+                        <p>0 pts</p>
                         <span class="separator">|</span>
-                        <p class="valor-tc">{{liga.valor | number}} Tc</p>
+                        <p class="valor-tc">10000000 Tc</p>
                     </div>
                     
                     <div class="div-opciones-liga" (click)="toggleMenu($index, $event)">
@@ -94,6 +94,10 @@
                 <div class="modal-body">
                     <label>Nombre de la liga:</label>
                     <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
+                    <label>Usuarios máximos:</label>
+                    <input type="text" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Maximo: 10" autofocus>
+                    <label>Clave de la liga:</label>
+                    <input type="text" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd" autofocus>
                 </div>
 
                 <div class="modal-footer">

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from "@angular/forms";
+import { Liga } from '../models/Liga';
 
 @Component({
   selector: 'app-ligas',
@@ -15,21 +16,20 @@ export class Ligas {
    user: any = null;
    private router = inject(Router);
    mostrarModal: boolean = false;
-   nombreNuevaLiga: string = '';
    activeMenuIndex: number | null = null;
+   ligas: Liga[] = [
+     { nombre: 'Treboliners', numero_jugadores: 4, clave: '1234abcd'},
+   ]
+
+   nombreNuevaLiga: string = '';
+   claveNuevaLiga: string = '';
+   maxUsuariosNuevaLiga: number = 0;
 
    // Toasts
    notificationMsg = '';
    isSuccess = false;
 
-   ligas = [
-     { nombre: 'Treboliners', miembros: '8/10', pts: 80, valor: 100000000, img: 'Utensilios/Emojis/escudo-ejemplo.svg' },
-     { nombre: 'La Liga Pro', miembros: '4/10', pts: 62, valor: 10000000, img: 'Utensilios/Emojis/escudo-ejemplo.svg' },
-     { nombre: 'Amigos FC', miembros: '9/10', pts: 45, valor: 5000000, img: 'Utensilios/Emojis/escudo-ejemplo.svg' },
-     { nombre: 'Torneo Verano', miembros: '2/10', pts: 10, valor: 1200000, img: 'Utensilios/Emojis/escudo-ejemplo.svg' },
-     { nombre: 'Champions T.', miembros: '10/10', pts: 120, valor: 300000000, img: 'Utensilios/Emojis/escudo-ejemplo.svg' },
-     { nombre: 'Novatos', miembros: '1/10', pts: 0, valor: 1000000, img: 'Utensilios/Emojis/escudo-ejemplo.svg' }
-   ];
+   
 
   ngOnInit() {
     const token = localStorage.getItem('token');
@@ -59,13 +59,15 @@ export class Ligas {
      this.nombreNuevaLiga = '';
    }
    confirmarCreacion() {
+    if (this.maxUsuariosNuevaLiga < 1 || this.maxUsuariosNuevaLiga > 10) {
+      this.mostrarNotificacion('El número máximo de usuarios debe ser un número entre 1 y 10', false);
+      return;
+    }
      if (this.nombreNuevaLiga.trim().length > 0) {
        this.ligas.push({
          nombre: this.nombreNuevaLiga,
-         miembros: '1/10',
-         pts: 0,
-         valor: 0,
-         img: 'Utensilios/Emojis/escudo-ejemplo.svg'
+         numero_jugadores: this.maxUsuariosNuevaLiga,
+         clave: this.claveNuevaLiga
        });
        
        this.mostrarNotificacion(`Liga "${this.nombreNuevaLiga}" creada con éxito`, true);

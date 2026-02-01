@@ -82,7 +82,6 @@ export class Register {
 
     this.http.post('https://api-trebol-league.vercel.app/api/register', user).subscribe({
       next: (res) => {
-        // 2. Éxito
         this.isLoading = false;
         this.mostrarNotificacion('¡Registro completado! Redirigiendo...', true);
         
@@ -91,7 +90,6 @@ export class Register {
         }, 1500);
       },
       error: (err) => {
-        // 3. Error
         console.error(err);
         this.isLoading = false;
         this.registerForm.enable();
