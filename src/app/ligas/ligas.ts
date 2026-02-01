@@ -42,7 +42,7 @@ export class Ligas {
   isSuccess = false;
 
   // URL base de tu API
-  private apiBase = 'https://api-trebol-league.vercel.app/api'; // ⚡ cambia por tu URL real si es Vercel
+  private apiBase = 'https://api-trebol-league.vercel.app/api'; 
 
   ngOnInit() {
     const token = localStorage.getItem('token');
