@@ -23,6 +23,8 @@ export class Mercado {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
 
+  // URL de tu API en Vercel
+  private apiBase = 'https://api-trebol-league.vercel.app';
 
   // Variables UI
   filtroActivo: string = 'TODOS';
@@ -64,7 +66,7 @@ export class Mercado {
   this.isLoading = true;
 
   this.http.get<Jugador[]>(
-    `https://TU_BACKEND/api/mercado/${this.id_liga}`,
+    `${this.apiBase}/api/mercado/${this.id_liga}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
