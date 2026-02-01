@@ -22,7 +22,7 @@ export class Menu {
   isSuccess = false;
 
   ngOnInit() {
-    this.id_liga = Number(this.route.snapshot.paramMap.get('id_liga'));
+    this.id_liga = Number(this.route.snapshot.paramMap.get('id'));
 
     const token = localStorage.getItem('token');
     if (token) {

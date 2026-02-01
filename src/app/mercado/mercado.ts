@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
 
@@ -20,7 +20,10 @@ interface Jugador {
 })
 export class Mercado {
   user: any = null;
+  id_liga!: number;
+
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   // Variables UI
   filtroActivo: string = 'TODOS';
@@ -46,6 +49,7 @@ export class Mercado {
   jugadoresMostrados: Jugador[] = [];
 
   ngOnInit() {
+    this.id_liga = Number(this.route.snapshot.paramMap.get('id'));
     const token = localStorage.getItem('token');
     if (token) {
         try {
@@ -75,7 +79,7 @@ export class Mercado {
   }
 
   volverAtras() {
-    this.router.navigate(['/TrebolLeague/menu']); 
+    this.router.navigate(['/ligas', this.id_liga, 'menu']); 
   }
   
   formatearDinero(valor: number): string {
