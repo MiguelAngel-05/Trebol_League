@@ -10,7 +10,7 @@ export interface Liga {
   id_liga: number;
   nombre: string;
   numero_jugadores: number;
-  clave: string;
+  clave?: string;
   dinero?: number;
   puntos?: number;
   rol?: string;
@@ -28,7 +28,8 @@ export class Ligas {
   private router = inject(Router);
   private http = inject(HttpClient);
 
-  mostrarModal: boolean = false;
+  mostrarModal: boolean = false; // Crear liga
+  mostrarModalUnirse: boolean = false; // Unirse a liga
   activeMenuIndex: number | null = null;
 
   ligas: Liga[] = [];
@@ -37,12 +38,14 @@ export class Ligas {
   claveNuevaLiga: string = '';
   maxUsuariosNuevaLiga: number = 0;
 
-  // Toasts
+  idLigaUnirse: number = 0;
+  claveLigaUnirse: string = '';
+
   notificationMsg = '';
   isSuccess = false;
 
-  // URL base de tu API
-  private apiBase = 'https://api-trebol-league.vercel.app/api'; 
+  // URL de tu API en Vercel
+  private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
     const token = localStorage.getItem('token');
@@ -50,24 +53,27 @@ export class Ligas {
       try {
         this.user = jwtDecode(token);
         this.cargarMisLigas();
-      } catch(e) { console.error('Error decodificando token', e); }
+      } catch(e) {
+        console.error('Error decodificando token', e);
+      }
     }
   }
 
-  // --- HTTP API METHODS ---
+  // --- HTTP HELPERS ---
   private getAuthHeaders() {
     const token = localStorage.getItem('token') || '';
     return { headers: new HttpHeaders({ 'Authorization': `Bearer ${token}` }) };
   }
 
   cargarMisLigas() {
-    this.http.get<Liga[]>(`${this.apiBase}/mis-ligas`, this.getAuthHeaders())
+    this.http.get<Liga[]>(`${this.apiBase}/api/mis-ligas`, this.getAuthHeaders())
       .subscribe({
         next: (data) => this.ligas = data,
         error: (err) => this.mostrarNotificacion('Error cargando ligas', false)
       });
   }
 
+  // --- CREAR LIGA ---
   crearLiga() {
     this.mostrarModal = true;
   }
@@ -78,17 +84,6 @@ export class Ligas {
     this.claveNuevaLiga = '';
     this.maxUsuariosNuevaLiga = 0;
   }
-
-  // Para modal unirse a liga
-idLigaUnirse: number = 0;
-claveLigaUnirse: string = '';
-mostrarModalUnirse: boolean = false;
-
-cerrarModalUnirse() {
-  this.mostrarModalUnirse = false;
-  this.idLigaUnirse = 0;
-  this.claveLigaUnirse = '';
-}
 
   confirmarCreacion() {
     if (this.maxUsuariosNuevaLiga < 1 || this.maxUsuariosNuevaLiga > 10) {
@@ -106,11 +101,11 @@ cerrarModalUnirse() {
       max_jugadores: this.maxUsuariosNuevaLiga
     };
 
-    this.http.post<any>(`${this.apiBase}/ligas`, body, this.getAuthHeaders())
+    this.http.post<any>(`${this.apiBase}/api/ligas`, body, this.getAuthHeaders())
       .subscribe({
-        next: (res) => {
+        next: () => {
           this.mostrarNotificacion(`Liga "${this.nombreNuevaLiga}" creada con éxito`, true);
-          this.cargarMisLigas();
+          this.cargarMisLigas(); // recarga automática
           this.cerrarModal();
         },
         error: (err) => {
@@ -120,13 +115,26 @@ cerrarModalUnirse() {
       });
   }
 
+  // --- UNIRSE A LIGA ---
+  cerrarModalUnirse() {
+    this.mostrarModalUnirse = false;
+    this.idLigaUnirse = 0;
+    this.claveLigaUnirse = '';
+  }
+
   unirseLiga(id_liga: number, clave: string) {
+    if (!id_liga || !clave.trim()) {
+      this.mostrarNotificacion('ID y clave son obligatorios', false);
+      return;
+    }
+
     const body = { clave };
-    this.http.post<any>(`${this.apiBase}/ligas/${id_liga}/join`, body, this.getAuthHeaders())
+    this.http.post<any>(`${this.apiBase}/api/ligas/${id_liga}/join`, body, this.getAuthHeaders())
       .subscribe({
-        next: (res) => {
+        next: () => {
           this.mostrarNotificacion('Te has unido a la liga', true);
           this.cargarMisLigas();
+          this.cerrarModalUnirse();
         },
         error: (err) => {
           console.error(err);
@@ -135,27 +143,29 @@ cerrarModalUnirse() {
       });
   }
 
+  // --- NAVEGACION ---
   irALiga(id_liga: number, nombreLiga: string) {
     this.mostrarNotificacion(`Entrando a ${nombreLiga}...`, true);
     setTimeout(() => {
-      this.router.navigate(['/ligas', id_liga, 'menu']); // Ajusta a tu ruta real
+      this.router.navigate(['/ligas', id_liga, 'menu']); // ajusta según tu router
     }, 800);
   }
 
+  volverAtras() {
+    this.router.navigate(['/login']); 
+  }
+
+  // --- MENU Y ELIMINAR ---
   toggleMenu(index: number, event: Event) {
     event.stopPropagation();
     this.activeMenuIndex = this.activeMenuIndex === index ? null : index;
   }
 
-  volverAtras() {
-  this.router.navigate(['/login']); 
-}
-
   salirDeLiga(index: number, event: Event) {
     event.stopPropagation();
     const liga = this.ligas[index];
 
-    this.http.delete(`${this.apiBase}/ligas/${liga.id_liga}`, this.getAuthHeaders())
+    this.http.delete(`${this.apiBase}/api/ligas/${liga.id_liga}`, this.getAuthHeaders())
       .subscribe({
         next: () => {
           this.ligas.splice(index, 1);
