@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router"; 
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // Importante para clases dinámicas y @if
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -81,7 +81,7 @@ export class Login {
         localStorage.setItem('token', res.token);
         
         setTimeout(() => {
-          this.router.navigate(['/TrebolLeague/ligas']);
+          this.router.navigate(['/ligas']);
         }, 1000);
       },
       error: (err) => {

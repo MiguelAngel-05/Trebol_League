@@ -47,7 +47,7 @@ export class Ligas {
   irALiga(nombreLiga: string) {
     this.mostrarNotificacion(`Entrando a ${nombreLiga}...`, true);
     setTimeout(() => {
-        this.router.navigate(['/TrebolLeague/menu']);
+        this.router.navigate(['/ligas', 2, 'menu']);
     }, 800);
   }
 

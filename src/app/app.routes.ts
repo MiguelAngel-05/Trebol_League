@@ -10,9 +10,7 @@ export const routes: Routes = [
     { path: 'login', component: Login },
     { path: 'register', component: Register},
     { path: 'ligas', component: Ligas },
-    { 
-        path: 'ligas/:idLiga', 
-        component: Menu,
+    { path: 'ligas/:idLiga',
         children: [
             { path: '', redirectTo: 'menu', pathMatch: 'full' }, 
             { path: 'menu', component: Menu },
