@@ -13,26 +13,25 @@ import { Jugador } from '../models/Jugador';
   styleUrl: './mercado.css',
 })
 export class Mercado {
+
   user: any = null;
   id_liga!: number;
+
   jugadores: Jugador[] = [];
   jugadoresMostrados: Jugador[] = [];
 
+  filtroActivo: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT' = 'TODOS';
+  isLoading = false;
+
+  // Toast
+  notificationMsg = '';
+  isSuccess = false;
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
 
-  // URL de tu API en Vercel
   private apiBase = 'https://api-trebol-league.vercel.app';
-
-  // Variables UI
-  filtroActivo: string = 'TODOS';
-  isLoading = false;
-  
-  // Variables Toast
-  notificationMsg = '';
-  isSuccess = false;
 
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
@@ -41,70 +40,58 @@ export class Mercado {
     if (token) {
       try {
         this.user = jwtDecode(token);
-      } catch (e) {}
+      } catch {}
     }
 
     this.cargarMercado();
   }
 
-
-  // Filtrado
-  filtrarPor(posicion: string) {
-    this.filtroActivo = posicion;
-
-    if (posicion === 'TODOS') {
-      this.jugadoresMostrados = [...this.jugadores];
-    } else {
-      this.jugadoresMostrados = this.jugadores.filter(
-        j => j.posicion === posicion
-      );
-    }
-  }
-
-
+  // MERCADO
   cargarMercado() {
     this.isLoading = true;
 
-    this.http.get<Jugador[]>(`${this.apiBase}/api/mercado/${this.id_liga}`,
+    this.http.get<Jugador[]>(
+      `${this.apiBase}/api/mercado/${this.id_liga}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       }
     ).subscribe({
-      next: (response: Jugador[]) => {
-        this.jugadores = response;
-        this.jugadoresMostrados = [...this.jugadores];
+      next: (jugadores) => {
+        this.jugadores = jugadores;
+        this.jugadoresMostrados = [...jugadores];
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
+        this.mostrarNotificacion('Error al cargar el mercado', false);
       }
     });
   }
 
-  // Acciones
+  // FILTROS
+  filtrarPor(posicion: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT') {
+    this.filtroActivo = posicion;
+
+    this.jugadoresMostrados =
+      posicion === 'TODOS'
+        ? [...this.jugadores]
+        : this.jugadores.filter(j => j.posicion === posicion);
+  }
+
+  // ACCIONES
   comprarJugador(jugador: Jugador) {
-    this.mostrarNotificacion(`Has pujado por ${jugador.nombre}`, true);
+    this.mostrarNotificacion(
+      `Has pujado por ${jugador.nombre}`,
+      true
+    );
   }
 
   volverAtras() {
-    this.router.navigate(['/ligas', this.id_liga, 'menu']); 
-  }
-  
-  formatearDinero(valor: number): string {
-    return new Intl.NumberFormat('es-ES').format(valor);
+    this.router.navigate(['/ligas', this.id_liga, 'menu']);
   }
 
-  mostrarNotificacion(mensaje: string, exito: boolean) {
-    this.notificationMsg = mensaje;
-    this.isSuccess = exito;
-    setTimeout(() => {
-      this.notificationMsg = '';
-    }, 3000);
-  }
-
-// Funciones para botones "Work in Progress"
   irATienda() {
     this.mostrarNotificacion('La tienda está cerrada por hoy', false);
   }
@@ -113,4 +100,17 @@ export class Mercado {
     this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true);
   }
 
+  // UTILS
+  formatearDinero(valor: number): string {
+    return new Intl.NumberFormat('es-ES').format(valor);
+  }
+
+  mostrarNotificacion(mensaje: string, exito: boolean) {
+    this.notificationMsg = mensaje;
+    this.isSuccess = exito;
+
+    setTimeout(() => {
+      this.notificationMsg = '';
+    }, 3000);
+  }
 }
