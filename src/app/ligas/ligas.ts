@@ -19,8 +19,8 @@ export class Ligas {
   private router = inject(Router);
   private http = inject(HttpClient);
 
-  mostrarModal: boolean = false; // Crear liga
-  mostrarModalUnirse: boolean = false; // Unirse a liga
+  mostrarModal: boolean = false; 
+  mostrarModalUnirse: boolean = false; 
   activeMenuIndex: number | null = null;
 
   ligas: Liga[] = [];
@@ -36,7 +36,7 @@ export class Ligas {
   notificationMsg = '';
   isSuccess = false;
 
-  // URL de tu API en Vercel
+  // url api
   private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
@@ -51,7 +51,7 @@ export class Ligas {
     }
   }
 
-  // --- HTTP HELPERS ---
+  // los helpers de http
   private getAuthHeaders() {
     const token = localStorage.getItem('token') || '';
     return { headers: new HttpHeaders({ 'Authorization': `Bearer ${token}` }) };
@@ -65,7 +65,7 @@ export class Ligas {
       });
   }
 
-  // --- CREAR LIGA ---
+  // para crear ligas
   crearLiga() {
     this.mostrarModal = true;
   }
@@ -97,7 +97,7 @@ export class Ligas {
       .subscribe({
         next: () => {
           this.mostrarNotificacion(`Liga "${this.nombreNuevaLiga}" creada con éxito`, true);
-          this.cargarMisLigas(); // recarga automática
+          this.cargarMisLigas();
           this.cerrarModal();
         },
         error: (err) => {
@@ -107,7 +107,7 @@ export class Ligas {
       });
   }
 
-  // --- UNIRSE A LIGA ---
+  // para unirse a la liga
   cerrarModalUnirse() {
     this.mostrarModalUnirse = false;
     this.NombreLigaUnirse = " ";
@@ -158,7 +158,7 @@ export class Ligas {
     });
   }
 
-  // --- NAVEGACION ---
+  // navegacion
   irALiga(id_liga: number, nombreLiga: string) {
     this.mostrarNotificacion(`Entrando a ${nombreLiga}...`, true);
     setTimeout(() => {
@@ -170,7 +170,7 @@ export class Ligas {
     this.router.navigate(['/login']); 
   }
 
-  // --- MENU Y ELIMINAR ---
+  // menu para eliminar y tal --> hacerlo proximamente
   toggleMenu(index: number, event: Event) {
     event.stopPropagation();
     this.activeMenuIndex = this.activeMenuIndex === index ? null : index;

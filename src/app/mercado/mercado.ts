@@ -50,7 +50,7 @@ export class Mercado implements OnDestroy {
     clearInterval(this.timerInterval);
   }
 
-  // ================== MERCADO ==================
+  // cargo el mercado
   cargarMercado() {
     this.isLoading = true;
 
@@ -78,7 +78,7 @@ export class Mercado implements OnDestroy {
     });
   }
 
-  // ================== TEMPORIZADOR ==================
+  // temporizador del mercado
   iniciarTemporizador(fechaGeneracion: string) {
     clearInterval(this.timerInterval);
 
@@ -109,7 +109,7 @@ export class Mercado implements OnDestroy {
     return n.toString().padStart(2, '0');
   }
 
-  // ================== POSICIÓN ==================
+  // posiciones
   normalizarPosicion(pos: string): 'DL' | 'MC' | 'DF' | 'PT' {
     const p = pos.toLowerCase();
     if (p.includes('del')) return 'DL';
@@ -119,7 +119,7 @@ export class Mercado implements OnDestroy {
     return 'MC';
   }
 
-  // ================== FILTROS ==================
+  // los filtrosd
   filtrarPor(posicion: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT') {
     this.filtroActivo = posicion;
     this.jugadoresMostrados =
@@ -128,7 +128,7 @@ export class Mercado implements OnDestroy {
         : this.jugadores.filter(j => j.posicion === posicion);
   }
 
-  // ================== ACCIONES ==================
+  // acciones varias
   comprarJugador(jugador: Jugador) {
     this.mostrarNotificacion(`Has pujado por ${jugador.nombre}`, true);
   }
@@ -145,7 +145,7 @@ export class Mercado implements OnDestroy {
     this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true);
   }
 
-  // ================== UTILS ==================
+  // utilidades
   formatearDinero(valor: number): string {
     return new Intl.NumberFormat('es-ES').format(valor);
   }
