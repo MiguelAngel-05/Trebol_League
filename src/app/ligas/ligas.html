@@ -32,7 +32,7 @@
         
         <div class="contenedor-ligas">
             @for (liga of ligas; track $index) {
-                <div class="div-liga" (click)="irALiga(liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
+                <div class="div-liga" (click)="irALiga(liga.id_liga, liga.nombre)" [style.animation-delay]="$index * 0.1 + 's'">
                     <div class="div-img-liga">
                         <img class="img-liga" src="Utensilios/Emojis/escudo-ejemplo.svg" alt="escudo">
                     </div>
@@ -66,10 +66,10 @@
         </div>
 
         <div class="acciones-ligas">
-            <div class="btn-liga crear" (click)="crearLiga()">
+            <div class="btn-liga crear" (click)="mostrarModal = true">
                 Crear liga
             </div>
-            <div class="btn-liga unirse" (click)="unirseLiga()">
+            <div class="btn-liga unirse" (click)="mostrarModalUnirse = true">
                 Unirse a liga
             </div>
         </div>
@@ -83,28 +83,51 @@
             </div>
         </div>
     }
-    @if (mostrarModal) {
-        <div class="modal-overlay" (click)="cerrarModal()">
-            <div class="modal-content" (click)="$event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>Crear Nueva Liga</h2>
-                    <span class="close-btn" (click)="cerrarModal()">&times;</span>
-                </div>
-                
-                <div class="modal-body">
-                    <label>Nombre de la liga:</label>
-                    <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
-                    <label>Usuarios máximos:</label>
-                    <input type="text" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Maximo: 10" autofocus>
-                    <label>Clave de la liga:</label>
-                    <input type="text" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd" autofocus>
-                </div>
+    @if (mostrarModalUnirse) {
+    <div class="modal-overlay" (click)="cerrarModalUnirse()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Unirse a Liga</h2>
+                <span class="close-btn" (click)="cerrarModalUnirse()">&times;</span>
+            </div>
 
-                <div class="modal-footer">
-                    <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-                    <button class="btn-confirmar" (click)="confirmarCreacion()">Crear</button>
-                </div>
+            <div class="modal-body">
+                <label>Nombre de la liga:</label>
+                <input type="text" [(ngModel)]="NombreLigaUnirse" placeholder="Ej: Treboliners" autofocus>
+                <label>Clave de la liga:</label>
+                <input type="text" [(ngModel)]="claveLigaUnirse" placeholder="Ej: 1234abcd">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancelar" (click)="cerrarModalUnirse()">Cancelar</button>
+                <button class="btn-confirmar" (click)="unirseLiga(NombreLigaUnirse, claveLigaUnirse)">Unirse</button>
             </div>
         </div>
-    }
+    </div>
+}
+
+    @if (mostrarModal) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Crear Nueva Liga</h2>
+        <span class="close-btn" (click)="cerrarModal()">&times;</span>
+      </div>
+
+      <div class="modal-body">
+        <label>Nombre de la liga:</label>
+        <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
+        <label>Usuarios máximos:</label>
+        <input type="number" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Maximo: 10">
+        <label>Clave de la liga:</label>
+        <input type="text" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-confirmar" (click)="confirmarCreacion()">Crear</button>
+      </div>
+    </div>
+  </div>
+}
 </main>
