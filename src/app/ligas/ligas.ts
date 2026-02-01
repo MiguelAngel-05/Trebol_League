@@ -136,6 +136,10 @@ export class Ligas {
     this.activeMenuIndex = this.activeMenuIndex === index ? null : index;
   }
 
+  volverAtras() {
+  this.router.navigate(['/login']); 
+}
+
   salirDeLiga(index: number, event: Event) {
     event.stopPropagation();
     const liga = this.ligas[index];
