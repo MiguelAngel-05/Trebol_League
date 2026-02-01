@@ -6,10 +6,6 @@
                 <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
                 <p>{{user?.username || 'Usuario'}}</p>
             </div>
-            <span class="separator-header">/</span>
-            <div class="option-group">
-                <p>1.034.500</p> <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
-            </div>
         </div>
         
         <div class="header-optionsB bottom-row">
@@ -44,9 +40,9 @@
                     <div class="div-info-liga">
                         <p>{{liga.numero_jugadores}}/10</p>
                         <span class="separator">|</span>
-                        <p>0 pts</p>
+                        <p>{{liga.puntos}} pts</p>
                         <span class="separator">|</span>
-                        <p class="valor-tc">10000000 Tc</p>
+                        <p class="valor-tc">{{liga.dinero}} Tc</p>
                     </div>
                     
                     <div class="div-opciones-liga" (click)="toggleMenu($index, $event)">
