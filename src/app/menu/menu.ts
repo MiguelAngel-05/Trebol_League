@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importa HttpClient
 
 @Component({
   selector: 'app-menu',
@@ -14,12 +15,17 @@ export class Menu {
 
   user: any = null;
   id_liga!: number;
+  dinero: number = 0;
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
 
   notificationMsg = '';
   isSuccess = false;
+  
+  // Url api
+  private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
@@ -28,12 +34,25 @@ export class Menu {
     if (token) {
       try {
         this.user = jwtDecode(token);
+        this.cargarDatosUsuarioLiga();
       } catch (error) {
         console.error('Error decodificando token', error);
       }
     }
   }
 
+  cargarDatosUsuarioLiga() {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+
+    this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/datos-usuario`, { headers })
+      .subscribe({
+        next: (data) => {
+          this.dinero = Number(data.dinero);
+        },
+        error: (err) => console.error('Error cargando dinero', err)
+      });
+  }
 
   // Navegación
   volverAtras() {
@@ -44,6 +63,13 @@ export class Menu {
     this.mostrarNotificacion('Entrando al Mercado...', true);
     setTimeout(() => {
         this.router.navigate(['/ligas', this.id_liga, 'mercado']);
+    }, 500);
+  }
+
+  irAListaJugadores() {
+    this.mostrarNotificacion('Cargando base de datos...', true);
+    setTimeout(() => {
+      this.router.navigate(['/ligas', this.id_liga, 'jugadores']);
     }, 500);
   }
 
@@ -64,7 +90,6 @@ export class Menu {
     this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true);
   }
 
-  // Lógica del Toast
   mostrarNotificacion(mensaje: string, exito: boolean) {
     this.notificationMsg = mensaje;
     this.isSuccess = exito;

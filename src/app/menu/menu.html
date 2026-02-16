@@ -9,7 +9,7 @@
             </div>
             <span class="separator-header">/</span>
             <div class="option-group">
-                <p>1.034.500</p>
+                <p>{{ dinero | number:'1.0-0':'es-ES' }}</p>
                 <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
             </div>
         </div>
@@ -61,9 +61,9 @@
                 <p class="p-card">CLASIFICACIÓN</p>
             </div>
             
-            <div class="home-card ligas" (click)="volverAtras()">
+            <div class="home-card jugadores" (click)="irAListaJugadores()">
                 <div class="card-overlay"></div>
-                <p class="p-card">LIGAS</p>
+                <p class="p-card">JUGADORES</p>
             </div>
         </div>
     </section>

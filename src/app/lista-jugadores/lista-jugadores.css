@@ -1,0 +1,139 @@
+body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
+
+.main-container {
+  width: 100%; height: 100vh;
+  background-image: url("/Fondos/FondoEstandar.png");
+  background-color: rgba(10, 20, 15, 0.85); background-blend-mode: overlay;
+  background-size: cover; background-position: center; 
+  display: flex; flex-direction: column; overflow: hidden; position: relative;
+}
+
+/* === HEADER (Reutilizado) === */
+.main-header {
+  background: transparent;
+  width: 50%; height: 120px;
+  position: absolute; top: 40px; right: 80px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  z-index: 20; animation: slideDown 0.8s ease-out forwards;
+}
+/* ... (Copia los estilos de header-options, separator, icons, user-img del mercado.css si los necesitas, son iguales) ... */
+.header-options.top-row { width: 100%; height: 50%; background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%); border-top-right-radius: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 160px 0 80px; box-sizing: border-box; }
+.header-optionsB.bottom-row { width: 100%; height: 50%; background: linear-gradient(90deg, #1f3327 0%, #15221b 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-around; padding: 0 160px 0 80px; box-sizing: border-box; }
+.separator-header { font-size: 2rem; color: #3b614b; font-weight: 300; margin: 0 10px; transform: skew(-20deg); }
+.option-group { display: flex; align-items: center; gap: 10px; color: white; font-weight: 600; }
+.icon { height: 22px; width: auto; }
+.pinchar { height: 26px; width: auto; cursor: pointer; transition: 0.2s; }
+.div-img-user { background: linear-gradient(to bottom, #1f8f5f, #156942); width: 140px; height: 100%; position: absolute; top: 0; right: 0; display: flex; align-items: center; justify-content: center; border-top-right-radius: 20px; border-bottom-left-radius: 20px; z-index: 5; }
+.img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; }
+
+/* === CONTENIDO PRINCIPAL === */
+.content-area {
+  margin-top: 180px; /* Espacio para el header */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 50px 30px 50px;
+}
+
+.team-header {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  margin-bottom: 30px;
+  animation: slideInLeft 0.8s ease forwards;
+}
+
+.page-title {
+  font-size: 3rem; color: white; margin: 0;
+  text-shadow: 0 0 20px rgba(46, 213, 115, 0.4);
+}
+
+/* === ESTADÍSTICAS (STATS) === */
+.stats-row {
+  display: flex; gap: 20px;
+}
+
+.stat-card {
+  background: rgba(20, 30, 25, 0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 20px;
+  border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 120px;
+}
+
+.stat-label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; margin-bottom: 5px; }
+.stat-value { font-size: 1.2rem; font-weight: 700; color: white; }
+.text-green { color: #2ed573; }
+
+.rating-box-mini {
+  padding: 2px 10px; border-radius: 4px; font-weight: 800; color: white;
+  background: rgba(0,0,0,0.5); border: 1px solid #ccc;
+}
+
+/* === LISTA (Scrollable) === */
+.scrollable-content {
+  flex: 1; overflow-y: auto;
+  padding-right: 10px;
+}
+.scrollable-content::-webkit-scrollbar { width: 6px; }
+.scrollable-content::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
+
+/* === FILAS DE JUGADORES (Estilo "Guapo" del Mercado) === */
+.player-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px; cursor: default;
+  transition: all 0.3s ease;
+  animation: slideInUp 0.5s ease forwards;
+}
+.player-row:hover {
+  background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+  border-color: rgba(46, 213, 115, 0.4); transform: translateX(5px);
+}
+
+/* IZQUIERDA */
+.player-left-section { display: flex; align-items: center; gap: 15px; flex: 1; }
+.team-token { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); overflow: hidden; }
+.team-img { width: 85%; height: 85%; object-fit: contain; }
+.player-info { display: flex; flex-direction: column; }
+.name-text { color: white; font-size: 1.1rem; font-weight: 700; }
+.team-subtext { color: #889990; font-size: 0.8rem; font-weight: 500; }
+
+/* DERECHA */
+.player-right-section { display: flex; align-items: center; gap: 20px; }
+
+/* POSICION */
+.pos-badge { width: 35px; height: 28px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border-radius: 6px; }
+.dl { background: linear-gradient(135deg, #ff4757, #ff6b81); } 
+.mc { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #1a2b22; } 
+.df { background: linear-gradient(135deg, #1e90ff, #70a1ff); } 
+.pt { background: linear-gradient(135deg, #ffa502, #eccc68); color: #1a2b22; }
+
+/* MEDIA */
+.rating-box { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 40px; height: 38px; border-radius: 6px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); margin-right: 15px; }
+.rating-num { font-size: 1.1rem; font-weight: 800; color: white; line-height: 1; }
+.rating-label { font-size: 0.5rem; font-weight: 600; color: #ccc; margin-top: 2px; }
+
+/* Media Colors */
+.media-elite { border-color: #00d2ff; background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.2)); }
+.media-elite .rating-num, .media-elite.rating-box-mini { color: #00d2ff; }
+.media-gold { border-color: #ffd700; background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(212, 175, 55, 0.15)); }
+.media-gold .rating-num, .media-gold.rating-box-mini { color: #ffd700; }
+.media-silver { border-color: #c0c0c0; background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(169, 169, 169, 0.15)); }
+.media-silver .rating-num, .media-silver.rating-box-mini { color: #e0e0e0; }
+.media-bronze { border-color: #cd7f32; background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(160, 82, 45, 0.15)); }
+.media-bronze .rating-num, .media-bronze.rating-box-mini { color: #cd7f32; }
+
+/* PRECIO */
+.price-tag { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: white; min-width: 100px; text-align: right; }
+.currency { font-size: 0.8rem; color: #2ed573; margin-left: 2px; }
+
+.empty-msg { text-align: center; color: #aaa; margin-top: 40px; font-style: italic; }
+.loading-msg { text-align: center; color: white; margin-top: 40px; font-size: 1.2rem; }
+
+/* ANIMACIONES */
+@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

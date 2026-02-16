@@ -1,22 +1,40 @@
-
-body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
-
-.main-container {
-    width: 100%; height: 100vh;
-    background-image: url("/Fondos/FondoEstandar.png");
-    background-color: rgba(10, 20, 15, 0.85); background-blend-mode: overlay;
-    background-size: cover; background-position: center; background-attachment: fixed;
-    display: flex; overflow: hidden; position: relative;
+/* =========================================
+   1. ESTRUCTURA BASE Y FONDO
+   ========================================= */
+body { 
+    margin: 0; 
+    font-family: 'Poppins', sans-serif; 
+    overflow: hidden; /* IMPORTANTE: Bloquea el scroll de toda la página */
+    background-color: #0b1a12; 
 }
 
-/* === HEADER (COPIADO DEL MENÚ) === */
+.main-container {
+    width: 100%; 
+    height: 100vh;
+    background-image: url("/Fondos/FondoEstandar.png");
+    background-color: rgba(10, 20, 15, 0.92); /* Fondo oscuro sólido */
+    background-blend-mode: overlay;
+    background-size: cover; 
+    background-position: center; 
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   2. HEADER (Fixed)
+   ========================================= */
 .main-header {
-    background: transparent;
-    width: 50%; height: 120px;
-    position: absolute; top: 40px; right: 80px;
-    display: flex; flex-direction: column; align-items: flex-start;
-    filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.5)); z-index: 20;
-    animation: slideDown 0.8s ease-out forwards;
+    width: 50%; 
+    height: 120px;
+    position: absolute; 
+    top: 40px; 
+    right: 80px;
+    display: flex; 
+    flex-direction: column; 
+    z-index: 100; 
+    filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.5)); 
+    animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .header-options.top-row {
@@ -37,11 +55,10 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 }
 
 .separator-header { font-size: 2rem; color: #3b614b; font-weight: 300; margin: 0 10px; transform: skew(-20deg); }
-.option-group { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-.header-options .icon { height: 22px; width: auto; }
-.pinchar { height: 26px; width: auto; cursor: pointer; transition: 0.2s; }
-.option-group p { margin: 0; color: #e0e0e0; font-weight: 600; font-size: 1rem; }
-.icon-hover:hover .pinchar, .active-icon .pinchar { transform: scale(1.2); filter: drop-shadow(0 0 5px white); }
+.option-group { display: flex; align-items: center; gap: 10px; color: white; font-weight: 600; }
+.icon { height: 22px; width: auto; }
+.pinchar { height: 26px; width: auto; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.icon-hover:hover .pinchar { transform: scale(1.3); filter: drop-shadow(0 0 8px rgba(255,255,255,0.6)); }
 
 .div-img-user {
     background: linear-gradient(to bottom, #1f8f5f, #156942);
@@ -52,128 +69,354 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 } 
 .img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; }
 
+/* =========================================
+   3. LAYOUT 3 COLUMNAS
+   ========================================= */
+.mercado-layout {
+    display: grid;
+    /* IZQUIERDA (Filtros): 260px | CENTRO (Mercado): Resto | DERECHA (Historial): 300px */
+    grid-template-columns: 260px 1fr 300px; 
+    width: 100%;
+    height: 100vh; /* Ocupa toda la pantalla */
+    padding-top: 160px; /* Deja espacio para el header */
+    box-sizing: border-box;
+    overflow: hidden; /* Nada se sale del layout */
+    gap: 20px;
+}
 
-/* === SIDEBAR FILTROS === */
+/* =========================================
+   4. SIDEBAR IZQUIERDA (FILTROS)
+   ========================================= */
 .sidebar-filters {
-    width: 260px; height: 100%; padding: 180px 30px 50px 30px; 
-    display: flex; flex-direction: column; box-sizing: border-box;
-    background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0));
+    padding: 20px 30px;
+    /* Degradado VERTICAL como pediste */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
     animation: slideInLeft 0.8s ease forwards;
+    display: flex; flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.05);
 }
 
 .page-title {
     color: white; font-size: 3rem; margin: 0 0 40px 0;
     font-weight: 700; letter-spacing: 1px;
     text-shadow: 0 0 20px rgba(46, 213, 115, 0.4);
+    animation: fadeIn 1s ease 0.2s forwards; opacity: 0;
 }
 
 .filters-list { display: flex; flex-direction: column; gap: 20px; }
 
 .filter-item {
     display: flex; align-items: center; gap: 12px; cursor: pointer;
-    opacity: 0.5; transition: 0.3s ease;
+    opacity: 0.6; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    padding: 8px 12px; border-radius: 8px;
 }
-.filter-item.active, .filter-item:hover { opacity: 1; transform: translateX(10px); }
+.filter-item:hover { opacity: 1; background: rgba(255,255,255,0.05); transform: translateX(10px); }
+.filter-item.active { opacity: 1; background: linear-gradient(90deg, rgba(46, 213, 115, 0.2), transparent); transform: translateX(5px); border-left: 3px solid #2ed573; }
 
 .dot-indicator { width: 8px; height: 8px; border-radius: 50%; background: transparent; transition: 0.3s; }
-.filter-item.active .dot-indicator { background: #2ed573; box-shadow: 0 0 8px #2ed573; }
+.filter-item.active .dot-indicator { background: #2ed573; box-shadow: 0 0 10px #2ed573; }
 
 .filter-name { color: white; font-weight: 500; font-size: 1.1rem; }
-.tag, .pos-badge { width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border-radius: 4px; }
+.tag { width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 .dl { background: #ff4757; } .mc { background: #2ed573; } .df { background: #1e90ff; } .pt { background: #ffa502; }
 
-
-/* === CONTENT AREA === */
-.content-area { flex: 1; position: relative; padding-top: 150px; display: flex; flex-direction: column; }
-.scrollable-content { 
-    flex: 1; overflow-y: auto; padding: 20px 40px 20px 10px; 
-    display: flex; flex-direction: column; gap: 25px; max-width: 1400px;
+/* =========================================
+   5. ÁREA CENTRAL (LISTA CON SCROLL)
+   ========================================= */
+.content-area {
+    display: flex; 
+    flex-direction: column;
+    overflow: hidden; /* Clave para el scroll interno */
+    padding-bottom: 20px;
 }
-.scrollable-content::-webkit-scrollbar { width: 6px; }
-.scrollable-content::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
 
-/* BANNER */
+.scrollable-content {
+    flex: 1; /* Ocupa el espacio restante */
+    overflow-y: auto; /* Solo esto hace scroll */
+    padding-right: 15px; /* Espacio para la barra */
+}
+
+/* Scrollbar Personalizada */
+.scrollable-content::-webkit-scrollbar { width: 8px; }
+.scrollable-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.scrollable-content::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3b614b, #2ed573); border-radius: 10px; }
+
+/* Cards & Banner */
 .league-banner {
-    height: 180px; border-radius: 20px; position: relative; overflow: hidden;
+    height: 150px; border-radius: 20px; position: relative; overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    animation: zoomIn 0.8s ease forwards;
+    margin-bottom: 25px; animation: zoomIn 0.8s ease forwards;
 }
-.banner-image-placeholder { position: absolute; width: 100%; height: 100%; background: url("/Utensilios/Jugadores/estadio-banner.png") center/cover; filter: grayscale(40%) brightness(50%); }
-.banner-overlay { position: relative; height: 100%; padding: 25px; color: white; display: flex; flex-direction: column; justify-content: space-between; }
-.banner-top-tag { background: white; color: black; padding: 4px 10px; font-weight: 800; font-size: 0.7rem; border-radius: 4px; width: fit-content; }
-.league-banner h2 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
-.banner-bottom-site { align-self: flex-end; background: white; color: black; padding: 4px 10px; font-weight: 800; font-size: 0.7rem; border-radius: 4px; }
+.banner-image-placeholder { position: absolute; width: 100%; height: 100%; background: url("/Utensilios/Jugadores/estadio-banner.png") center/cover; filter: grayscale(40%) brightness(50%); transition: 5s ease; }
+.league-banner:hover .banner-image-placeholder { transform: scale(1.1); filter: grayscale(0%) brightness(80%); }
 
-/* BALANCE CARDS */
-.balance-cards { display: flex; gap: 30px; animation: slideUp 0.8s ease forwards 0.2s; opacity: 0; }
-.card-balance { flex: 1; background: rgba(30,30,30,0.6); backdrop-filter: blur(5px); border-radius: 15px; padding: 20px; display: flex; align-items: center; gap: 20px; border: 1px solid rgba(255,255,255,0.05); }
-.icon-circle-thick { width: 45px; height: 45px; border-radius: 50%; border: 4px solid #2ed573; color: #2ed573; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; }
-.icon-circle-thick.red-icon { border-color: #ff4757; color: #ff4757; }
+.balance-cards { display: flex; gap: 20px; margin-bottom: 25px; animation: slideInUp 0.6s ease forwards 0.2s; opacity: 0; }
+.card-balance { flex: 1; background: rgba(30,30,30,0.7); backdrop-filter: blur(10px); border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+.card-balance:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(46, 213, 115, 0.15); border-color: rgba(46, 213, 115, 0.3); }
+.icon-circle-thick { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #2ed573; color: #2ed573; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; box-shadow: 0 0 15px rgba(46, 213, 115, 0.2); }
 .balance-text { display: flex; flex-direction: column; }
 .label-balance { color: #aaa; font-size: 0.9rem; }
-.amount { font-size: 1.4rem; font-weight: 700; }
-.amount.positive { color: #2ed573; } .amount.negative { color: #ff4757; }
+.amount { font-size: 1.4rem; font-weight: 700; color: white; }
+.amount.positive { color: #2ed573; text-shadow: 0 0 10px rgba(46, 213, 115, 0.4); }
 
-/* LISTA JUGADORES */
+/* Contenedor Lista */
 .players-list-container {
-    background: rgba(15, 25, 20, 0.8); backdrop-filter: blur(10px);
-    border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
-    flex: 1; min-height: 400px; display: flex; flex-direction: column; padding: 25px;
-    animation: slideUp 0.8s ease forwards 0.4s; opacity: 0;
+    background: rgba(15, 25, 20, 0.6); 
+    backdrop-filter: blur(20px); 
+    border-radius: 20px; 
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 20px;
+    animation: slideInUp 0.8s ease forwards 0.4s; opacity: 0;
 }
-.list-header { display: flex; color: #889990; font-weight: 600; font-size: 0.85rem; padding-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
-.list-scroll { overflow-y: auto; flex: 1; padding-right: 10px; }
+.list-header { display: flex; justify-content: space-between; color: #889990; font-weight: 600; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
 
-/* FILAS JUGADORES */
+/* === FILA JUGADOR (SOLUCIÓN BUGS VISUALES) === */
 .player-row {
-    display: flex; align-items: center; padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.03); color: white; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; margin-bottom: 10px;
+    background: rgba(40, 50, 45, 0.7); /* Fondo sólido semi-transparente */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     
-    opacity: 0; /* Para animación staggered */
+    /* FIX CRUCIAL PARA BICHOS TRANSPARENTES */
+    position: relative; 
+    z-index: 1;
+    will-change: transform, opacity; 
+    
+    /* Animación staggered */
+    opacity: 0; 
     animation: slideInUp 0.5s ease forwards;
 }
-.player-row:hover { background: rgba(255,255,255,0.03); transform: translateX(5px); transition: 0.2s; }
 
-.col-name { flex: 2; display: flex; align-items: center; gap: 15px; }
-.col-pts { flex: 0.5; text-align: center; font-weight: 700; color: #ccc; }
-.col-team { flex: 0.5; display: flex; justify-content: center; }
-.col-value { flex: 1; text-align: right; color: #2ed573; font-weight: 700; font-family: monospace; font-size: 1.1rem; }
+.player-row:hover {
+    transform: translateY(-4px) scale(1.01);
+    background: linear-gradient(90deg, rgba(60, 70, 65, 0.9), rgba(40, 50, 45, 0.8));
+    border-color: rgba(46, 213, 115, 0.6);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    z-index: 2;
+}
 
-.player-avatar-placeholder { width: 35px; height: 35px; background: #333; border-radius: 6px; }
-.team-placeholder { width: 25px; height: 25px; background: #333; border-radius: 4px; opacity: 0.5; }
-.name-text { font-size: 1.1rem; font-weight: 500; }
-.empty-msg { text-align: center; color: #aaa; margin-top: 20px; font-style: italic; }
+/* Venta usuario (Naranja) */
+.player-row.user-sale {
+    border-left: 5px solid #ffa502 !important;
+    background: linear-gradient(90deg, rgba(255, 165, 2, 0.15), rgba(40, 50, 45, 0.7));
+}
+.player-row.user-sale:hover { border-color: #ff7f50 !important; }
+
+.player-left-section { display: flex; align-items: center; gap: 15px; }
+.team-token { 
+    width: 50px; height: 50px; background: white; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s;
+}
+.player-row:hover .team-token { transform: rotate(-10deg) scale(1.1); border-color: #2ed573; }
+
+.team-img { width: 85%; height: 85%; object-fit: contain; }
+.player-info { display: flex; flex-direction: column; }
+.name-text { color: white; font-size: 1.1rem; font-weight: 700; transition: 0.3s; }
+.player-row:hover .name-text { color: #2ed573; }
+.team-subtext { color: #889990; font-size: 0.8rem; text-transform: uppercase; }
+
+.player-right-section { display: flex; align-items: center; gap: 20px; }
+.pos-badge { width: 35px; height: 28px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.price-tag { font-family: monospace; font-size: 1.2rem; font-weight: 700; color: white; min-width: 100px; text-align: right; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+.currency { font-size: 0.8rem; color: #2ed573; margin-left: 2px; }
+
+/* Medias */
+.rating-box { width: 40px; height: 38px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+.media-elite { border-color: #00d2ff; color: #00d2ff; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); background: rgba(0, 210, 255, 0.1); }
+.media-gold { border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.1); }
+.media-silver { border-color: #c0c0c0; color: #e0e0e0; }
+.media-bronze { border-color: #cd7f32; color: #cd7f32; }
+
+/* =========================================
+   6. SIDEBAR DERECHA (HISTORIAL)
+   ========================================= */
+.sidebar-history {
+    padding: 20px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.2)); /* Degradado Vertical */
+    border-left: 1px solid rgba(255,255,255,0.05);
+    display: flex; flex-direction: column;
+    animation: slideInRight 0.8s ease forwards;
+}
+
+.history-title { color: #2ed573; font-size: 1.2rem; margin-bottom: 20px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; border-bottom: 2px solid rgba(46, 213, 115, 0.3); padding-bottom: 10px; }
+.history-list { overflow-y: auto; flex: 1; padding-right: 5px; display: flex; flex-direction: column; gap: 10px; }
+.history-list::-webkit-scrollbar { width: 4px; }
+.history-list::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
+
+.history-item {
+    display: flex; gap: 12px; padding: 12px;
+    background: rgba(255,255,255,0.05); border-radius: 10px;
+    align-items: center; animation: slideInRight 0.5s ease forwards;
+    border: 1px solid transparent; transition: 0.3s;
+}
+.history-item:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); transform: translateX(-5px); }
+
+.h-icon { font-size: 1.2rem; animation: spin 10s linear infinite; }
+.h-info p { margin: 0; color: #ccc; font-size: 0.85rem; line-height: 1.3; }
+.h-info strong { color: white; }
+.h-price { color: #2ed573; font-weight: 700; font-size: 0.8rem; display: block; margin-top: 3px; }
+.empty-history { text-align: center; color: #666; font-style: italic; margin-top: 20px; }
+
+/* =========================================
+   7. MODALES (SOLUCIÓN CAPAS Y DISEÑO)
+   ========================================= */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.95); 
+    backdrop-filter: blur(10px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 99999; 
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%);
+    border: 1px solid rgba(46, 213, 115, 0.4);
+    border-radius: 20px; padding: 30px; width: 90%; max-width: 450px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(46, 213, 115, 0.1);
+    display: flex; flex-direction: column; gap: 20px;
+    animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+.modal-title { color: white; font-size: 1.5rem; margin: 0; font-weight: 700; }
+.close-btn { color: #888; font-size: 2rem; cursor: pointer; line-height: 1; transition: 0.2s; }
+.close-btn:hover { color: #ff4757; transform: rotate(90deg); }
+
+/* Resumen en Modal */
+.player-summary { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+.team-token.large { width: 60px; height: 60px; }
+.player-name-modal { font-size: 1.2rem; font-weight: 700; color: white; display: block; }
+.player-team-modal { color: #aaa; font-size: 0.9rem; }
+
+/* Input */
+.input-group label { display: block; color: #2ed573; margin-bottom: 10px; font-weight: 600; }
+.input-puja { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid #2ed573; border-radius: 10px; color: white; font-size: 1.2rem; font-weight: 700; text-align: center; outline: none; box-sizing: border-box; transition: 0.3s; }
+.input-puja:focus { background: rgba(46, 213, 115, 0.1); box-shadow: 0 0 15px rgba(46, 213, 115, 0.3); }
+
+.modal-footer { display: flex; gap: 15px; margin-top: 10px; }
+.btn-cancelar, .btn-confirmar { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+.btn-cancelar { background: rgba(255,255,255,0.1); color: #ccc; }
+.btn-cancelar:hover { background: rgba(255,255,255,0.2); color: white; }
+.btn-confirmar { background: linear-gradient(90deg, #2ed573, #1f8f5f); color: white; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.3); }
+.btn-confirmar:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(46, 213, 115, 0.5); }
+.btn-confirmar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; background: #444; }
+.btn-borrar {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s;
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+.btn-borrar:hover {
+  background: rgba(255, 71, 87, 0.3);
+  box-shadow: 0 0 15px rgba(255, 71, 87, 0.2);
+  transform: translateY(-2px);
+}
+
+.warning-msg { color: #ff4757; text-align: center; margin-top: 10px; font-weight: 600; animation: shake 0.5s; }
+.compra-text { color: #ddd; text-align: center; line-height: 1.5; font-size: 1rem; }
+.compra-text strong { color: white; color: #2ed573; }
+
+/* Contenedor de etiquetas (por si tiene las dos cosas, aunque es raro) */
+.status-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+  margin-left: 15px;
+  min-width: 80px;
+}
+
+.tag-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Estilo Venta (Usuario) */
+.tag-label.venta {
+  background: rgba(255, 165, 2, 0.2);
+  color: #ffa502;
+  border: 1px solid rgba(255, 165, 2, 0.4);
+}
+
+/* Estilo Pujado (Tú) */
+.tag-label.pujado {
+  background: rgba(46, 213, 115, 0.2);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.4);
+  box-shadow: 0 0 10px rgba(46, 213, 115, 0.1);
+}
+
+.icon-small {
+  font-size: 0.8rem;
+}
+
+.money-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrow {
+  color: #888;
+  font-size: 1rem;
+}
+
+.amount.positive {
+  color: #2ed573; 
+}
+
+.amount.future {
+  color: #ffa502;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.amount.future.negative {
+  color: #ff4757;
+}
 
 .card-balance {
-  animation: pulse 2s infinite;
+  min-width: 240px;
 }
 
-
-
-
-/* TOAST */
+/* === TOAST === */
 .toast-notification {
-    position: fixed; bottom: 30px; right: 30px; z-index: 1000;
-    background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1); border-left: 5px solid; 
-    color: white; padding: 12px 20px; border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    display: flex; align-items: center; gap: 15px; min-width: 250px;
+    position: fixed; bottom: 30px; right: 30px; z-index: 100000;
+    background: #000; border-left: 5px solid #2ed573;
+    padding: 15px 25px; border-radius: 8px; color: white;
+    display: flex; align-items: center; gap: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     animation: slideInRight 0.4s ease-out;
 }
-.toast-notification.success { border-left-color: #2ed573; }
 .toast-notification.error { border-left-color: #ff4757; }
-.toast-icon { font-size: 20px; } 
+.toast-icon { font-size: 1.5rem; }
 
-/* ANIMACIONES */
+/* === ANIMACIONES KEYFRAMES === */
 @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 rgba(46,213,115,0.4); }
-  50% { box-shadow: 0 0 20px rgba(46,213,115,0.6); }
-  100% { box-shadow: 0 0 0 rgba(46,213,115,0.4); }
-}
+@keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }

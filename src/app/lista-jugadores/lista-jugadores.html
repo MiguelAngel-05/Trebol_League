@@ -1,0 +1,105 @@
+<main class="main-container">
+
+  <header class="main-header">
+    <div class="header-options top-row">
+      <div class="option-group">
+        <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+        <p>{{ user?.username || 'Usuario' }}</p>
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group">
+        <p>{{ formatearDinero(dinero) }}</p>
+        <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+      </div>
+    </div>
+
+    <div class="header-optionsB bottom-row">
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/home-blanco.png" alt="Inicio" (click)="volverAtras()">
+      </div>
+    </div>
+    
+    <div class="div-img-user">
+      <img class="img-user" src="Ejemplos/img-user.jpeg" alt="imagen de usuario">
+    </div>
+  </header>
+
+  <section class="content-area">
+    
+    <div class="team-header">
+      
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label">Valor Plantilla</span>
+          <span class="stat-value text-green">{{ formatearDinero(valorPlantilla) }} Tc</span>
+        </div>
+        
+        <div class="stat-card">
+          <span class="stat-label">Media Global</span>
+          <div class="rating-box-mini" [ngClass]="getMediaClass(mediaPlantilla)">
+            {{ mediaPlantilla }}
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Jugadores</span>
+          <span class="stat-value">{{ totalJugadores }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrollable-content">
+      <div class="list-scroll">
+        
+        @if (isLoading) {
+          <div class="loading-msg">Cargando jugadores...</div>
+        } @else {
+          
+          <div
+            class="player-row"
+            *ngFor="let jugador of misJugadores; let i = index"
+            [style.animation-delay]="i * 0.05 + 's'"
+          >
+            <div class="player-left-section">
+              <div class="team-token">
+                <img 
+                  [src]="obtenerRutaEscudo(jugador.equipo)" 
+                  alt="{{ jugador.equipo }}" 
+                  class="team-img"
+                >
+              </div>
+
+              <div class="player-info">
+                <span class="name-text">{{ jugador.nombre }}</span>
+                <span class="team-subtext">{{ jugador.equipo }}</span>
+              </div>
+            </div>
+
+            <div class="player-right-section">
+              <div class="rating-box" [ngClass]="getMediaClass(jugador.media)">
+                <span class="rating-num">{{ jugador.media }}</span>
+                <span class="rating-label">MED</span>
+              </div>
+
+              <div class="pos-badge" [ngClass]="jugador.posicion.toLowerCase()">
+                {{ jugador.posicion }}
+              </div>
+
+              <div class="price-tag">
+                {{ formatearDinero(jugador.precio) }} <span class="currency">Tc</span>
+              </div>
+            </div>
+          </div>
+
+        }
+
+        @if (!isLoading && misJugadores.length === 0) {
+          <div class="empty-msg">
+            Aún no tienes jugadores. ¡Ve al mercado a fichar!
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+</main>

@@ -8,7 +8,7 @@
       </div>
       <span class="separator-header">/</span>
       <div class="option-group">
-        <p>1.034.500</p>
+        <p>{{ formatearDinero(dinero) }}</p>
         <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
       </div>
     </div>
@@ -32,112 +32,204 @@
     </div>
   </header>
 
-  <aside class="sidebar-filters">
-    <h1 class="page-title">Mercado</h1>
+  <section class="mercado-layout">
 
-    <div class="filters-list">
-      <div class="filter-item" [class.active]="filtroActivo === 'TODOS'" (click)="filtrarPor('TODOS')">
-        <div class="dot-indicator"></div>
-        <span class="filter-name">Todos</span>
-      </div>
-
-      <div class="filter-item" [class.active]="filtroActivo === 'DL'" (click)="filtrarPor('DL')">
-        <div class="dot-indicator"></div>
-        <div class="tag dl">DL</div>
-        <span class="filter-name">Delanteros</span>
-      </div>
-
-      <div class="filter-item" [class.active]="filtroActivo === 'MC'" (click)="filtrarPor('MC')">
-        <div class="dot-indicator"></div>
-        <div class="tag mc">MC</div>
-        <span class="filter-name">Medios</span>
-      </div>
-
-      <div class="filter-item" [class.active]="filtroActivo === 'DF'" (click)="filtrarPor('DF')">
-        <div class="dot-indicator"></div>
-        <div class="tag df">DF</div>
-        <span class="filter-name">Defensas</span>
-      </div>
-
-      <div class="filter-item" [class.active]="filtroActivo === 'PT'" (click)="filtrarPor('PT')">
-        <div class="dot-indicator"></div>
-        <div class="tag pt">PT</div>
-        <span class="filter-name">Porteros</span>
-      </div>
-    </div>
-  </aside>
-
-  <section class="content-area">
-    <div class="scrollable-content">
-
-      <div class="league-banner">
-        <div class="banner-image-placeholder"></div>
-        <div class="banner-overlay">
-          <div class="banner-top-tag">LIGA DE FÚTBOL</div>
-          <h2>Trebol League</h2>
-          <div class="banner-bottom-site">REALLYGREATSITE.COM</div>
+    <aside class="sidebar-filters">
+      <h1 class="page-title">Mercado</h1>
+      <div class="filters-list">
+        <div class="filter-item" [class.active]="filtroActivo === 'TODOS'" (click)="filtrarPor('TODOS')">
+          <div class="dot-indicator"></div><span class="filter-name">Todos</span>
+        </div>
+        <div class="filter-item" [class.active]="filtroActivo === 'DL'" (click)="filtrarPor('DL')">
+          <div class="dot-indicator"></div><div class="tag dl">DL</div><span class="filter-name">Delanteros</span>
+        </div>
+        <div class="filter-item" [class.active]="filtroActivo === 'MC'" (click)="filtrarPor('MC')">
+          <div class="dot-indicator"></div><div class="tag mc">MC</div><span class="filter-name">Medios</span>
+        </div>
+        <div class="filter-item" [class.active]="filtroActivo === 'DF'" (click)="filtrarPor('DF')">
+          <div class="dot-indicator"></div><div class="tag df">DF</div><span class="filter-name">Defensas</span>
+        </div>
+        <div class="filter-item" [class.active]="filtroActivo === 'PT'" (click)="filtrarPor('PT')">
+          <div class="dot-indicator"></div><div class="tag pt">PT</div><span class="filter-name">Porteros</span>
         </div>
       </div>
+    </aside>
 
-      <div class="balance-cards">
-        <div class="card-balance green-theme">
-          <div class="icon-circle-thick">C</div>
-          <div class="balance-text">
-            <span class="label-balance">Mi saldo:</span>
-            <span class="amount positive">1.034.500 Tc</span>
+    <div class="content-area">
+      <div class="scrollable-content">
+        
+        <div class="league-banner">
+          <div class="banner-image-placeholder"></div>
+          <div class="banner-overlay"></div>
+        </div>
+
+        <div class="balance-cards">
+          <div class="card-balance green-theme">
+            <div class="icon-circle-thick">C</div>
+            <div class="balance-text">
+              <span class="label-balance">Saldo Actual / Futuro</span>
+              
+              <div class="money-row">
+                <span class="amount positive">{{ formatearDinero(dinero) }}</span>
+                
+                <span class="arrow">➔</span>
+                
+                <span class="amount future" [class.negative]="saldoFuturo < 0">
+                  {{ formatearDinero(saldoFuturo) }}
+                </span>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="card-balance">
+            <div class="icon-circle-thick">⏱</div>
+            <div class="balance-text">
+              <span class="label-balance">Nuevo mercado en:</span>
+              <span class="amount">{{ tiempoRestante }}</span>
+            </div>
           </div>
         </div>
-        <div class="card-balance">
-          <div class="icon-circle-thick">⏱</div>
-          <div class="balance-text">
-            <span class="label-balance">Nuevo mercado en:</span>
-            <span class="amount">{{ tiempoRestante }}</span>
+
+        <div class="players-list-container">
+          <div class="list-header">
+            <span style="flex: 2;">Jugador</span>
+            <span style="flex: 1; text-align: right;">Precio</span>
           </div>
-        </div>
-      </div>
 
-      <div class="players-list-container">
-        <div class="list-header">
-          <span style="flex: 2;">Jugador</span>
-          <span style="flex: 1; text-align: right;">Precio</span>
-        </div>
+          <div class="list-scroll" [class.fade-out]="isAnimatingFilter">
+            
+            <div
+              class="player-row"
+              *ngFor="let jugador of jugadoresMostrados; let i = index"
+              [style.animation-delay]="i * 0.05 + 's'"
+              [class.user-sale]="jugador.id_vendedor"
+              (click)="gestionarClicJugador(jugador)"
+            >
+              <div class="player-left-section">
+                <div class="team-token">
+                  <img 
+                    [src]="obtenerRutaEscudo(jugador.equipo)" 
+                    alt="{{ jugador.equipo }}" 
+                    class="team-img"
+                  >
+                </div>
+                <div class="player-info">
+                  <span class="name-text">{{ jugador.nombre }}</span>
+                  <span class="team-subtext">{{ jugador.id_vendedor ? 'Vendido por ' + jugador.vendedor_name : 'Jugador de ' + jugador.equipo }}</span>
+                </div>
+              </div>
 
-        <div class="list-scroll">
-          <div
-            class="player-row"
-            *ngFor="let jugador of jugadoresMostrados; let i = index"
-            [style.animation-delay]="i * 0.05 + 's'"
-            (click)="comprarJugador(jugador)"
-          >
-            <div class="col-name">
-              <div class="player-avatar-placeholder"></div>
-              <span class="name-text">{{ jugador.nombre }}</span>
-              <div class="pos-badge" [ngClass]="jugador.posicion.toLowerCase()">
-                {{ jugador.posicion }}
+              <div class="player-right-section">
+                <div class="rating-box" [ngClass]="getMediaClass(jugador.media)">
+                  <span class="rating-num">{{ jugador.media }}</span>
+                </div>
+                <div class="pos-badge" [ngClass]="jugador.posicion.toLowerCase()">
+                  {{ jugador.posicion }}
+                </div>
+                <div class="price-tag">
+                  {{ formatearDinero(jugador.precio) }} <span class="currency">Tc</span>
+                </div>
+
+                <div class="status-labels">
+                  <div *ngIf="jugador.id_vendedor" class="tag-label venta">
+                    EN VENTA
+                  </div>
+                  <div *ngIf="jugador.pujado_por_mi" class="tag-label pujado">
+                    <span class="icon-small">✔</span> PUJADO
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="col-value">
-              {{ formatearDinero(jugador.precio) }} Tc
+            <div *ngIf="jugadoresMostrados.length === 0" class="empty-msg">
+              No hay jugadores en esta posición
             </div>
           </div>
+        </div>
 
-          @if (jugadoresMostrados.length === 0) {
-            <div class="empty-msg">No hay jugadores en esta posición</div>
-          }
+      </div>
+    </div>
+
+    <aside class="sidebar-history">
+      <h2 class="history-title">Historial</h2>
+      <div class="history-list">
+        <div class="history-item" *ngFor="let item of historial">
+          <div class="h-icon">🔄</div>
+          <div class="h-info">
+            <p><strong>{{ item.comprador }}</strong> fichó a <strong>{{ item.nombre_jugador }}</strong></p>
+            <span class="h-price">{{ formatearDinero(item.monto) }} Tc</span>
+          </div>
+        </div>
+        <div *ngIf="historial.length === 0" class="empty-history">
+          No hay movimientos
         </div>
       </div>
+    </aside>
 
-    </div>
   </section>
 
-  @if (notificationMsg) {
-    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
-      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-      <div class="toast-content">
-        <p class="toast-message">{{ notificationMsg }}</p>
+  <div class="toast-notification" *ngIf="notificationMsg" [class.success]="isSuccess" [class.error]="!isSuccess">
+    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+    <div class="toast-content">
+      <p class="toast-message">{{ notificationMsg }}</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalPuja && jugadorSeleccionado" (click)="cerrarModales()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">Pujar por {{ jugadorSeleccionado.nombre }}</h2>
+        <span class="close-btn" (click)="cerrarModales()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="player-summary">
+          <div class="team-token large">
+            <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="team-img">
+          </div>
+          <div class="info-block">
+            <span class="player-name-modal">{{ jugadorSeleccionado.nombre }}</span>
+            <span class="player-team-modal">{{ jugadorSeleccionado.equipo }}</span>
+          </div>
+          <div class="rating-box" [ngClass]="getMediaClass(jugadorSeleccionado.media)">
+            <span class="rating-num">{{ jugadorSeleccionado.media }}</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Tu oferta (Mínimo: {{ formatearDinero(jugadorSeleccionado.precio) }} Tc)</label>
+          <input type="number" [(ngModel)]="ofertaPuja" class="input-puja" placeholder="Cantidad...">
+        </div>
+        <p class="warning-msg" *ngIf="ofertaPuja > dinero">⚠️ No tienes suficiente saldo</p>
+      </div>
+      <div class="modal-footer">
+      <button *ngIf="jugadorSeleccionado.pujado_por_mi" class="btn-borrar" (click)="borrarPuja()">
+          Retirar
+        </button>        
+      <button class="btn-confirmar" (click)="confirmarPuja()" [disabled]="ofertaPuja < jugadorSeleccionado.precio || ofertaPuja > dinero">
+        Pujar
+      </button>
       </div>
     </div>
-  }
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalCompraDirecta && jugadorSeleccionado" (click)="cerrarModales()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">Compra Directa</h2>
+        <span class="close-btn" (click)="cerrarModales()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p class="compra-text">¿Quieres fichar a <strong>{{ jugadorSeleccionado.nombre }}</strong> por <strong>{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="jugadorSeleccionado.pujado_por_mi" class="btn-borrar" (click)="borrarPuja()">
+          Retirar
+        </button>        
+        <button class="btn-confirmar" (click)="confirmarCompraDirecta()" [disabled]="jugadorSeleccionado.precio > dinero">
+          Comprar
+        </button>
+      </div>
+    </div>
+  </div>
 
 </main>
