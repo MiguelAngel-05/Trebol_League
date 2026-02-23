@@ -5,6 +5,7 @@ import { Ligas } from './ligas/ligas';
 import { Menu } from './menu/menu'; 
 import { Mercado } from './mercado/mercado';
 import { ListaJugadores } from './lista-jugadores/lista-jugadores';
+import { Tienda } from './tienda/tienda';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const routes: Routes = [
             { path: 'menu', component: Menu },
             { path: 'mercado', component: Mercado },
             { path: 'jugadores', component: ListaJugadores },
+            { path: 'tienda', component: Tienda},
         ]
     },
     { path: '**', redirectTo: 'login', pathMatch: 'full' }

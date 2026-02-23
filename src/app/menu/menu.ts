@@ -83,7 +83,10 @@ export class Menu {
   }
 
   irATienda() {
-    this.mostrarNotificacion('La tienda está cerrada por hoy', false);
+    this.mostrarNotificacion('Cargando base de datos...', true);
+    setTimeout(() => {
+      this.router.navigate(['/ligas', this.id_liga, 'tienda']);
+    }, 500);
   }
 
   verInfo() {

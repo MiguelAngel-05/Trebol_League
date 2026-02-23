@@ -9,4 +9,12 @@ export interface Jugador {
   vendedor_name?: string;
   pujado_por_mi?: boolean;
   mi_puja_actual?: number;
+  // Campos opcionales extra para el diseño de la carta
+  imagen?: string;
+  stats?: {
+    ataque: number;
+    defensa: number;
+    velocidad: number;
+    pase: number;
+  };
 }
