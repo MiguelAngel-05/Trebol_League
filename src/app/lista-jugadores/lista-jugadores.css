@@ -133,6 +133,49 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .empty-msg { text-align: center; color: #aaa; margin-top: 40px; font-style: italic; }
 .loading-msg { text-align: center; color: white; margin-top: 40px; font-size: 1.2rem; }
 
+/* === ZONA DE ACCIÓN DE VENTA === */
+.action-zone {
+  min-width: 90px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.btn-vender {
+  background: linear-gradient(135deg, #ffa502, #ff7f50);
+  border: none;
+  color: #1a2b22;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.btn-vender:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 15px rgba(255, 165, 2, 0.4);
+}
+
+.tag-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-label.venta {
+  background: rgba(255, 165, 2, 0.15);
+  color: #ffa502;
+  border: 1px solid rgba(255, 165, 2, 0.4);
+}
+
 /* ANIMACIONES */
 @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

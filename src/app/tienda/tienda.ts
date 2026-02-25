@@ -21,12 +21,10 @@ export class Tienda {
     vendedor_name: "UsuarioMisterioso",
     pujado_por_mi: false,
     imagen: "https://api.dicebear.com/9.x/micah/svg?seed=Christopher",
-    stats: {
-      ataque: 88,
-      defensa: 42,
-      velocidad: 91,
-      pase: 82
-    }
+    ataque: 80,
+    defensa: 50,
+    pase: 75,
+    parada: 10
   };
 
 }

@@ -88,6 +88,16 @@
               <div class="price-tag">
                 {{ formatearDinero(jugador.precio) }} <span class="currency">Tc</span>
               </div>
+
+              <div class="action-zone">
+                <button *ngIf="!jugador.en_venta" class="btn-vender" (click)="venderJugador(jugador)">
+                  VENDER
+                </button>
+                <div *ngIf="jugador.en_venta" class="tag-label venta">
+                  EN VENTA
+                </div>
+              </div>
+
             </div>
           </div>
 

@@ -23,12 +23,12 @@
     {{ jugador.posicion }}
   </div>
 
-  <div class="stats-row" *ngIf="jugador.stats">
-    <div class="stat">{{ jugador.stats?.velocidad }}</div>
-    <div class="stat">{{ jugador.stats?.ataque }}</div>
-    <div class="stat">{{ jugador.stats?.pase }}</div>
-    <div class="stat">{{ jugador.stats?.defensa }}</div>
-  </div>
+  <div class="stats-row">
+     <div class="stat"><small>PAR</small> {{ jugador.parada || 0 }}</div>
+     <div class="stat"><small>ATQ</small> {{ jugador.ataque || 0 }}</div>
+     <div class="stat"><small>PAS</small> {{ jugador.pase || 0 }}</div>
+     <div class="stat"><small>DEF</small> {{ jugador.defensa || 0 }}</div>
+   </div>
 
   <div class="rarity-box">
     COMÚN

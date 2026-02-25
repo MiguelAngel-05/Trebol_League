@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Jugador } from '../models/Jugador';
+
 @Component({
   selector: 'app-lista-jugadores',
   standalone: true,
@@ -43,7 +44,6 @@ export class ListaJugadores implements OnInit {
     this.cargarMisJugadores();
   }
 
-  // Cargar Dinero (Para el Header)
   cargarDatosUsuario() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
@@ -55,7 +55,6 @@ export class ListaJugadores implements OnInit {
       });
   }
 
-  // Cargar Jugadores de la Plantilla
   cargarMisJugadores() {
     this.isLoading = true;
     const token = localStorage.getItem('token');
@@ -79,9 +78,39 @@ export class ListaJugadores implements OnInit {
       });
   }
 
+  // --- NUEVA LÓGICA PARA VENDER JUGADORES ---
+  venderJugador(jugador: Jugador) {
+    const inputPrecio = prompt(`Vas a poner en venta a ${jugador.nombre}.\n\nValor Base: ${this.formatearDinero(jugador.precio)} Tc.\n\nIntroduce el precio de venta deseado:`, jugador.precio.toString());
+
+    if (inputPrecio !== null) {
+      // Limpiamos los puntos por si el usuario escribe "10.000.000"
+      const precioFinal = Number(inputPrecio.replace(/[^0-9]/g, '')); 
+      
+      if (isNaN(precioFinal) || precioFinal <= 0) {
+        alert('Precio no válido. Introduce solo números.');
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+      const body = { 
+        id_futbolista: jugador.id_futbolista, 
+        precio_venta: precioFinal 
+      };
+
+      this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/vender`, body, { headers })
+        .subscribe({
+          next: () => {
+            alert(`¡${jugador.nombre} ha sido puesto en el mercado por ${this.formatearDinero(precioFinal)} Tc!`);
+            this.cargarMisJugadores(); // Recargamos para que aparezca la etiqueta de "EN VENTA"
+          },
+          error: (err) => alert('Error al poner en venta el jugador.')
+        });
+    }
+  }
+
   calcularEstadisticas() {
     this.totalJugadores = this.misJugadores.length;
-    
     this.valorPlantilla = this.misJugadores.reduce((acc, j) => acc + Number(j.precio), 0);
     
     if (this.totalJugadores > 0) {
@@ -90,28 +119,30 @@ export class ListaJugadores implements OnInit {
     }
   }
 
+  // MAPEO EXACTO BASADO EN TUS IMÁGENES
   obtenerRutaEscudo(nombreEquipo: string): string {
     const mapeo: { [key: string]: string } = {
-      'Real Trébol FC': 'real_trebol.jpg',
-      'Atlético Capitalino': 'atletico_capitalino.jpg',
-      'Deportivo La Corona': 'deportivo_la_corona.jpg',
-      'Racing de Norte': 'racing_de_norte.jpg',
-      'Unión de Hierro': 'union_de_hierro.jpg',
-      'Ferroviarios del Sur': 'ferroviarios_del_sur.jpg',
-      'Mineros de Carbón FC': 'mineros_de_carbon.jpg',
-      'Dinamo de la Fábrica': 'dinamo_de_la_fabrica.jpg',
-      'Puerto Nuevo Sporting': 'puerto_nuevo_sporting.jpg',
+      'Real Pinar FC': 'real_pinar.jpg',
+      'Athletic Hullera': 'athletic_hullera.jpg',
       'Club Náutico Brisamar': 'club_nautico_brisamar.jpg',
-      'Marinos de San Telmo': 'marinos_de_san_telmo.jpg',
-      'Estuario FC': 'estuario.jpg',
-      'Bosque Profundo': 'bosque_profundo.jpg',
-      'Juventud Esmeralda': 'juventud_esmeralda.png',
-      'Defensores del Valle': 'defensores_del_valle.jpg',
-      'Robles de la Sierra': 'robles_de_la_sierra.jpg',
-      'Académica de Letras': 'academia_de_letras.jpg',
-      'Gimnasia y Esgrima del Solar': 'gimnasia_y_esgrima.jpg',
-      'Sociedad Deportiva El Bastión': 'el_bastion.jpg',
-      'Fénix Renaciente': 'fenix_renaciente.png'
+      'Racing Vaguadas': 'racing_vaguadas.jpg',
+      'Motor Club Chacón': 'motor_club_chacon.jpg',
+      'Unión Fortaleza': 'union_fortaleza.jpg',
+      'CD Frontera': 'cd_frontera.jpg',
+      'Sporting Lechuza': 'sporting_lechuza.jpg',
+      'CF Átomo': 'cf_atomo.jpg',
+      'Deportivo Relámpago': 'deportivo_relampago.jpg',
+      'CD Refugio': 'cd_refugio.jpg',
+      'Dragones de Oriente': 'dragones_de_oriente.jpg',
+      'UD Recreo': 'ud_recreo.jpg',
+      'Alianza Metropolitana': 'alianza_metropolitana.jpg',
+      'Neón City FC': 'neon_city_fc.jpg',
+      'Pixel United': 'pixel_united.jpg',
+      'Gourmet FC': 'gourmet_fc.jpg',
+      'Titanes CF': 'titanes_cf.jpg',
+      'Pangea FC': 'pangea_fc.jpg',
+      'Cosmos United': 'cosmos_united.jpg',
+      'Real Trébol FC': 'real_trebol.jpg'
     };
     const archivo = mapeo[nombreEquipo];
     return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.png';
@@ -140,7 +171,4 @@ export class ListaJugadores implements OnInit {
   volverAtras() {
     this.router.navigate(['/ligas', this.id_liga, 'menu']);
   }
-  
-  irATienda() { alert('Tienda cerrada'); }
-  verInfo() { alert('Beta 1.0'); }
 }

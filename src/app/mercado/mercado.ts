@@ -280,26 +280,27 @@ export class Mercado implements OnInit, OnDestroy {
 
   obtenerRutaEscudo(nombreEquipo: string): string {
     const mapeo: { [key: string]: string } = {
-      'Real Trébol FC': 'real_trebol.jpg',
-      'Atlético Capitalino': 'atletico_capitalino.jpg',
-      'Deportivo La Corona': 'deportivo_la_corona.jpg',
-      'Racing de Norte': 'racing_de_norte.jpg',
-      'Unión de Hierro': 'union_de_hierro.jpg',
-      'Ferroviarios del Sur': 'ferroviarios_del_sur.jpg',
-      'Mineros de Carbón FC': 'mineros_de_carbon.jpg',
-      'Dinamo de la Fábrica': 'dinamo_de_la_fabrica.jpg',
-      'Puerto Nuevo Sporting': 'puerto_nuevo_sporting.jpg',
+      'Real Pinar FC': 'real_pinar.jpg',
+      'Athletic Hullera': 'athletic_hullera.jpg',
       'Club Náutico Brisamar': 'club_nautico_brisamar.jpg',
-      'Marinos de San Telmo': 'marinos_de_san_telmo.jpg',
-      'Estuario FC': 'estuario.jpg',
-      'Bosque Profundo': 'bosque_profundo.jpg',
-      'Juventud Esmeralda': 'juventud_esmeralda.png',
-      'Defensores del Valle': 'defensores_del_valle.jpg',
-      'Robles de la Sierra': 'robles_de_la_sierra.jpg',
-      'Académica de Letras': 'academia_de_letras.jpg',
-      'Gimnasia y Esgrima del Solar': 'gimnasia_y_esgrima.jpg',
-      'Sociedad Deportiva El Bastión': 'el_bastion.jpg',
-      'Fénix Renaciente': 'fenix_renaciente.png'
+      'Racing Vaguadas': 'racing_vaguadas.jpg',
+      'Motor Club Chacón': 'motor_club_chacon.jpg',
+      'Unión Fortaleza': 'union_fortaleza.jpg',
+      'CD Frontera': 'cd_frontera.jpg',
+      'Sporting Lechuza': 'sporting_lechuza.jpg',
+      'CF Átomo': 'cf_atomo.jpg',
+      'Deportivo Relámpago': 'deportivo_relampago.jpg',
+      'CD Refugio': 'cd_refugio.jpg',
+      'Dragones de Oriente': 'dragones_de_oriente.jpg',
+      'UD Recreo': 'ud_recreo.jpg',
+      'Alianza Metropolitana': 'alianza_metropolitana.jpg',
+      'Neón City FC': 'neon_city_fc.jpg',
+      'Pixel United': 'pixel_united.jpg',
+      'Gourmet FC': 'gourmet_fc.jpg',
+      'Titanes CF': 'titanes_cf.jpg',
+      'Pangea FC': 'pangea_fc.jpg',
+      'Cosmos United': 'cosmos_united.jpg',
+      'Real Trébol FC': 'real_trebol.jpg'
     };
     const archivo = mapeo[nombreEquipo];
     return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.png';
