@@ -95,7 +95,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 
 /* IZQUIERDA */
 .player-left-section { display: flex; align-items: center; gap: 15px; flex: 1; }
-.team-token { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); overflow: hidden; }
+.team-token { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); overflow: hidden; }
 .team-img { width: 85%; height: 85%; object-fit: contain; }
 .player-info { display: flex; flex-direction: column; }
 .name-text { color: white; font-size: 1.1rem; font-weight: 700; }
