@@ -2,11 +2,11 @@
 main {
     margin: 0;
     overflow: hidden; 
-    background: url("/Fondos/FondoJugadores4.jpg");
+    background: url("/Fondos/FondoLoginRegister.png");
     background-color: rgba(0,0,0,0.5); 
     background-blend-mode: overlay;
     background-size: cover;
-    background-position: top;
+    background-position: bottom;
     width: 100vw;
     height: 100vh;
     display: flex;

@@ -112,6 +112,7 @@ export class Mercado implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.historial = data;
+          console.log(this.historial);
         },
         error: (err) => {
           console.error('Error al cargar el historial', err);
@@ -123,18 +124,14 @@ export class Mercado implements OnInit, OnDestroy {
   filtrarPor(posicion: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT') {
     if (this.filtroActivo === posicion) return; 
 
-    // 1. Activar animación de salida
     this.isAnimatingFilter = true;
     this.filtroActivo = posicion; 
 
-    // 2. Esperar 300ms (tiempo de la transición CSS)
     setTimeout(() => {
-      // 3. Cambiar los datos
       this.jugadoresMostrados = posicion === 'TODOS' 
         ? [...this.jugadores] 
         : this.jugadores.filter(j => j.posicion === posicion);
       
-      // 4. Desactivar animación para que entren los nuevos
       setTimeout(() => {
         this.isAnimatingFilter = false;
       }, 50);

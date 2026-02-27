@@ -28,7 +28,7 @@
     </div>
 
     <div class="div-img-user">
-      <img class="img-user" src="Ejemplos/img-user.jpeg" alt="imagen de usuario">
+      <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario">
     </div>
   </header>
 
@@ -157,7 +157,7 @@
         <div class="history-item" *ngFor="let item of historial">
           <div class="h-icon">🔄</div>
           <div class="h-info">
-            <p><strong>{{ item.comprador }}</strong> fichó a <strong>{{ item.nombre_jugador }}</strong></p>
+            <p><strong>{{ item.comprador }}</strong> fichó a <strong>{{ item.jugador }}</strong></p>
             <span class="h-price">{{ formatearDinero(item.monto) }} Tc</span>
           </div>
         </div>
