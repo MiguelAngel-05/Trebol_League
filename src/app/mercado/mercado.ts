@@ -112,7 +112,6 @@ export class Mercado implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.historial = data;
-          console.log(this.historial);
         },
         error: (err) => {
           console.error('Error al cargar el historial', err);
@@ -324,6 +323,9 @@ export class Mercado implements OnInit, OnDestroy {
   }
 
   volverAtras() { this.router.navigate(['/ligas', this.id_liga, 'menu']); }
+  irAPerfil() {
+    this.router.navigate(['/perfil']);
+  }
   irATienda() { this.mostrarNotificacion('La tienda está cerrada por hoy', false); }
   verInfo() { this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true); }
 

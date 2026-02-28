@@ -1,0 +1,52 @@
+<main class="main-container">
+  <div class="perfil-card">
+    
+    <h1 class="titulo-perfil">Tu Perfil</h1>
+
+    <div class="preview-section">
+      <div class="avatar-grande-container">
+        <img [src]="avatarPrevisualizacion" alt="Previsualización" class="avatar-preview">
+        <button class="btn-randomize" (click)="generarOtroRandom()" title="Generar otra variante">🎲</button>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Nombre de Usuario</label>
+      <input type="text" [(ngModel)]="nombreInput" class="input-nombre" placeholder="Tu nuevo nombre...">
+    </div>
+
+    <div class="styles-section">
+      <label class="styles-label">Elige un estilo de Avatar</label>
+      <div class="styles-grid">
+        
+        @for (estilo of estilosAvatar; track estilo.url) {
+          <div class="style-option" 
+               [class.active]="estiloSeleccionado === estilo.url"
+               (click)="seleccionarEstilo(estilo.url)">
+            <img [src]="estilo.url + '?seed=Ejemplo'" class="style-img">
+          </div>
+        }
+
+      </div>
+    </div>
+
+    <div class="acciones-perfil">
+      <button class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+      <button class="btn-guardar" (click)="guardarPerfil()" [disabled]="isLoading">
+        @if (isLoading) {
+          Guardando...
+        } @else {
+          Guardar Cambios
+        }
+      </button>
+    </div>
+
+  </div>
+
+  @if (notificationMsg) {
+    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+      <div class="toast-icon">{{ isSuccess ? '✔' : '✖' }}</div>
+      <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
+    </div>
+  }
+</main>

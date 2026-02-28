@@ -3,35 +3,34 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
-import { FormsModule } from '@angular/forms'; 
 import { Jugador } from '../models/Jugador';
 
 @Component({
-  selector: 'app-lista-jugadores',
+  selector: 'app-plantilla-rival',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './lista-jugadores.html',
-  styleUrl: './lista-jugadores.css'
+  imports: [CommonModule],
+  templateUrl: './plantilla-rival.html',
+  styleUrl: './plantilla-rival.css'
 })
-export class ListaJugadores implements OnInit {
+export class PlantillaRival implements OnInit {
 
   user: any = null;
   id_liga!: number;
+  id_rival!: number;
   dinero: number = 0;
 
-  misJugadores: Jugador[] = [];
+  jugadoresRival: Jugador[] = [];
   isLoading = true;
 
   valorPlantilla: number = 0;
   mediaPlantilla: number = 0;
   totalJugadores: number = 0;
 
-  mostrarModalVenta: boolean = false;
-  jugadorAVender: Jugador | null = null;
-  precioVentaInput: number = 0;
-  
   notificationMsg = '';
   isSuccess = false;
+
+  nombreRival: string = 'Cargando...';
+  avatarRival: string = '';
 
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -42,17 +41,18 @@ export class ListaJugadores implements OnInit {
 
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
+    this.id_rival = Number(this.route.snapshot.paramMap.get('idUsuario')); // ID del rival
     const token = localStorage.getItem('token');
 
     if (token) {
       try { this.user = jwtDecode(token); } catch {}
     }
 
-    this.cargarDatosUsuario();
-    this.cargarMisJugadores();
+    this.cargarDatosMios(); // Para mostrar tu dinero en el header
+    this.cargarJugadoresRival();
   }
 
-  cargarDatosUsuario() {
+  cargarDatosMios() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
@@ -63,15 +63,18 @@ export class ListaJugadores implements OnInit {
       });
   }
 
-  cargarMisJugadores() {
+  cargarJugadoresRival() {
     this.isLoading = true;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.get<Jugador[]>(`${this.apiBase}/api/ligas/${this.id_liga}/mis-jugadores`, { headers })
+    this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/jugadores-rival/${this.id_rival}`, { headers })
       .subscribe({
         next: (data) => {
-          this.misJugadores = data.map(j => ({
+          this.nombreRival = data.rival?.username || 'Mánager Desconocido';
+          this.avatarRival = data.rival?.avatar || '';
+
+          this.jugadoresRival = data.jugadores.map((j: any) => ({
             ...j,
             posicion: this.normalizarPosicion(j.posicion)
           }));
@@ -86,54 +89,16 @@ export class ListaJugadores implements OnInit {
       });
   }
 
-  abrirModalVender(jugador: Jugador) {
-    this.jugadorAVender = jugador;
-    this.precioVentaInput = jugador.precio;
-    this.mostrarModalVenta = true;
+  hacerOferta(jugador: Jugador) {
+    this.mostrarNotificacion(`Próximamente: Sistema de ofertas por ${jugador.nombre}`, false);
   }
-
-  cerrarModalVenta() {
-    this.mostrarModalVenta = false;
-    this.jugadorAVender = null;
-    this.precioVentaInput = 0;
-  }
-
-  confirmarVenta() {
-    if (!this.jugadorAVender) return;
-    
-    if (this.precioVentaInput === null || isNaN(this.precioVentaInput) || this.precioVentaInput <= 0) {
-      this.mostrarNotificacion('Introduce un precio válido mayor a 0', false);
-      return;
-    }
-
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    const body = { 
-      id_futbolista: this.jugadorAVender.id_futbolista, 
-      precio_venta: this.precioVentaInput 
-    };
-
-    this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/vender`, body, { headers })
-      .subscribe({
-        next: () => {
-          this.mostrarNotificacion(`¡${this.jugadorAVender!.nombre} puesto en venta!`, true);
-          this.cerrarModalVenta();
-          this.cargarMisJugadores(); 
-        },
-        error: (err) => {
-          console.error(err);
-          this.mostrarNotificacion('Error al poner en venta el jugador.', false);
-        }
-      });
-  }
-
 
   calcularEstadisticas() {
-    this.totalJugadores = this.misJugadores.length;
-    this.valorPlantilla = this.misJugadores.reduce((acc, j) => acc + Number(j.precio), 0);
+    this.totalJugadores = this.jugadoresRival.length;
+    this.valorPlantilla = this.jugadoresRival.reduce((acc, j) => acc + Number(j.precio), 0);
     
     if (this.totalJugadores > 0) {
-      const sumaMedia = this.misJugadores.reduce((acc, j) => acc + j.media, 0);
+      const sumaMedia = this.jugadoresRival.reduce((acc, j) => acc + j.media, 0);
       this.mediaPlantilla = Math.round(sumaMedia / this.totalJugadores);
     }
   }
@@ -187,7 +152,7 @@ export class ListaJugadores implements OnInit {
   }
 
   volverAtras() {
-    this.router.navigate(['/ligas', this.id_liga, 'menu']);
+    this.router.navigate(['/ligas', this.id_liga, 'clasificacion']);
   }
 
   irAPerfil() {

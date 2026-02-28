@@ -69,16 +69,25 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden;}
 
 .div-img-user {
     background: linear-gradient(to bottom, #1f8f5f, #156942);
-    width: 140px; height: 100%; 
-    position: absolute; top: 0; right: 0; 
+    width: 140px; height: 100%; position: absolute; top: 0; right: 0; 
     display: flex; align-items: center; justify-content: center; 
     border-top-right-radius: 20px; border-bottom-left-radius: 20px;
     box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 5;
+    cursor: pointer; 
 } 
+
 .img-user { 
     width: 80px; height: 80px; 
-    border-radius: 15px; border: 3px solid rgba(255,255,255,0.2);
-    object-fit: cover;
+    border-radius: 15px; 
+    border: 3px solid rgba(255,255,255,0.2); 
+    object-fit: cover; 
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.div-img-user:hover .img-user {
+    transform: scale(1.15); 
+    border-color: #2ed573; 
+    box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); 
 }
 
 

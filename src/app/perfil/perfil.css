@@ -1,0 +1,54 @@
+body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
+
+.main-container {
+  width: 100%; height: 100vh;
+  background-image: url("/Fondos/FondoEstandar.png");
+  background-color: rgba(10, 20, 15, 0.9); background-blend-mode: overlay;
+  background-size: cover; background-position: center; 
+  display: flex; justify-content: center; align-items: center;
+}
+
+.perfil-card {
+  background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  border-radius: 25px; padding: 40px; width: 90%; max-width: 500px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+  display: flex; flex-direction: column; gap: 25px;
+  animation: zoomIn 0.4s ease forwards;
+}
+
+.titulo-perfil { color: white; text-align: center; margin: 0; font-weight: 800; font-size: 2rem; text-shadow: 0 0 15px rgba(46,213,115,0.4); }
+
+.preview-section { display: flex; justify-content: center; position: relative; }
+.avatar-grande-container { position: relative; width: 140px; height: 140px; }
+.avatar-preview { width: 100%; height: 100%; border-radius: 30px; border: 4px solid #2ed573; box-shadow: 0 0 20px rgba(46,213,115,0.4); object-fit: cover; background: #1a2b22; }
+.btn-randomize { position: absolute; bottom: -10px; right: -10px; background: #1f8f5f; border: 2px solid #2ed573; border-radius: 50%; width: 45px; height: 45px; font-size: 1.5rem; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+.btn-randomize:hover { transform: scale(1.1) rotate(180deg); background: #2ed573; }
+
+.input-group label { display: block; color: #2ed573; margin-bottom: 8px; font-weight: 700; }
+.input-nombre { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-size: 1.2rem; font-family: 'Poppins', sans-serif; font-weight: 600; text-align: center; outline: none; box-sizing: border-box; transition: 0.3s; }
+.input-nombre:focus { border-color: #2ed573; box-shadow: 0 0 15px rgba(46,213,115,0.3); background: rgba(0,0,0,0.5); }
+
+.styles-section { display: flex; flex-direction: column; gap: 10px; }
+.styles-label { color: #aaa; text-align: center; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.styles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+.style-option { background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 10px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; }
+.style-option:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); }
+.style-option.active { border-color: #2ed573; background: rgba(46, 213, 115, 0.15); box-shadow: 0 0 15px rgba(46,213,115,0.3); }
+.style-img { width: 60px; height: 60px; object-fit: contain; }
+
+.acciones-perfil { display: flex; gap: 15px; margin-top: 10px; }
+.acciones-perfil button { flex: 1; padding: 15px; border-radius: 12px; border: none; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+.btn-cancelar { background: rgba(255,255,255,0.05); color: #ccc; border: 1px solid rgba(255,255,255,0.1); }
+.btn-cancelar:hover { background: rgba(255,71,87,0.2); border-color: #ff4757; color: white; }
+.btn-guardar { background: linear-gradient(90deg, #1f8f5f, #2ed573); color: #1a2b22; box-shadow: 0 5px 15px rgba(31, 143, 95, 0.4); }
+.btn-guardar:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(31, 143, 95, 0.6); color: white; }
+.btn-guardar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.toast-notification { position: fixed; bottom: 30px; right: 30px; z-index: 10000; background: #000; border-left: 5px solid #2ed573; padding: 15px 25px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); animation: slideInRight 0.4s ease-out; }
+.toast-notification.error { border-left-color: #ff4757; }
+.toast-icon { font-size: 1.5rem; } .toast-message { margin: 0; font-size: 0.9rem;}
+
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

@@ -167,10 +167,15 @@ export class Ligas {
   }
 
   volverAtras() {
+    localStorage.removeItem('token');
     this.router.navigate(['/login']); 
+    this.mostrarNotificacion('Sesión cerrada correctamente', true); 
   }
 
-  // menu para eliminar y tal --> hacerlo proximamente
+  irAPerfil() {
+    this.router.navigate(['/perfil']);
+  }
+
   toggleMenu(index: number, event: Event) {
     event.stopPropagation();
     this.activeMenuIndex = this.activeMenuIndex === index ? null : index;

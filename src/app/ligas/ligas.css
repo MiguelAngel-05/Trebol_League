@@ -61,13 +61,26 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
     display: flex; align-items: center; justify-content: center; 
     border-top-right-radius: 20px; border-bottom-left-radius: 20px;
     box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 5;
+    cursor: pointer; 
 } 
-.img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; }
 
+.img-user { 
+    width: 80px; height: 80px; 
+    border-radius: 15px; 
+    border: 3px solid rgba(255,255,255,0.2); 
+    object-fit: cover; 
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-/* === CONTENT (GLASSMORPHISM) === */
+.div-img-user:hover .img-user {
+    transform: scale(1.15); 
+    border-color: #2ed573; 
+    box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); 
+}
+
+/* === CONTENT === */
 .content {
-    margin-top: 140px; /* Ajustado para librar el header */
+    margin-top: 140px;
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.1);

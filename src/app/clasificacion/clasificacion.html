@@ -1,0 +1,109 @@
+<main class="main-container">
+
+  <header class="main-header">
+    <div class="header-options top-row">
+      <div class="option-group">
+        <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+        <p>{{ user?.username || 'Usuario' }}</p>
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group">
+        <p>{{ formatearDinero(dinero) }}</p>
+        <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+      </div>
+    </div>
+
+    <div class="header-optionsB bottom-row">
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/home-blanco.png" alt="Inicio" (click)="volverAtras()">
+      </div>
+    </div>
+    
+    <div class="div-img-user" (click)="irAPerfil()">
+      <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario" title="Editar Perfil"> 
+    </div>
+  </header>
+
+  <section class="content-area">
+    <div class="team-header">
+      <h1 class="page-title">Clasificación</h1>
+    </div>
+
+    <div class="scrollable-content">
+      @if (isLoading) {
+        <div class="loading-msg">Calculando posiciones...</div>
+      } @else {
+        <div class="clasificacion-list">
+          
+          @for (jugador of clasificacion; track jugador.id; let i = $index) {
+            <div class="user-row" 
+                 [style.animation-delay]="i * 0.1 + 's'"
+                 [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
+              
+              <div class="rank-badge">
+                @if (i === 0) { 🥇 }
+                @else if (i === 1) { 🥈 }
+                @else if (i === 2) { 🥉 }
+                @else { {{ i + 1 }} }
+              </div>
+
+              <div class="user-info">
+                <div class="avatar-container">
+                  <img [src]="jugador.avatar" alt="Avatar" class="user-avatar">
+                </div>
+                <div class="name-block">
+                  <span class="username">{{ jugador.username }}</span>
+                  <span class="rol-text" *ngIf="jugador.rol === 'owner'">(Admin)</span>
+                </div>
+                
+                @if (jugador.id === user?.id) {
+                  <span class="me-badge">Tú</span>
+                }
+              </div>
+
+              <div class="points-section">
+                <div class="money-box">
+                  <span class="money-value">{{ jugador.total_jugadores }} <span class="currency">Jug.</span></span>
+                </div>
+                <div class="points-box">
+                  <span class="pts-value">{{ jugador.puntos }}</span>
+                  <span class="pts-label">PTS</span>
+                </div>
+                
+                @if (jugador.id !== user?.id) {
+                  <div class="btn-opciones" (click)="abrirModalOpciones(jugador)">
+                    <img src="Utensilios/Emojis/tres-puntos.png" alt="Opciones" class="icon-small-btn">
+                  </div>
+                }
+              </div>
+
+            </div>
+          }
+          
+        </div>
+      }
+    </div>
+  </section>
+
+  @if (mostrarModalUsuario && usuarioSeleccionado) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2 class="modal-title">{{ usuarioSeleccionado.username }}</h2>
+          <span class="close-btn" (click)="cerrarModal()">&times;</span>
+        </div>
+        
+        <div class="modal-body user-modal-body">
+          <img [src]="usuarioSeleccionado.avatar" class="avatar-grande" alt="Avatar">
+          <p class="txt-center">¿Qué deseas hacer con este mánager?</p>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-confirmar" (click)="verPlantillaRival()">Ver Jugadores </button>
+          <button class="btn-cancelar" (click)="mandarMensaje()">Mandar Mensaje </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</main>

@@ -59,6 +59,10 @@ export class Menu {
     this.router.navigate(['/ligas']);
   }
 
+  irAPerfil() {
+    this.router.navigate(['/perfil']);
+  }
+
   irAMercado() {
     this.mostrarNotificacion('Entrando al Mercado...', true);
     setTimeout(() => {
@@ -79,7 +83,10 @@ export class Menu {
   }
 
   irAClasificacion() {
-    this.mostrarNotificacion('Clasificación no disponible aún', false);
+    this.mostrarNotificacion('Cargando clasificación...', true);
+    setTimeout(() => {
+      this.router.navigate(['/ligas', this.id_liga, 'clasificacion']);
+    }, 500);
   }
 
   irATienda() {

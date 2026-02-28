@@ -15,7 +15,7 @@
 
     <div class="header-optionsB bottom-row">
       <div class="option-group icon-hover">
-        <img class="pinchar" src="Utensilios/Emojis/home-blanco.png" alt="Inicio" (click)="volverAtras()">
+        <img class="pinchar" src="Utensilios/Emojis/flecha-retroceso.png" alt="Volver" (click)="volverAtras()">
       </div>
     </div>
     
@@ -28,19 +28,25 @@
     
     <div class="team-header">
       
+      <div class="rival-badge">
+        <img [src]="avatarRival" alt="Avatar Rival" class="rival-avatar" *ngIf="avatarRival">
+        <div class="rival-info-text">
+          <span class="rival-subtitle">Plantilla de</span>
+          <span class="rival-name">{{ nombreRival }}</span>
+        </div>
+      </div>
+
       <div class="stats-row">
         <div class="stat-card">
           <span class="stat-label">Valor Plantilla</span>
           <span class="stat-value text-green">{{ formatearDinero(valorPlantilla) }} Tc</span>
         </div>
-        
         <div class="stat-card">
-          <span class="stat-label">Media Global</span>
+          <span class="stat-label">Media</span>
           <div class="rating-box-mini" [ngClass]="getMediaClass(mediaPlantilla)">
             {{ mediaPlantilla }}
           </div>
         </div>
-
         <div class="stat-card">
           <span class="stat-label">Jugadores</span>
           <span class="stat-value">{{ totalJugadores }}</span>
@@ -52,12 +58,12 @@
       <div class="list-scroll">
         
         @if (isLoading) {
-          <div class="loading-msg">Cargando jugadores...</div>
+          <div class="loading-msg">Espiando la plantilla de {{ nombreRival }}... 🕵️‍♂️</div>
         } @else {
           
           <div
             class="player-row"
-            *ngFor="let jugador of misJugadores; let i = index"
+            *ngFor="let jugador of jugadoresRival; let i = index"
             [style.animation-delay]="i * 0.05 + 's'"
           >
             <div class="player-left-section">
@@ -86,12 +92,13 @@
               </div>
 
               <div class="action-zone">
-                <button *ngIf="!jugador.en_venta" class="btn-vender" (click)="abrirModalVender(jugador)">
-                  VENDER
-                </button>
-                <div *ngIf="jugador.en_venta" class="tag-label venta">
+                <div *ngIf="jugador.en_venta" class="tag-label venta" style="margin-right: 10px;">
                   EN VENTA
                 </div>
+                
+                <button class="btn-oferta" (click)="hacerOferta(jugador)">
+                  HACER OFERTA
+                </button>
               </div>
 
             </div>
@@ -99,51 +106,14 @@
 
         }
 
-        @if (!isLoading && misJugadores.length === 0) {
+        @if (!isLoading && jugadoresRival.length === 0) {
           <div class="empty-msg">
-            Aún no tienes jugadores. ¡Ve al mercado a fichar!
+            {{ nombreRival }} no tiene jugadores todavía. ¡Menudo novato!
           </div>
         }
       </div>
     </div>
   </section>
-
-  <div class="modal-overlay" *ngIf="mostrarModalVenta && jugadorAVender" (click)="cerrarModalVenta()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title">Vender a {{ jugadorAVender.nombre }}</h2>
-        <span class="close-btn" (click)="cerrarModalVenta()">&times;</span>
-      </div>
-      
-      <div class="modal-body">
-        
-        <div class="player-summary">
-          <div class="team-token large">
-            <img [src]="obtenerRutaEscudo(jugadorAVender.equipo)" class="team-img">
-          </div>
-          <div class="info-block">
-            <span class="player-name-modal">{{ jugadorAVender.nombre }}</span>
-            <span class="player-team-modal">Valor base: {{ formatearDinero(jugadorAVender.precio) }} Tc</span>
-          </div>
-          <div class="rating-box" [ngClass]="getMediaClass(jugadorAVender.media)">
-            <span class="rating-num">{{ jugadorAVender.media }}</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>Precio de venta deseado</label>
-          <input type="number" [(ngModel)]="precioVentaInput" class="input-puja" placeholder="Cantidad..." autofocus>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn-cancelar" (click)="cerrarModalVenta()">Cancelar</button>
-        <button class="btn-confirmar" (click)="confirmarVenta()" [disabled]="precioVentaInput <= 0">
-          Poner a la venta
-        </button>
-      </div>
-    </div>
-  </div>
 
   @if (notificationMsg) {
     <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">

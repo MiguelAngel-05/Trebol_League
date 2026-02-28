@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router"; 
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
-export class Login {
+export class Login implements OnInit {
 
   private fb = inject(FormBuilder);
   private http = inject(HttpClient); 
@@ -33,6 +33,12 @@ export class Login {
   get correo() { return this.loginForm.get('correo'); }
   get usuario() { return this.loginForm.get('usuario'); }
   get contra() { return this.loginForm.get('contra'); }
+
+  ngOnInit() {
+    if (localStorage.getItem('token')) {
+      this.router.navigate(['/ligas']);
+    }
+  }
 
   getErrorMessage(controlName: string): string {
     const control = this.loginForm.get(controlName);
