@@ -116,7 +116,9 @@
                 </div>
                 <div class="player-info">
                   <span class="name-text">{{ jugador.nombre }}</span>
-                  <span class="team-subtext">{{ jugador.id_vendedor ? 'Vendido por ' + jugador.vendedor_name : 'Jugador de ' + jugador.equipo }}</span>
+                  <span class="team-subtext">
+                    {{ jugador.id_vendedor ? (jugador.id_vendedor === user?.id ? 'Puesto en venta por ti' : 'Vendido por ' + jugador.vendedor_name) : 'Jugador de ' + jugador.equipo }}
+                  </span>
                 </div>
               </div>
 

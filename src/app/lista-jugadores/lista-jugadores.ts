@@ -127,6 +127,21 @@ export class ListaJugadores implements OnInit {
       });
   }
 
+  cancelarVenta(jugador: Jugador) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    const body = { id_futbolista: jugador.id_futbolista };
+
+    this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/cancelar-venta`, body, { headers })
+      .subscribe({
+        next: () => {
+          this.mostrarNotificacion(`Has cancelado la venta de ${jugador.nombre}`, true);
+          this.cargarMisJugadores(); 
+        },
+        error: (err) => this.mostrarNotificacion('Error al cancelar la venta', false)
+      });
+  }
+
 
   calcularEstadisticas() {
     this.totalJugadores = this.misJugadores.length;

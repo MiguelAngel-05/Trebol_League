@@ -89,9 +89,15 @@
                 <button *ngIf="!jugador.en_venta" class="btn-vender" (click)="abrirModalVender(jugador)">
                   VENDER
                 </button>
-                <div *ngIf="jugador.en_venta" class="tag-label venta">
-                  EN VENTA
-                </div>
+                
+                <ng-container *ngIf="jugador.en_venta">
+                  <div class="tag-label venta">
+                    EN VENTA
+                  </div>
+                  <button class="btn-cancelar-venta" (click)="cancelarVenta(jugador)" title="Cancelar Venta">
+                    ✖
+                  </button>
+                </ng-container>
               </div>
 
             </div>

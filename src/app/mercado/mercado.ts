@@ -139,6 +139,11 @@ export class Mercado implements OnInit, OnDestroy {
 
   // --- LÓGICA DEL MODAL DE PUJA ---
   gestionarClicJugador(jugador: Jugador) {
+    if (jugador.id_vendedor === this.user.id) {
+      this.mostrarNotificacion('Este jugador es tuyo. Ve a tu plantilla si quieres cancelar su venta.', false);
+      return;
+    }
+
     this.jugadorSeleccionado = jugador;
     
     if (jugador.id_vendedor) {

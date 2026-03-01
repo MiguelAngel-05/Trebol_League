@@ -219,6 +219,31 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .close-btn { color: #888; font-size: 2rem; cursor: pointer; line-height: 1; transition: 0.2s; }
 .close-btn:hover { color: #ff4757; transform: rotate(90deg); }
 
+/* Botón para cancelar la venta */
+.btn-cancelar-venta {
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  color: #ff4757;
+  width: 32px; 
+  height: 32px;
+  border-radius: 8px; 
+  margin-left: 8px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  cursor: pointer; 
+  font-weight: bold; 
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar-venta:hover {
+  background: #ff4757; 
+  color: white; 
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+}
+
 /* Resumen Jugador Modal */
 .player-summary { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
 .team-token.large { width: 60px; height: 60px; flex-shrink: 0;}
