@@ -1,0 +1,148 @@
+<main class="main-container">
+
+  <header class="main-header">
+    <div class="header-options top-row">
+      <div class="option-group">
+        <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+        <p>{{ user?.username || 'Usuario' }}</p>
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group">
+        <p>{{ formatearDinero(dinero) }}</p>
+        <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+      </div>
+    </div>
+
+    <div class="header-optionsB bottom-row">
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/flecha-retroceso.png" alt="Volver" (click)="volverAtras()">
+      </div>
+    </div>
+    
+    <div class="div-img-user">
+      <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario">
+    </div>
+  </header>
+
+  <section class="mensajes-layout">
+    
+    <div class="panel-privados">
+      <div class="panel-header">
+        <h2>Buzón Privado</h2>
+        <span class="badge-contador" *ngIf="sinLeerCount > 0">{{ sinLeerCount }} Sin leer</span>      </div>
+
+      <div class="privados-list">
+        
+        @for (msg of mensajesPrivados; track msg) {
+          <div class="privado-row" [class.no-leido]="!msg.leido" (click)="abrirMensaje(msg)">
+            <div class="icon-tipo">
+              <span *ngIf="msg.tipo === 'oferta'">🤝</span>
+              <span *ngIf="msg.tipo === 'texto'">✉️</span>
+            </div>
+            
+            <div class="privado-info">
+              <div class="privado-top">
+                <span class="privado-remitente">{{ msg.remitente }}</span>
+                <span class="privado-fecha">{{ msg.fecha }}</span>
+              </div>
+              <span class="privado-asunto">{{ msg.asunto }}</span>
+              <span class="privado-preview">{{ msg.contenido }}</span>
+            </div>
+            
+            <div class="dot-unread" *ngIf="!msg.leido"></div>
+          </div>
+        }
+
+      </div>
+    </div>
+
+    <div class="panel-chat">
+      <div class="panel-header chat-header">
+        <h2>Vestuario (Chat de Liga)</h2>
+      </div>
+
+      <div class="chat-messages">
+        @for (chat of chatGeneral; track chat) {
+          <div class="bubble-wrapper" [class.is-mine]="chat.mio">
+            <span class="chat-sender" *ngIf="!chat.mio">{{ chat.remitente }}</span>
+            <div class="chat-bubble">
+              <p>{{ chat.texto }}</p>
+              <span class="chat-time">{{ chat.hora }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input-area">
+        <input type="text" [(ngModel)]="nuevoMensaje" placeholder="Escribe un mensaje..." (keyup.enter)="enviarMensajeGeneral()">
+        <button class="btn-enviar" (click)="enviarMensajeGeneral()">➤</button>
+      </div>
+    </div>
+
+  </section>
+
+
+  <div class="modal-overlay" *ngIf="mostrarModalLeer && mensajeSeleccionado" (click)="cerrarMensajes()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">{{ mensajeSeleccionado.asunto }}</h2>
+        <span class="close-btn" (click)="cerrarMensajes()">&times;</span>
+      </div>
+      
+      <div class="modal-body">
+        <p style="color: #889990; font-size: 0.9rem; margin-top: 0;">De: <strong style="color: white;">{{ mensajeSeleccionado.remitente }}</strong></p>
+        
+        <div class="carta-contenido">
+          <p style="color: white; font-size: 1.1rem; line-height: 1.5; white-space: pre-line;">
+            {{ mensajeSeleccionado.contenido }}
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="flex-direction: column;">
+        <ng-container *ngIf="mensajeSeleccionado.tipo === 'oferta' && !mensajeSeleccionado.contenido.includes('ACEPTADA') && !mensajeSeleccionado.contenido.includes('RECHAZADA')">
+          <button class="btn-confirmar" style="background: linear-gradient(135deg, #2ed573, #1f8f5f); color: white;" (click)="aceptarOferta()">
+            🤝 Aceptar Trato
+          </button>
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <button class="btn-cancelar" style="flex: 1; border-color: #ff4757; color: #ff4757;" (click)="abrirContraoferta()">
+              🗣️ Contraofertar / Rechazar
+            </button>
+          </div>
+        </ng-container>
+
+        <button *ngIf="mensajeSeleccionado.tipo !== 'oferta' || mensajeSeleccionado.contenido.includes('ACEPTADA') || mensajeSeleccionado.contenido.includes('RECHAZADA')" class="btn-cancelar" (click)="cerrarMensajes()">
+          Cerrar Mensaje
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalRespuesta" (click)="cerrarMensajes()">
+    <div class="modal-content" (click)="$event.stopPropagation()" style="border-color: #ff4757; box-shadow: 0 0 30px rgba(255, 71, 87, 0.2);">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: #ff4757;">Rechazar Oferta</h2>
+        <span class="close-btn" (click)="cerrarMensajes()">&times;</span>
+      </div>
+      
+      <div class="modal-body">
+        <p style="color: #ccc; font-size: 0.9rem;">Mándale un mensaje a {{ mensajeSeleccionado.remitente }} explicando por qué la rechazas o cuánto dinero quieres realmente.</p>
+        <textarea [(ngModel)]="respuestaInput" class="input-puja" rows="4" placeholder="Ej: No me vale, ofréceme al menos 20.000.000 Tc..." style="border-color: #ff4757; resize: none;"></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="mostrarModalRespuesta = false; mostrarModalLeer = true;">Atrás</button>
+        <button class="btn-confirmar" style="background: linear-gradient(135deg, #ff4757, #ff6b81); color: white;" (click)="enviarRechazoOContraoferta()">
+          Enviar y Rechazar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="notificationMsg" class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+    <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
+  </div>
+
+
+</main>

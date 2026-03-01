@@ -10,6 +10,7 @@ import { authGuard } from './guards/auth.guard';
 import { Clasificacion } from './clasificacion/clasificacion';
 import { PlantillaRival } from './plantilla-rival/plantilla-rival';
 import { Perfil } from './perfil/perfil';
+import { CentroMensajes } from './centro-mensajes/centro-mensajes';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,7 +26,8 @@ export const routes: Routes = [
             { path: 'jugadores', component: ListaJugadores },
             { path: 'tienda', component: Tienda},
             { path: 'clasificacion', component: Clasificacion },
-            { path: 'plantilla-rival/:idUsuario', component: PlantillaRival }
+            { path: 'plantilla-rival/:idUsuario', component: PlantillaRival },
+            { path: 'mensajes', component: CentroMensajes }
         ]
     },
     { path: 'perfil', component: Perfil, canActivate: [authGuard] },

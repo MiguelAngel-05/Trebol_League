@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Jugador } from '../models/Jugador';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-plantilla-rival',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './plantilla-rival.html',
   styleUrl: './plantilla-rival.css'
 })
@@ -31,6 +32,10 @@ export class PlantillaRival implements OnInit {
 
   nombreRival: string = 'Cargando...';
   avatarRival: string = '';
+
+  mostrarModalOferta = false;
+  jugadorOfertado: Jugador | null = null;
+  montoOfertaInput: number = 0;
 
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -164,4 +169,39 @@ export class PlantillaRival implements OnInit {
     this.isSuccess = exito;
     setTimeout(() => this.notificationMsg = '', 3000);
   }
+
+
+  abrirModalOferta(jugador: Jugador) {
+    this.jugadorOfertado = jugador;
+    this.montoOfertaInput = Number(jugador.precio); // Sugerimos su valor de mercado
+    this.mostrarModalOferta = true;
+  }
+
+  cerrarModalOferta() {
+    this.mostrarModalOferta = false;
+    this.jugadorOfertado = null;
+    this.montoOfertaInput = 0;
+  }
+
+  enviarOfertaFormal() {
+    if (this.montoOfertaInput <= 0) return;
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    const body = {
+      id_destinatario: this.id_rival,
+      id_futbolista: this.jugadorOfertado!.id_futbolista,
+      monto: this.montoOfertaInput
+    };
+
+    this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/ofertas`, body, { headers })
+      .subscribe({
+        next: () => {
+          this.mostrarNotificacion(`¡Oferta de ${this.formatearDinero(this.montoOfertaInput)} Tc enviada por ${this.jugadorOfertado!.nombre}!`, true);
+          this.cerrarModalOferta();
+        },
+        error: (err) => this.mostrarNotificacion('Error al enviar la oferta.', false)
+      });
+  }
+
 }

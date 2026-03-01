@@ -100,6 +100,13 @@ export class Menu {
     this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true);
   }
 
+  irAChat() {
+    this.mostrarNotificacion('Abriendo Centro de Mensajes...', true);
+    setTimeout(() => {
+      this.router.navigate(['/ligas', this.id_liga, 'mensajes']);
+    }, 500); // Pequeño retraso para que se vea el mensajito verde
+  }
+
   mostrarNotificacion(mensaje: string, exito: boolean) {
     this.notificationMsg = mensaje;
     this.isSuccess = exito;

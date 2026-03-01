@@ -96,7 +96,7 @@
                   EN VENTA
                 </div>
                 
-                <button class="btn-oferta" (click)="hacerOferta(jugador)">
+                <button class="btn-oferta" (click)="abrirModalOferta(jugador)">
                   HACER OFERTA
                 </button>
               </div>
@@ -123,5 +123,37 @@
       </div>
     </div>
   }
+
+  <div class="modal-overlay" *ngIf="mostrarModalOferta && jugadorOfertado" (click)="cerrarModalOferta()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">Ofertar por {{ jugadorOfertado.nombre }}</h2>
+        <span class="close-btn" (click)="cerrarModalOferta()">&times;</span>
+      </div>
+      
+      <div class="modal-body">
+        <div class="player-summary" style="margin-bottom: 20px;">
+          <div class="info-block" style="text-align: center;">
+            <span style="color:#aaa; font-size:0.9rem;">Valor de Mercado:</span>
+            <span style="display:block; color:white; font-size:1.4rem; font-weight:800;">
+              {{ formatearDinero(jugadorOfertado.precio) }} Tc
+            </span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label style="color:#1e90ff;">¿Cuánto dinero ofreces?</label>
+          <input type="number" [(ngModel)]="montoOfertaInput" class="input-puja" style="border-color:#1e90ff;" placeholder="Cantidad a ofertar...">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cerrarModalOferta()">Cancelar</button>
+        <button class="btn-confirmar" style="background: linear-gradient(135deg, #1e90ff, #00d2ff);" (click)="enviarOfertaFormal()" [disabled]="montoOfertaInput <= 0">
+          Enviar Oferta Formal
+        </button>
+      </div>
+    </div>
+  </div>
 
 </main>

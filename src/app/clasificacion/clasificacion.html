@@ -88,20 +88,76 @@
   @if (mostrarModalUsuario && usuarioSeleccionado) {
     <div class="modal-overlay" (click)="cerrarModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
+        
         <div class="modal-header">
-          <h2 class="modal-title">{{ usuarioSeleccionado.username }}</h2>
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <img [src]="usuarioSeleccionado.avatar" class="user-avatar" style="width: 50px; height: 50px;">
+            <h2 class="modal-title">{{ usuarioSeleccionado.username }}</h2>
+          </div>
           <span class="close-btn" (click)="cerrarModal()">&times;</span>
         </div>
+
+        <div class="modal-body user-stats-modal">
+          <div class="stat-item">
+            <span class="stat-label">Puntos Totales</span>
+            <span class="stat-value text-green">{{ usuarioSeleccionado.puntos }} PTS</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Tamaño Plantilla</span>
+            <span class="stat-value">{{ usuarioSeleccionado.total_jugadores }} Jugadores</span>
+          </div>
+        </div>
+
+        <div class="modal-footer action-buttons">
+          <button class="btn-action" (click)="verPlantillaRival()">
+            <span class="btn-icon"></span> Ver Plantilla
+          </button>
+          
+          <button class="btn-action btn-msg" (click)="mandarMensaje()">
+            <span class="btn-icon"></span> Mandar Mensaje
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  @if (mostrarModalMensaje && destinatarioMensaje) {
+    <div class="modal-overlay" (click)="cerrarModalMensaje()">
+      <div class="modal-content correo-modal" (click)="$event.stopPropagation()">
         
-        <div class="modal-body user-modal-body">
-          <img [src]="usuarioSeleccionado.avatar" class="avatar-grande" alt="Avatar">
-          <p class="txt-center">¿Qué deseas hacer con este mánager?</p>
+        <div class="modal-header">
+          <h2 class="modal-title">Escribir a {{ destinatarioMensaje?.username }}</h2>
+          <span class="close-btn" (click)="cerrarModalMensaje()">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+          <div class="input-group">
+            <label>Asunto</label>
+            <input type="text" [(ngModel)]="asuntoInput" class="input-puja" placeholder="Ej: Fichaje, Alianza...">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Mensaje</label>
+            <textarea [(ngModel)]="contenidoInput" class="input-puja" rows="4" placeholder="Escribe tu mensaje aquí..." style="resize: none;"></textarea>
+          </div>
         </div>
 
         <div class="modal-footer">
-          <button class="btn-confirmar" (click)="verPlantillaRival()">Ver Jugadores </button>
-          <button class="btn-cancelar" (click)="mandarMensaje()">Mandar Mensaje </button>
+          <button class="btn-cancelar" (click)="cerrarModalMensaje()">Cancelar</button>
+          <button class="btn-confirmar" style="background: linear-gradient(135deg, #1e90ff, #00d2ff);" (click)="enviarMensajePrivado()" [disabled]="!asuntoInput || !contenidoInput">
+            Enviar Mensaje
+          </button>
         </div>
+
+      </div>
+    </div>
+  }
+
+  @if (notificationMsg) {
+    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+      <div class="toast-content">
+        <p class="toast-message">{{ notificationMsg }}</p>
       </div>
     </div>
   }
