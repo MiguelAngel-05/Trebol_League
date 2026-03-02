@@ -1,0 +1,361 @@
+body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
+
+.main-container {
+  width: 100%; height: 100vh;
+  background-image: url("/Fondos/FondoEstandar.png");
+  background-color: rgba(10, 20, 15, 0.9); background-blend-mode: overlay;
+  background-size: cover; background-position: center; 
+  display: flex; flex-direction: column; overflow: hidden; position: relative;
+}
+
+/* === HEADER REUTILIZADO === */
+.main-header {
+  background: transparent; width: 50%; height: 120px;
+  position: absolute; top: 40px; right: 80px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  z-index: 20; animation: slideDown 0.8s ease-out forwards;
+}
+.header-options.top-row { width: 100%; height: 50%; background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%); border-top-right-radius: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 160px 0 80px; box-sizing: border-box; }
+.header-optionsB.bottom-row { width: 100%; height: 50%; background: linear-gradient(90deg, #1f3327 0%, #15221b 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-around; padding: 0 160px 0 80px; box-sizing: border-box; }
+.separator-header { font-size: 2rem; color: #3b614b; font-weight: 300; margin: 0 10px; transform: skew(-20deg); }
+.option-group { display: flex; align-items: center; gap: 10px; color: white; font-weight: 600; }
+.icon { height: 22px; width: auto; }
+.pinchar { height: 26px; width: auto; cursor: pointer; transition: 0.2s; }
+.icon-hover:hover .pinchar { transform: scale(1.2); filter: drop-shadow(0 0 5px white); }
+.div-img-user { background: linear-gradient(to bottom, #1f8f5f, #156942); width: 140px; height: 100%; position: absolute; top: 0; right: 0; display: flex; align-items: center; justify-content: center; border-top-right-radius: 20px; border-bottom-left-radius: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 5; cursor: pointer; } 
+.img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; transition: 0.3s; }
+.div-img-user:hover .img-user { transform: scale(1.15); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
+
+
+/* ================= ÁREA DE LA TIENDA ================= */
+.store-area {
+  margin-top: 190px;
+  height: calc(100vh - 220px);
+  padding: 0 80px;
+  display: flex;
+  gap: 40px;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* === PANEL IZQUIERDO (Lista de sobres) === */
+.store-left {
+  flex: 1; /* Ocupa todo el espacio restante (aprox 70%) */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pestañas */
+.store-tabs {
+  display: flex;
+  gap: 5px;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  margin-bottom: 25px;
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: #889990;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 15px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.tab-btn:hover { color: white; }
+.tab-btn.active { color: #2ed573; }
+.tab-btn.active::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px;
+  background: #2ed573; box-shadow: 0 0 10px rgba(46, 213, 115, 0.5);
+}
+
+/* Cuadrícula Horizontal de Sobres */
+.packs-grid {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto; 
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  height: 100%;
+  align-items: flex-start;
+}
+.packs-grid::-webkit-scrollbar { height: 8px; }
+.packs-grid::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
+
+/* Diseño del Sobre*/
+
+/* Contenedor individual de cada sobre */
+.pack-item {
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.5; /* Opacos por defecto como en el FIFA */
+  filter: grayscale(40%);
+}
+
+.pack-item.selected, .pack-item:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: translateY(-10px) scale(1.05);
+}
+
+/* Título superior (Fuera de la imagen) */
+.pack-top-title {
+  color: #ccc;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.pack-item.selected .pack-top-title {
+  color: white;
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+/* Contenedor de tu imagen PNG */
+.pack-image-container {
+  width: 100%;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.pack-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  /* El drop-shadow genera una sombra con la forma exacta de tu PNG */
+  filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8));
+  transition: filter 0.3s ease;
+}
+
+/* El brillo mágico cuando seleccionas el sobre (usa la variable --glow-color) */
+.pack-item.selected .pack-image {
+  filter: drop-shadow(0 0 30px var(--glow-color)) drop-shadow(0 15px 15px rgba(0,0,0,0.5));
+}
+
+/* Píldora de precio debajo de la imagen */
+.pack-price-pill {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.pack-item.selected .pack-price-pill {
+  border-color: var(--glow-color);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.1);
+}
+
+.tc-icon-small {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Etiqueta flotante para los sobres por posición (PT, DF, etc.) */
+.pos-badge-floating {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  color: white;
+  font-weight: 900;
+  font-size: 1.2rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.3);
+}
+.currency { color: #2ed573; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 800; }
+
+
+/* === PANEL DERECHO (Info del Sobre) === */
+.store-right {
+  width: 380px; /* Ancho fijo para el panel de información */
+  display: flex;
+  flex-direction: column;
+}
+
+.info-panel {
+  background: linear-gradient(145deg, #15221b 0%, #0a100c 100%);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top: 5px solid; /* El color se inyecta por estilo en línea */
+  border-radius: 15px;
+  padding: 30px;
+  height: 100%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.5s ease forwards;
+}
+
+.info-title {
+  color: white; font-size: 1.8rem; font-weight: 800; margin: 0 0 20px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: 0.5px;
+}
+
+.info-desc {
+  color: #aaa; font-size: 1rem; line-height: 1.6; margin: 0 0 30px 0;
+}
+
+.info-contents {
+  background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 3px solid #2ed573;
+  margin-bottom: auto; /* Empuja el botón de compra hacia el fondo */
+  display: flex; flex-direction: column; gap: 5px;
+}
+.contents-label { color: #889990; font-size: 0.8rem; text-transform: uppercase; font-weight: 700; }
+.contents-value { color: white; font-size: 1.1rem; font-weight: 600; }
+
+.buy-section {
+  background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.05); margin-top: 30px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+.price-display { display: flex; flex-direction: column; align-items: center; }
+.price-label { color: #889990; font-size: 0.9rem; text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+.price-amount { color: white; font-size: 2.2rem; font-weight: 900; font-family: monospace; text-shadow: 0 2px 5px rgba(0,0,0,0.5); line-height: 1; }
+.price-amount small { font-family: 'Poppins', sans-serif; font-size: 1rem; color: #2ed573; }
+
+.btn-comprar {
+  background: linear-gradient(135deg, #2ed573, #1f8f5f);
+  color: white; border: none; padding: 18px; border-radius: 12px;
+  font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+}
+.btn-comprar:hover {
+  transform: translateY(-3px); box-shadow: 0 8px 25px rgba(46, 213, 115, 0.6); background: linear-gradient(135deg, #32e87d, #24a870);
+}
+.btn-comprar:disabled {
+  background: #333; color: #666; cursor: not-allowed; transform: none; box-shadow: none; border: 1px solid #444;
+}
+
+/* Animaciones */
+@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ========================================================= */
+/* === ANIMACIÓN DE APERTURA DE SOBRES (ESTILO FIFA)     === */
+/* ========================================================= */
+
+.pack-opening-arena {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: radial-gradient(circle at center, #1a2b22 0%, #050a08 80%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Luces de fondo rotando lentamente */
+.pack-opening-arena::before {
+  content: ''; position: absolute; width: 200vw; height: 200vw;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(46, 213, 115, 0.1) 60deg, transparent 120deg, rgba(255, 215, 0, 0.05) 180deg, transparent 240deg, rgba(46, 213, 115, 0.1) 300deg, transparent 360deg);
+  animation: rotateLights 20s linear infinite;
+  z-index: 1; pointer-events: none;
+}
+
+.reveal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  z-index: 10;
+}
+
+/* Items que caen (Posición, Escudo, Media) */
+.reveal-item {
+  animation: dropAndBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  transform: translateY(-100px) scale(0.5);
+}
+
+.reveal-text {
+  font-family: 'Arial Black', Impact, sans-serif;
+  font-size: 6rem;
+  color: white;
+  text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.3);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.reveal-shield {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
+}
+
+.glow-gold {
+  color: #ffd700;
+  text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 50px rgba(255, 215, 0, 0.6);
+  font-size: 8rem;
+}
+
+/* Pantallazo Blanco (Explosión) */
+.flash-bang {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: white; z-index: 9999;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.1s ease-out;
+}
+.flash-bang.active { opacity: 1; transition: opacity 0.1s ease-in; }
+
+/* Carta final y botón */
+.final-card-container {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.confetti {
+  color: #ffd700; font-size: 1.5rem; font-weight: 800; font-family: 'Poppins';
+  text-shadow: 0 0 20px rgba(255,215,0,0.8); letter-spacing: 2px;
+}
+
+.btn-continuar {
+  background: linear-gradient(135deg, #2ed573, #1f8f5f);
+  color: white; border: none; padding: 15px 40px; border-radius: 30px;
+  font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+}
+.btn-continuar:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 30px rgba(46, 213, 115, 0.8); }
+
+/* --- KEYFRAMES --- */
+@keyframes rotateLights { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+@keyframes dropAndBounce {
+  0% { opacity: 0; transform: translateY(-150px) scale(0.5); }
+  60% { opacity: 1; transform: translateY(20px) scale(1.1); }
+  80% { transform: translateY(-10px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}

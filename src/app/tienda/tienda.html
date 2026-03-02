@@ -1,1 +1,144 @@
-<app-carta [jugador]="jugadorPrueba"></app-carta>
+<main class="main-container">
+
+  @if (vistaActual === 'tienda') {
+    <header class="main-header">
+    <div class="header-options top-row">
+      <div class="option-group">
+        <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+        <p>{{ user?.username || 'Usuario' }}</p>
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group">
+        <p>{{ formatearDinero(dinero) }}</p>
+        <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+      </div>
+    </div>
+    <div class="header-optionsB bottom-row">
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/home-blanco.png" alt="Inicio" (click)="volverAtras()">
+      </div>
+    </div>
+    <div class="div-img-user" (click)="irAPerfil()">
+      <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario"> 
+    </div>
+  </header>
+
+  <section class="store-area">
+    
+    <div class="store-left">
+      
+      <div class="store-tabs">
+        <button class="tab-btn" [class.active]="tabActiva === 'normales'" (click)="cambiarTab('normales')">
+          Sobres Normales
+        </button>
+        <button class="tab-btn" [class.active]="tabActiva === 'posiciones'" (click)="cambiarTab('posiciones')">
+          Sobres por Posición
+        </button>
+      </div>
+
+      <div class="packs-grid" [class.tab-posiciones]="tabActiva === 'posiciones'">
+        
+        @if (tabActiva === 'normales') {
+          @for (sobre of sobresNormales; track sobre.id) {
+            <div class="pack-item" [class.selected]="sobreSeleccionado?.id === sobre.id" (click)="seleccionarSobre(sobre)" [style.--glow-color]="sobre.colorBorde">
+              <h3 class="pack-top-title">{{ sobre.nombre }}</h3>
+              
+              <div class="pack-image-container">
+                <img [src]="sobre.imagen" class="pack-image" alt="Sobre Trébol League">
+              </div>
+
+              <div class="pack-price-pill">
+                <span>{{ formatearDinero(sobre.precio) }}</span>
+                <img src="Utensilios/Emojis/moneda-tc.png" class="tc-icon-small" alt="Tc">
+              </div>
+            </div>
+          }
+        } 
+        
+        @else {
+          @for (sobre of sobresPosiciones; track sobre.id) {
+            <div class="pack-item" [class.selected]="sobreSeleccionado?.id === sobre.id" (click)="seleccionarSobre(sobre)" [style.--glow-color]="sobre.colorBorde">
+              <h3 class="pack-top-title">{{ sobre.nombre }}</h3>
+              
+              <div class="pack-image-container">
+                <div class="pos-badge-floating" [style.background]="sobre.colorBorde">{{ sobre.posicion }}</div>
+                <img [src]="sobre.imagen" class="pack-image" alt="Sobre Trébol League">
+              </div>
+
+              <div class="pack-price-pill">
+                <span>{{ formatearDinero(sobre.precio) }}</span>
+                <img src="Utensilios/Emojis/moneda-tc.png" class="tc-icon-small" alt="Tc">
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="store-right">
+      @if (sobreSeleccionado) {
+        <div class="info-panel" [style.border-top-color]="sobreSeleccionado.colorBorde">
+          <h2 class="info-title">{{ sobreSeleccionado.nombre | uppercase }}</h2>
+          
+          <p class="info-desc">{{ sobreSeleccionado.descripcion }}</p>
+          
+          <div class="info-contents">
+            <span class="contents-label">Contenido:</span>
+            <span class="contents-value">{{ sobreSeleccionado.contenidoInfo }}</span>
+          </div>
+
+          <div class="buy-section">
+            <div class="price-display">
+              <span class="price-label">Precio del Sobre:</span>
+              <span class="price-amount">{{ formatearDinero(sobreSeleccionado.precio) }} <small>Tc</small></span>
+            </div>
+
+            <button class="btn-comprar" [disabled]="dinero < sobreSeleccionado.precio" (click)="comprarSobre()">
+              {{ dinero >= sobreSeleccionado.precio ? 'ABRIR SOBRE' : 'SIN FONDOS' }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+  </section>
+  } @else if (vistaActual === 'animacion') {
+    <div class="pack-opening-arena">
+      
+      <div class="flash-bang" [class.active]="flashActivo"></div>
+
+      @if (!mostrarCarta) {
+        <div class="reveal-container">
+          @if (mostrarPosicion) {
+            <div class="reveal-item reveal-text" style="animation-delay: 0s;">
+              {{ jugadorObtenido.posicion }}
+            </div>
+          }
+          
+          @if (mostrarEscudo) {
+            <div class="reveal-item" style="animation-delay: 0s;">
+              <img [src]="getRutaEscudo(jugadorObtenido.equipo)" class="reveal-shield" alt="Escudo">
+            </div>
+          }
+
+          @if (mostrarMedia) {
+            <div class="reveal-item reveal-text glow-gold" style="animation-delay: 0s;">
+              {{ jugadorObtenido.media }}
+            </div>
+          }
+        </div>
+      }
+
+      @if (mostrarCarta) {
+        <div class="final-card-container">
+          <div class="confetti">✨ ¡NUEVO JUGADOR! ✨</div>
+          
+          <app-carta [jugador]="jugadorObtenido"></app-carta>
+          
+          <button class="btn-continuar" (click)="volverATienda()">Aceptar y Continuar</button>
+        </div>
+      }
+    </div>
+  }
+
+</main>

@@ -1,18 +1,18 @@
 <div class="card" *ngIf="jugador">
+  
   <div class="grl-box">
     <span class="grl-label">GRL</span>
     <span class="grl-value">{{ jugador.media }}</span>
   </div>
 
-  <img class="player-photo" [src]="jugador.imagen || 'https://via.placeholder.com/150'" alt="Foto">
+  <img class="player-photo" [src]="obtenerImagenJugador()" alt="Foto del Jugador">
 
   <div class="name-box">
     <div class="first-name">{{ jugador.nombre | uppercase }}</div>
-    <div class="last-name">APELLIDO</div>
   </div>
 
   <div class="club-icon-box">
-    ☘️
+    <img [src]="obtenerRutaEscudo(jugador.equipo)" alt="Escudo">
   </div>
 
   <div class="club-name-box">
@@ -24,14 +24,10 @@
   </div>
 
   <div class="stats-row">
-     <div class="stat"><small>PAR</small> {{ jugador.parada || 0 }}</div>
-     <div class="stat"><small>ATQ</small> {{ jugador.ataque || 0 }}</div>
-     <div class="stat"><small>PAS</small> {{ jugador.pase || 0 }}</div>
-     <div class="stat"><small>DEF</small> {{ jugador.defensa || 0 }}</div>
+     <div class="stat">{{ jugador.parada || 0 }}</div>
+     <div class="stat">{{ jugador.ataque || 0 }}</div>
+     <div class="stat">{{ jugador.pase || 0 }}</div>
+     <div class="stat">{{ jugador.defensa || 0 }}</div>
    </div>
-
-  <div class="rarity-box">
-    COMÚN
-  </div>
 
 </div>

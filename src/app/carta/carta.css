@@ -1,13 +1,16 @@
 /* Contenedor principal: define el tamaño fijo de la carta */
 .card {
-  width: 360px; /* Ajusta esto al ancho real de tu PNG */
-  height: 540px; /* Ajusta esto al alto real de tu PNG */
-  background-image: url('/Utensilios/card-template-bg.png'); /* PON TU RUTA AQUÍ */
-  background-size: cover;
+  width: 360px; 
+  height: 540px; 
+  background-image: url('/Utensilios/Cartas/CartaTL_normal.png'); 
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
+
+  filter: drop-shadow(0px 15px 25px rgba(0,0,0,0.6));
   position: relative;
   font-family: 'Arial Black', Impact, sans-serif;
-  overflow: hidden;
   margin: 20px auto;
 }
 
