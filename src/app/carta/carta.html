@@ -5,14 +5,14 @@
     <span class="grl-value">{{ jugador.media }}</span>
   </div>
 
-  <img class="player-photo" [src]="obtenerImagenJugador()" alt="Foto del Jugador">
+  <img class="player-photo" [src]="fotoJugador" alt="Foto del Jugador">
 
   <div class="name-box">
     <div class="first-name">{{ jugador.nombre | uppercase }}</div>
   </div>
 
   <div class="club-icon-box">
-    <img [src]="obtenerRutaEscudo(jugador.equipo)" alt="Escudo">
+    <img [src]="rutaEscudo" alt="Escudo" style="width: 35px; height: 35px; object-fit: contain;">
   </div>
 
   <div class="club-name-box">

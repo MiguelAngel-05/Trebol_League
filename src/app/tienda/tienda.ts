@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
-import { CartaComponent } from '../carta/carta';
+import { CartaComponent, obtenerRutaEscudoGlobal } from '../carta/carta';
 
 interface Sobre {
   id: string;
@@ -26,9 +26,10 @@ interface Sobre {
 export class Tienda implements OnInit {
   user: any = null;
   dinero: number = 0;
-  id_liga: number = 3; 
+  id_liga!: number; 
 
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   private apiBase = 'https://api-trebol-league.vercel.app';
 
@@ -53,13 +54,13 @@ export class Tienda implements OnInit {
       id: 'norm_1', nombre: 'Sobre Normal', precio: 10000000,
       descripcion: 'El sobre clásico de la Trébol League. Contiene 1 jugador aleatorio de cualquier posición y media.',
       contenidoInfo: '1 Jugador Aleatorio', colorBorde: '#2ed573',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png' // <-- TU IMAGEN
+      imagen: 'Utensilios/Sobres/SobreTL_normal.png'
     },
     {
-      id: 'norm_2', nombre: 'Sobre Élite', precio: 25000000,
+      id: 'norm_2', nombre: 'Sobre Especial', precio: 25000000,
       descripcion: 'Para los mánagers más exigentes. Más posibilidades de conseguir a las estrellas de la liga.',
-      contenidoInfo: '1 Jugador Aleatorio (Alta Probabilidad)', colorBorde: '#00d2ff',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png' // Cámbialo cuando tengas el diseño élite
+      contenidoInfo: '1 Jugador Aleatorio (Alta Probabilidad)', colorBorde: '#ff9100',
+      imagen: 'Utensilios/Sobres/SobreTL_especial.png'
     }
   ];
 
@@ -96,8 +97,33 @@ export class Tienda implements OnInit {
     if (token) {
       try { this.user = jwtDecode(token); } catch {}
     }
-    this.cargarDatosMios();
-    // Seleccionamos el primer sobre por defecto al entrar
+
+    this.route.paramMap.subscribe(params => {
+      // 1. Intentamos la forma tradicional
+      let id = params.get('id_liga') || params.get('id');
+
+      if (!id && this.route.parent) {
+        id = this.route.parent.snapshot.paramMap.get('id_liga') || this.route.parent.snapshot.paramMap.get('id');
+      }
+
+      // 2. Leemos la URL "a lo bruto"
+      if (!id) {
+        const urlPura = this.router.url.split('/');
+        const idEncontrado = urlPura.find(fragmento => fragmento !== '' && !isNaN(Number(fragmento)));
+        if (idEncontrado) {
+          id = idEncontrado;
+        }
+      }
+
+      // 3. Asignamos y pedimos el dinero
+      if (id) {
+        this.id_liga = Number(id);
+        this.cargarDatosMios(); 
+      } else {
+        console.error("No pudimos sacar el ID de esta URL:", this.router.url);
+      }
+    });
+
     this.seleccionarSobre(this.sobresNormales[0]);
   }
 
@@ -113,7 +139,6 @@ export class Tienda implements OnInit {
 
   cambiarTab(tab: 'normales' | 'posiciones') {
     this.tabActiva = tab;
-    // Al cambiar de tab, seleccionamos el primer sobre de esa categoría
     if (tab === 'normales') this.seleccionarSobre(this.sobresNormales[0]);
     else this.seleccionarSobre(this.sobresPosiciones[0]);
   }
@@ -137,76 +162,79 @@ export class Tienda implements OnInit {
   comprarSobre() {
     if (!this.sobreSeleccionado) return;
     if (this.dinero < this.sobreSeleccionado.precio) {
-      alert('¡No tienes suficientes Tc!');
+      alert('¡No tienes suficientes Tc para comprar este sobre!');
       return;
     }
 
-    // Por ahora, solo activamos la animación para el "Sobre Normal"
-    if (this.sobreSeleccionado.id === 'norm_1') {
-      // Restamos el dinero visualmente (luego lo haremos en base de datos)
-      this.dinero -= this.sobreSeleccionado.precio;
-      this.iniciarAnimacionSobre();
-    } else {
-      alert('La animación de este sobre llegará en el futuro.');
-    }
-  }
-
-  iniciarAnimacionSobre() {
-    // 1. Aquí en el futuro llamaremos a la Base de Datos para que nos dé un jugador aleatorio.
-    // Por ahora, nos inventamos uno top para probar la animación:
-    this.jugadorObtenido = {
-      id_futbolista: 99,
-      nombre: "Lamine Yamal",
-      posicion: "DL",
-      equipo: "Real Pinar FC", 
-      media: 87,
-      imagen: "https://api.dicebear.com/9.x/micah/svg?seed=Lamine Yamal", // o tu placeholder de Dicebear
-      ataque: 88, defensa: 30, pase: 82, parada: 10
-    };
-
-    // 2. Preparamos el escenario
-    this.vistaActual = 'animacion';
+    // 1. Deshabilitamos la tienda y preparamos la arena de animación
+    this.vistaActual = 'animacion'; 
     this.mostrarPosicion = false;
     this.mostrarEscudo = false;
     this.mostrarMedia = false;
     this.mostrarCarta = false;
     this.flashActivo = false;
+    
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    // 3. LA SECUENCIA DE TIEMPO (Tensión pura)
-    // A los 2 segundos: cae la posición
+    // 2. Configuramos la ruta y el body dependiendo del sobre
+    let urlEndpoint = '';
+    let bodyData = {};
+
+    if (this.sobreSeleccionado.id === 'norm_1') {
+      // Es un sobre normal (10 Millones)
+      urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-normal`;
+      
+    } else if (this.sobreSeleccionado.posicion) {
+      // Es un sobre posicional (15 Millones), mandamos la posición ('DL', 'MC'...) al backend
+      urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-posicion`;
+      bodyData = { posicion: this.sobreSeleccionado.posicion };
+      
+    } else {
+      // El sobre élite u otros
+      alert('La animación de este sobre llegará en el futuro.');
+      this.vistaActual = 'tienda';
+      return;
+    }
+
+    // 3. Ejecutamos la llamada HTTP a la ruta correspondiente
+    this.http.post<any>(urlEndpoint, bodyData, { headers })
+      .subscribe({
+        next: (res) => {
+          this.dinero -= this.sobreSeleccionado!.precio; 
+          this.iniciarAnimacionSobre(res.jugador); 
+        },
+        error: (err) => {
+          alert(err.error?.message || 'Error al abrir el sobre');
+          this.vistaActual = 'tienda'; 
+        }
+      });
+  }
+
+  // Arranca la secuencia pasándole el jugador de la base de datos
+  iniciarAnimacionSobre(jugadorReal: any) {
+    this.jugadorObtenido = jugadorReal;
+
     setTimeout(() => { this.mostrarPosicion = true; }, 2000);
-    
-    // A los 4.5 segundos: cae el escudo
     setTimeout(() => { this.mostrarEscudo = true; }, 4500);
-    
-    // A los 7 segundos: cae la media
     setTimeout(() => { this.mostrarMedia = true; }, 7000);
     
-    // A los 9 segundos: ¡Fogonazo blanco y revelación de carta!
     setTimeout(() => {
-      this.flashActivo = true; // Activa el pantallazo blanco
+      this.flashActivo = true; 
       this.mostrarPosicion = false;
       this.mostrarEscudo = false;
       this.mostrarMedia = false;
       
-      // Medio segundo después del flash, mostramos la carta
       setTimeout(() => {
         this.flashActivo = false;
         this.mostrarCarta = true;
       }, 500);
-
     }, 9000);
   }
 
-  // Helper para sacar la ruta del escudo en la animación
+  // La Tienda ya no calcula el escudo, se lo pide a la lógica central de la Carta
   getRutaEscudo(equipo: string): string {
-    const mapeo: { [key: string]: string } = {
-      'Real Pinar FC': 'real_pinar.png',
-      'Athletic Hullera': 'athletic_hullera.png',
-      'Real Trébol FC': 'real_trebol.png'
-    };
-    const archivo = mapeo[equipo];
-    return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.png';
+    return obtenerRutaEscudoGlobal(equipo);
   }
 
   volverATienda() {
