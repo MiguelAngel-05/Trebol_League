@@ -359,3 +359,31 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   80% { transform: translateY(-10px) scale(0.95); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .main-container { overflow-y: auto; padding-top: 10px; }
+    .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 10px; }
+    .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
+    .div-img-user { display: none; }
+    
+    .store-area { flex-direction: column; margin-top: 10px; height: auto; padding: 0 15px 30px 15px; gap: 20px; }
+    .store-left { width: 100%; }
+    .store-tabs { justify-content: center; }
+    .tab-btn { padding: 10px 15px; font-size: 0.9rem; }
+    
+    .pack-item { min-width: 180px; }
+    .pack-image-container { height: 240px; }
+    
+    .store-right { width: 100%; }
+    .info-panel { padding: 20px; box-sizing: border-box; }
+    .info-title { font-size: 1.5rem; text-align: center; }
+    .info-desc { text-align: center; font-size: 0.9rem; }
+    
+    .reveal-text { font-size: 4rem; }
+    .glow-gold { font-size: 5rem; }
+    .reveal-shield { width: 100px; height: 100px; }
+    .final-card-container app-carta { transform: scale(0.85); transform-origin: top center; }
+    
+    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+}

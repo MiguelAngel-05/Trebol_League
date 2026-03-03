@@ -181,3 +181,31 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .toast-notification.error { border-left-color: #ff4757; }
 .toast-icon { font-size: 1.5rem; }
 .toast-message { margin: 0; font-size: 0.9rem;}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .main-container { overflow-y: auto; padding-top: 10px; }
+
+    /* Header compacto */
+    .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 10px; }
+    .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
+    .div-img-user { display: none; } 
+
+    /* Layout vertical */
+    .mensajes-layout { flex-direction: column; margin-top: 10px; height: auto; padding: 0 15px 30px 15px; gap: 20px; }
+
+    /* Panel de Privados */
+    .panel-privados { flex: none; height: 350px; }
+    .privado-remitente { font-size: 1rem; }
+    .privado-preview { font-size: 0.8rem; }
+    .icon-tipo { width: 35px; height: 35px; font-size: 1.2rem; }
+
+    /* Panel de Chat */
+    .panel-chat { flex: none; height: 400px; }
+    .chat-bubble { font-size: 0.9rem; padding: 8px 12px; }
+
+    /* Modales */
+    .modal-content { width: 95%; padding: 20px; }
+    .modal-botones, .modal-footer { flex-direction: column; }
+    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+}

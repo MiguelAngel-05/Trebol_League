@@ -168,3 +168,54 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    /* Header compacto */
+    .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-top: 10px; }
+    .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
+    .div-img-user { display: none; }
+
+    /* Contenedor principal */
+    .content-area { margin-top: 10px; padding: 0 15px 15px 15px; }
+    .page-title { font-size: 2rem; text-align: center; width: 100%; margin-bottom: 10px; }
+
+    /* Filas de usuarios (Formato tarjeta) */
+    .user-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        position: relative;
+        gap: 0;
+    }
+    
+    /* El número de rango lo mandamos a la esquina superior derecha */
+    .rank-badge { position: absolute; top: 15px; right: 15px; margin: 0; text-align: right; width: auto; font-size: 1.5rem; }
+    .top-1 .rank-badge { font-size: 1.8rem; }
+    .top-2 .rank-badge, .top-3 .rank-badge { font-size: 1.6rem; }
+
+    /* Info del usuario a la izquierda */
+    .user-info { width: 85%; margin-bottom: 15px; }
+    .avatar-container { width: 50px; height: 50px; flex-shrink: 0; }
+    .username { font-size: 1.1rem; }
+
+    /* Puntos, dinero y botones abajo */
+    .points-section { 
+        width: 100%; 
+        justify-content: space-between; 
+        border-top: 1px solid rgba(255,255,255,0.1); 
+        padding-top: 15px; 
+        gap: 10px;
+    }
+    .money-box { text-align: left; }
+    .points-box { padding: 8px 15px; min-width: 60px; }
+    .pts-value { font-size: 1.3rem; }
+
+    /* Modales */
+    .modal-content { width: 95%; padding: 20px; }
+    .action-buttons { flex-direction: column; }
+    .modal-footer { flex-direction: column; }
+
+    /* Ajuste Toast */
+    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+}

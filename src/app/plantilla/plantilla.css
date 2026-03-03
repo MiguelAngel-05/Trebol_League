@@ -254,3 +254,110 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    /* 1. Ajuste General y Scroll */
+    .main-container {
+        height: auto; 
+        min-height: 100vh;
+        overflow-y: auto; 
+        padding: 10px;
+    }
+
+    /* Rompemos las 3 columnas y las apilamos verticalmente */
+    .plantilla-layout {
+        flex-direction: column;
+        padding: 0;
+        gap: 15px;
+    }
+
+    /* 2. Panel Izquierdo (Datos y Botones) */
+    .sidebar-izq {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    .stats-panel {
+        flex-direction: row;
+        gap: 10px;
+    }
+    .stat-row { flex: 1; flex-direction: column; gap: 5px; text-align: center; }
+
+    /* 3. EL CÉSPED (Lo giramos 90 grados) */
+    .campo-container {
+        width: 100%;
+        height: 550px; 
+    }
+    .estadio-bg {
+        flex-direction: column; 
+        padding: 15px 0;
+        background-size: cover; 
+    }
+
+    /* Las filas (Ataque, Medio, Defensa...) ahora son horizontales */
+    .fila-campo {
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        justify-content: space-evenly;
+        gap: 2px; 
+    }
+
+    /* 4. Escala de Cartas en el Campo */
+    .zona-drop {
+        width: 55px;  
+        height: 85px;
+    }
+    .carta-escala-campo {
+        transform: scale(0.24); 
+    }
+    .carta-titular:hover .carta-escala-campo { transform: scale(0.26); z-index: 30; }
+    
+    .etiqueta-pos {
+        font-size: 0.6rem;
+        padding: 2px 5px;
+        top: -8px;
+    }
+
+    /* 5. BANQUILLO (Abajo del todo) */
+    .sidebar-der {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+    }
+    .banquillo-scroll {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        height: 140px;
+        padding-top: 10px;
+    }
+    .carta-reserva {
+        width: 75px;
+        height: 110px;
+    }
+    .carta-escala-banquillo {
+        transform: translateX(-50%) scale(0.32);
+    }
+    .carta-reserva:hover .carta-escala-banquillo { transform: translateX(-50%) scale(0.35); }
+
+    /* 6. Solución al arrastre táctil (Drag & Drop Móvil) */
+    /* IMPORTANTE: Evita que al intentar arrastrar, arrastres la pantalla entera */
+    .carta-titular, .carta-reserva {
+        touch-action: none; 
+    }
+
+    /* Escala del clon que sigues con el dedo */
+    .preview-escala-drag app-carta {
+        transform: scale(0.30);
+    }
+    .drag-placeholder { width: 55px; height: 85px; }
+    .drag-placeholder-banquillo { width: 75px; height: 110px; }
+
+    /* 7. Modales y Toast */
+    .modal-content { width: 95%; padding: 20px; }
+    .modal-botones { flex-direction: column; }
+    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+}

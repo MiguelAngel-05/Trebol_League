@@ -486,3 +486,34 @@ body {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .main-container { padding-top: 10px; overflow-y: auto; }
+    .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 10px; }
+    .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
+    .div-img-user { display: none; }
+    
+    .mercado-layout { display: flex; flex-direction: column; padding-top: 10px; height: auto; overflow-y: visible; }
+    
+    .sidebar-filters { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px; box-sizing: border-box; }
+    .page-title { font-size: 2rem; margin-bottom: 15px; text-align: center; }
+    .filters-list { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .filter-item { padding: 6px 10px; background: rgba(255,255,255,0.05); }
+    
+    .content-area { width: 100%; padding: 0 15px; box-sizing: border-box; overflow: visible; }
+    .scrollable-content { overflow-y: visible; padding-right: 0; }
+    .balance-cards { flex-direction: column; gap: 15px; }
+    
+    .player-row { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
+    .player-left-section { justify-content: center; text-align: center; flex-direction: column; gap: 5px; }
+    .player-right-section { justify-content: space-between; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+    .status-labels { width: 100%; flex-direction: row; justify-content: center; margin-left: 0; margin-top: 10px; }
+    
+    .sidebar-history { width: 100%; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px; padding: 15px; box-sizing: border-box; }
+    .history-list { max-height: 300px; }
+    
+    .modal-content { width: 95%; padding: 20px; }
+    .modal-footer { flex-direction: column; }
+    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+}

@@ -273,6 +273,13 @@ input:focus {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .EspacioLogin { width: 100%; clip-path: none; padding: 20px; }
-    .logo img { width: 80px; }
+    main { justify-content: center; padding: 15px; box-sizing: border-box; }
+    .EspacioLogin { width: 100%; max-width: 400px; height: auto; max-height: 95vh; padding: 30px 20px; clip-path: none; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transform-origin: center; animation: zoomInMobile 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; overflow-y: auto; }
+    .logo { margin-bottom: 15px; }
+    .logo img { width: 75px; }
+    .logo h2 { font-size: 1.3rem; }
+    .ValContra { width: 100%; font-size: 11px; margin-bottom: 2px; }
+    .login-btn { font-size: 15px; padding: 12px; }
+    .toast-notification { width: 90%; top: 15px; left: 50%; right: auto; transform: translateX(-50%); min-width: unset; }
 }
+@keyframes zoomInMobile { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
