@@ -271,12 +271,15 @@ export class Mercado implements OnInit, OnDestroy {
   pad(n: number) { return n.toString().padStart(2, '0'); }
 
   normalizarPosicion(pos: string): 'DL' | 'MC' | 'DF' | 'PT' {
-    const p = pos.toLowerCase();
-    if (p.includes('del')) return 'DL';
-    if (p.includes('med') || p.includes('cen')) return 'MC';
-    if (p.includes('def')) return 'DF';
-    if (p.includes('por') || p.includes('pt')) return 'PT';
-    return 'MC';
+    if (!pos) return 'MC';
+    
+    const p = pos.trim().toUpperCase();
+    
+    if (p === 'DL' || p.includes('DEL')) return 'DL';
+    if (p === 'DF' || p.includes('DEF')) return 'DF';
+    if (p === 'PT' || p.includes('POR')) return 'PT';
+    
+    return 'MC'; 
   }
 
   obtenerRutaEscudo(nombreEquipo: string): string {
@@ -308,10 +311,11 @@ export class Mercado implements OnInit, OnDestroy {
   }
 
   getMediaClass(media: number): string {
-    if (media >= 90) return 'media-elite';
-    if (media >= 80) return 'media-gold';
-    if (media >= 75) return 'media-silver';
-    return 'media-bronze';
+    if (media >= 95) return 'media-galaxy';   // 95 a 99 (Galaxia)
+    if (media >= 90) return 'media-diamond';  // 90 a 94 (Diamante)
+    if (media >= 80) return 'media-gold';     // 80 a 89 (Oro)
+    if (media >= 70) return 'media-silver';   // 70 a 79 (Plata)
+    return 'media-bronze';                    // 60 a 69 (Bronce)
   }
 
   private getAuthHeaders() {

@@ -49,11 +49,13 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 
 /* === CONTENIDO PRINCIPAL === */
 .content-area {
-  margin-top: 180px; /* Espacio para el header */
+  margin-top: 180px; 
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 0 50px 30px 50px;
+  overflow: hidden; 
+  min-height: 0;
 }
 
 .team-header {
@@ -138,14 +140,55 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .rating-label { font-size: 0.5rem; font-weight: 600; color: #ccc; margin-top: 2px; }
 
 /* Media Colors */
-.media-elite { border-color: #00d2ff; background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.2)); }
-.media-elite .rating-num, .media-elite.rating-box-mini { color: #00d2ff; }
-.media-gold { border-color: #ffd700; background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(212, 175, 55, 0.15)); }
-.media-gold .rating-num, .media-gold.rating-box-mini { color: #ffd700; }
-.media-silver { border-color: #c0c0c0; background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(169, 169, 169, 0.15)); }
-.media-silver .rating-num, .media-silver.rating-box-mini { color: #e0e0e0; }
-.media-bronze { border-color: #cd7f32; background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(160, 82, 45, 0.15)); }
+/* Bronce (60 - 69) */
+.media-bronze { 
+  border-color: #cd7f32; 
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(160, 82, 45, 0.15)); 
+}
 .media-bronze .rating-num, .media-bronze.rating-box-mini { color: #cd7f32; }
+
+/* Plata (70 - 79) */
+.media-silver { 
+  border-color: #c0c0c0; 
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(169, 169, 169, 0.15)); 
+}
+.media-silver .rating-num, .media-silver.rating-box-mini { color: #e0e0e0; }
+
+/* Oro (80 - 89) */
+.media-gold { 
+  border-color: #ffd700; 
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(212, 175, 55, 0.15)); 
+}
+.media-gold .rating-num, .media-gold.rating-box-mini { 
+  color: #ffd700; 
+  text-shadow: 0 0 5px rgba(255,215,0,0.5); 
+}
+
+/* Diamante / Élite (90 - 94) */
+.media-diamond { 
+  border-color: #00d2ff; 
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.2)); 
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); 
+}
+.media-diamond .rating-num, .media-diamond.rating-box-mini { 
+  color: #00d2ff; 
+  text-shadow: 0 0 8px rgba(0,210,255,0.6); 
+}
+
+/*  GALAXIA (95 - 99)  */
+.media-galaxy { 
+  border-color: #b145e9; 
+  background: linear-gradient(45deg, rgba(255, 0, 128, 0.4), rgba(106, 13, 173, 0.4), rgba(0, 210, 255, 0.4)); 
+  background-size: 200% 200%;
+  animation: galaxyAnim 3s ease infinite;
+  box-shadow: 0 0 15px rgba(177, 69, 233, 0.6);
+}
+.media-galaxy .rating-num, .media-galaxy.rating-box-mini { 
+  color: #ffffff; 
+  text-shadow: 0 0 10px #ff0080, 0 0 20px #6a0dad; 
+  font-weight: 900;
+}
+
 
 /* PRECIO */
 .price-tag { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: white; min-width: 100px; text-align: right; }
@@ -279,3 +322,8 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes galaxyAnim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

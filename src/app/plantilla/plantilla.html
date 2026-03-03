@@ -1,1 +1,133 @@
-<p>plantilla works!</p>
+<main class="main-container">
+
+  <section class="plantilla-layout">
+
+    <aside class="sidebar-izq">
+      <button class="btn-volver" (click)="volverAtras()">
+        <span class="icon-back">⬅</span> Volver al Menú
+      </button>
+
+      <div class="club-info">
+        <div class="club-text">
+          <h2>{{ user?.username || 'Mi Equipo' }} FC</h2>
+          <p class="formacion-texto">{{ formacionSeleccionada }}</p>
+        </div>
+      </div>
+
+      <div class="stats-panel">
+        <div class="stat-row">
+          <span>Valor total:</span>
+          <div class="stat-box val">{{ formatearDinero(valorTotal) }} Tc</div>
+        </div>
+        <div class="stat-row">
+          <span>Media global:</span>
+          <div class="stat-box med" [ngClass]="{'media-alta': mediaGlobal >= 80}">{{ mediaGlobal }}</div>
+        </div>
+      </div>
+
+      <div class="formacion-selector">
+        <label>Cambiar Formación:</label>
+        <select [(ngModel)]="formacionSeleccionada" (change)="cambiarFormacion(formacionSeleccionada)">
+          <option *ngFor="let form of opcionesFormacion" [value]="form">{{ form }}</option>
+        </select>
+      </div>
+
+      <button class="btn-guardar" [class.parpadeo]="cambiosSinGuardar" (click)="guardarPlantilla()">
+        GUARDAR CAMBIOS
+      </button>
+    </aside>
+
+    <div class="campo-container">
+      <div class="estadio-bg">
+        <div class="fila-campo" *ngFor="let fila of filasCampo">
+          <div class="hueco-wrapper" *ngFor="let hueco of fila">
+            
+            <div class="zona-drop"
+                 cdkDropList
+                 [id]="hueco.idDrop"
+                 [cdkDropListData]="hueco.jugadores"
+                 [cdkDropListConnectedTo]="obtenerIdsConectados()"
+                 (cdkDropListDropped)="drop($event, hueco.posicion)">
+              
+              <div class="recuadro-fondo">
+                <span class="etiqueta-pos" [ngClass]="hueco.posicion.toLowerCase()">
+                  {{ hueco.posicion }}
+                </span>
+              </div>
+
+              <div class="carta-titular" *ngFor="let jugador of hueco.jugadores" 
+                   cdkDrag [cdkDragData]="jugador"
+                   (contextmenu)="mandarAlBanquillo(jugador, hueco, $event)"
+                   (dblclick)="mandarAlBanquillo(jugador, hueco, $event)">
+                
+                <div class="carta-escala-campo">
+                  <app-carta [jugador]="jugador"></app-carta>
+                </div>
+                
+                <div *cdkDragPreview>
+                  <div class="preview-escala-drag">
+                    <app-carta [jugador]="jugador"></app-carta>
+                  </div>
+                </div>
+                
+                <div *cdkDragPlaceholder class="drag-placeholder"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar-der">
+      <div class="banquillo-header">
+        <span>Reservas</span>
+      </div>
+      
+      <div class="banquillo-scroll"
+           cdkDropList
+           id="banquilloList"
+           cdkDropListOrientation="vertical"
+           [cdkDropListData]="banquillo"
+           [cdkDropListConnectedTo]="obtenerIdsConectados()"
+           (cdkDropListDropped)="drop($event)">
+        
+        <div class="carta-reserva" *ngFor="let suplente of banquillo" cdkDrag [cdkDragData]="suplente">
+          <div class="carta-escala-banquillo">
+            <app-carta [jugador]="suplente"></app-carta>
+          </div>
+          
+          <div *cdkDragPreview>
+            <div class="preview-escala-drag">
+              <app-carta [jugador]="suplente"></app-carta>
+            </div>
+          </div>
+
+          <div *cdkDragPlaceholder class="drag-placeholder-banquillo"></div>
+        </div>
+
+        <div class="empty-banquillo" *ngIf="banquillo.length === 0">
+          Vacío
+        </div>
+      </div>
+    </aside>
+
+  </section>
+
+  <div class="modal-overlay" *ngIf="mostrarModalSalir" (click)="cerrarModalSalir()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>⚠️ Cambios sin guardar</h2>
+      <p>Has modificado tu alineación pero no has guardado. Si sales ahora, perderás los cambios.</p>
+      <div class="modal-botones">
+        <button class="btn-cancelar" (click)="salirSinGuardar()">Salir sin guardar</button>
+        <button class="btn-confirmar" (click)="guardarYSalir()">Guardar y Salir</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-notification" *ngIf="notificationMsg" [class.success]="isSuccess" [class.error]="!isSuccess">
+    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+    <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
+  </div>
+
+</main>

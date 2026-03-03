@@ -1,0 +1,256 @@
+/* =========================================
+   ESTILOS GENERALES
+   ========================================= */
+body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #0b1a12; }
+
+.main-container {
+  width: 100%; height: 100vh;
+  background-image: url("/Fondos/FondoEstandar.png");
+  background-color: rgba(10, 20, 15, 0.95); background-blend-mode: overlay;
+  background-size: cover; background-position: center;
+  display: flex; flex-direction: column; overflow: hidden;
+  padding: 20px 0; 
+  box-sizing: border-box;
+}
+
+/* 3 COLUMNAS: Izquierda - Centro (1fr) - Derecha */
+.plantilla-layout {
+  display: flex;
+  width: 100%;
+  height: 100%; 
+  padding: 0 20px;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   SIDEBAR IZQUIERDA
+   ========================================= */
+.sidebar-izq {
+  width: 270px; 
+  background: rgba(30, 50, 40, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 10px 10px 30px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.btn-volver { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s ease; }
+.btn-volver:hover { background: rgba(255, 255, 255, 0.15); border-color: white; transform: translateX(-5px); }
+
+.club-text h2 { margin: 0; color: white; font-size: 1.3rem; font-weight: 700; }
+.formacion-texto { margin: 0; color: #2ed573; font-weight: 800; font-size: 1.1rem; }
+
+.stats-panel { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+.stat-row { display: flex; align-items: center; justify-content: space-between; color: white; font-weight: 600; font-size: 0.85rem;}
+.stat-box { background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); font-family: monospace; font-size: 0.95rem; }
+.stat-box.val { color: #2ed573; }
+.stat-box.med { color: #ffd700; font-weight: 800; }
+
+.formacion-selector label { color: white; font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.85rem;}
+.formacion-selector select { width: 100%; padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #2ed573; font-weight: 700; font-size: 0.95rem; outline: none; cursor: pointer; }
+
+.btn-guardar { margin-top: auto; padding: 15px; background: linear-gradient(90deg, #1f8f5f, #2ed573); border: none; border-radius: 12px; color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4); width: 100%; }
+.btn-guardar:hover { transform: translateY(-3px); filter: brightness(1.2); }
+.parpadeo { animation: pulseWarning 1.5s infinite; background: linear-gradient(90deg, #ff4757, #ff6b81); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
+@keyframes pulseWarning { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
+/* =========================================
+   EL CÉSPED CENTRAL
+   ========================================= */
+.campo-container {
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.estadio-bg {
+  width: 100%;
+  max-width: 1100px;
+  height: 98%; 
+  background: url('/Utensilios/campo-futbol.jpg') center/cover no-repeat;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  border: 3px solid rgba(255,255,255,0.2);
+  display: flex;
+  flex-direction: row-reverse; 
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 2%; 
+  box-sizing: border-box;
+}
+
+.fila-campo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; 
+  height: 95%; 
+  gap: 5px; 
+  z-index: 10;
+}
+
+.hueco-wrapper { display: flex; justify-content: center; align-items: center; }
+
+.zona-drop {
+  position: relative;
+  width: 75px;  
+  height: 110px; 
+  display: flex; justify-content: center; align-items: center;
+}
+
+.recuadro-fondo {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  border: 2px dashed rgba(255, 255, 255, 0.6); background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px; pointer-events: none; transition: all 0.3s ease;
+}
+.zona-drop.cdk-drop-list-receiving .recuadro-fondo { background: rgba(46, 213, 115, 0.4); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
+
+.etiqueta-pos {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: #1a2b22; color: white; padding: 2px 6px; border-radius: 6px;
+  font-size: 0.7rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.2);
+  z-index: 5; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.etiqueta-pos.dl { border-color: #ff4757; color: #ff6b81; }
+.etiqueta-pos.mc { border-color: #2ed573; color: #7bed9f; }
+.etiqueta-pos.df { border-color: #1e90ff; color: #70a1ff; }
+.etiqueta-pos.pt { border-color: #ffa502; color: #eccc68; }
+
+.carta-titular {
+  width: 100%; height: 100%;
+  position: absolute; top:0; left:0;
+  display: flex; justify-content: center; align-items: center;
+  cursor: grab; z-index: 20;
+}
+.carta-titular:active { cursor: grabbing; }
+
+.carta-escala-campo {
+  position: absolute;
+  transform: scale(0.33); 
+  transform-origin: center center; 
+  pointer-events: none; 
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.carta-titular:hover .carta-escala-campo { transform: scale(0.36); z-index: 30; }
+
+
+/* =========================================
+   SIDEBAR DERECHA (BANQUILLO VERTICAL)
+   ========================================= */
+.sidebar-der {
+  width: 200px; /* Estrecho, lo justo para la carta */
+  background: rgba(20, 30, 25, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  border-radius: 20px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 10px 30px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.banquillo-header { 
+  color: #2ed573; font-weight: 800; text-transform: uppercase; 
+  margin-bottom: 15px; font-size: 1rem; letter-spacing: 1px;
+  text-align: center; border-bottom: 2px solid rgba(46,213,115,0.3); padding-bottom: 10px;
+}
+
+.banquillo-scroll {
+  flex: 1; /* Ocupa todo el alto */
+  display: flex; 
+  flex-direction: column; /* SCROLL VERTICAL */
+  gap: 15px; 
+  overflow-y: auto; 
+  overflow-x: hidden;
+  align-items: center; /* Centra las cartas */
+  padding: 10px 0;
+}
+.banquillo-scroll::-webkit-scrollbar { width: 6px; }
+.banquillo-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 4px; }
+.banquillo-scroll::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #1f8f5f, #2ed573); border-radius: 4px; }
+
+.carta-reserva {
+  width: 100px; 
+  height: 240px; 
+  position: relative;
+  display: flex; justify-content: center; align-items: flex-start; 
+  flex-shrink: 0; cursor: grab;
+}
+.carta-reserva:active { cursor: grabbing; }
+
+.carta-escala-banquillo {
+  position: absolute;
+  top: 0; left: 50%; /* Centrado absoluto */
+  transform: translateX(-50%) scale(0.45); /* Escala más grande porque hay espacio */
+  transform-origin: top center; /* Crece desde el centro superior */
+  pointer-events: none;
+  transition: 0.2s;
+}
+.carta-reserva:hover .carta-escala-banquillo { filter: drop-shadow(0 0 10px rgba(46, 213, 115, 0.8)); transform: translateX(-50%) scale(0.48); }
+
+.empty-banquillo { color: #888; font-style: italic; margin-top: 20px; font-size: 0.85rem; text-align: center;}
+
+
+/* =========================================
+   DRAG PREVIEW Y SOMBRAS
+   ========================================= */
+
+/* 1. El contenedor que sigue al ratón. Le damos el tamaño exacto físico para que no salgan scrollbars */
+.preview-escala-drag {
+  width: 90px;
+  height: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  position: relative;
+}
+
+/* 2. La carta gigante la sacamos del "espacio físico" con position: absolute para que no empuje la pantalla */
+.preview-escala-drag app-carta {
+  position: absolute;
+  transform: scale(0.20); /* Un poco más grande que en el campo (0.33) para que parezca que la has levantado */
+  transform-origin: center center; /* IMPORTANTE: Para que se quede pegada al centro del ratón */
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+}
+
+.cdk-drag-preview { 
+  opacity: 0.95; 
+  z-index: 99999 !important; 
+}
+
+/* Sombras en el sitio vacío */
+.drag-placeholder { background: rgba(0, 0, 0, 0.6); border: 2px dashed #aaa; border-radius: 10px; width: 75px; height: 110px; }
+.drag-placeholder-banquillo { background: rgba(0, 0, 0, 0.4); border: 2px dashed #888; border-radius: 8px; width: 110px; height: 160px; }
+
+.cdk-drag-animating { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
+.zona-drop.cdk-drop-list-dragging .carta-titular:not(.cdk-drag-placeholder) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
+.banquillo-scroll.cdk-drop-list-dragging .carta-reserva:not(.cdk-drag-placeholder-banquillo) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
+
+
+/* =========================================
+   MODAL Y TOAST
+   ========================================= */
+.modal-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 100000; animation: fadeIn 0.3s; }
+.modal-content { background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%); padding: 30px; border-radius: 20px; border: 1px solid #ff4757; text-align: center; max-width: 400px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.8); animation: zoomIn 0.3s; }
+.modal-content h2 { margin-top: 0; color: #ff4757; }
+.modal-botones { display: flex; gap: 15px; margin-top: 25px; }
+.btn-cancelar { flex: 1; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; font-weight: 600; cursor: pointer; transition: 0.3s;}
+.btn-cancelar:hover { background: rgba(255,255,255,0.2); }
+.btn-confirmar { flex: 1; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; font-weight: bold; cursor: pointer; transition: 0.3s;}
+.btn-confirmar:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
+
+.toast-notification { position: fixed; bottom: 30px; right: 30px; z-index: 99999; background: #000; border-left: 5px solid #2ed573; padding: 15px 25px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+.toast-notification.error { border-left-color: #ff4757; }
+.toast-icon { font-size: 1.5rem; font-weight: bold; }
+.toast-message { margin: 0; font-size: 0.95rem; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }

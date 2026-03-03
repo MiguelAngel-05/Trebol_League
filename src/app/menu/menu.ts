@@ -104,7 +104,14 @@ export class Menu {
     this.mostrarNotificacion('Abriendo Centro de Mensajes...', true);
     setTimeout(() => {
       this.router.navigate(['/ligas', this.id_liga, 'mensajes']);
-    }, 500); // Pequeño retraso para que se vea el mensajito verde
+    }, 500); 
+  }
+
+  irAPlantilla() {
+    this.mostrarNotificacion('Entrando al vestuario...', true);
+    setTimeout(() => {
+      this.router.navigate(['/ligas', this.id_liga, 'plantilla']);
+    }, 500);
   }
 
   mostrarNotificacion(mensaje: string, exito: boolean) {
