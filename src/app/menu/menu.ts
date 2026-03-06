@@ -77,9 +77,11 @@ export class Menu {
     }, 500);
   }
 
-  // Funciones para botones "Work in Progress"
   irACalendario() {
-    this.mostrarNotificacion('Calendario: Próximamente', false);
+    this.mostrarNotificacion('Entrando al calendario...', true);
+    setTimeout(() => {
+      this.router.navigate(['/ligas', this.id_liga, 'calendario']);
+    }, 500);
   }
 
   irAClasificacion() {

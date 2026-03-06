@@ -12,6 +12,7 @@ import { PlantillaRival } from './plantilla-rival/plantilla-rival';
 import { Perfil } from './perfil/perfil';
 import { CentroMensajes } from './centro-mensajes/centro-mensajes';
 import { Plantilla } from './plantilla/plantilla';
+import { Calendario } from './calendario/calendario';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -29,7 +30,8 @@ export const routes: Routes = [
             { path: 'clasificacion', component: Clasificacion },
             { path: 'plantilla-rival/:idUsuario', component: PlantillaRival },
             { path: 'mensajes', component: CentroMensajes },
-            { path: 'plantilla', component: Plantilla }
+            { path: 'plantilla', component: Plantilla },
+            { path: 'calendario', component: Calendario}
         ]
     },
     { path: 'perfil', component: Perfil, canActivate: [authGuard] },

@@ -1,0 +1,109 @@
+<main class="main-container">
+
+  <header class="main-header">
+    <div class="header-options top-row">
+      <div class="option-group">
+        <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+        <p>{{ user?.username || 'Usuario' }}</p>
+      </div>
+      <span class="separator-header">/</span>
+      <div class="option-group">
+        <p>{{ dinero | number:'1.0-0':'es-ES' }}</p>
+        <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+      </div>
+    </div>
+    <div class="header-optionsB bottom-row">
+      <div class="option-group icon-hover">
+        <img class="pinchar" src="Utensilios/Emojis/flecha-retroceso.png" alt="Volver" (click)="volverAtras()">
+      </div>
+    </div>
+    <div class="div-img-user" (click)="irAPerfil()">
+      <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario">
+    </div>
+  </header>
+
+  <section class="content-area">
+    <div class="calendar-glass-panel">
+      
+      <div class="calendar-toolbar">
+        <div class="toolbar-left">
+          <h2 class="month-title">{{ mesActualTexto | titlecase }}</h2>
+        </div>
+
+        <div class="toolbar-right">
+          <button class="btn-generar" *ngIf="miRol === 'owner' && partidos.length === 0" (click)="abrirModalGenerar()">
+            🚀 EMPEZAR LIGA
+          </button>
+
+          <div class="nav-group">
+            <button class="nav-btn" (click)="mesAnterior()">&#8592;</button>
+            <button class="nav-btn btn-hoy" (click)="irAHoy()">Hoy</button>
+            <button class="nav-btn" (click)="mesSiguiente()">&#8594;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-partidos" *ngIf="partidos.length === 0 && miRol !== 'owner'">
+        El administrador aún no ha generado el calendario de la liga.
+      </div>
+
+      <div class="calendar-wrapper" *ngIf="partidos.length > 0 || miRol === 'owner'">
+        
+        <div class="grid-header">
+          <div class="day-name" *ngFor="let dia of diasSemana">{{ dia }}</div>
+        </div>
+
+        <div class="grid-body">
+          <div class="day-cell" 
+               *ngFor="let dia of diasCalendario" 
+               [ngClass]="{'other-month': dia.esOtroMes, 'is-today': esHoy(dia.fecha)}">
+            
+            <span class="day-number">{{ dia.fecha | date:'d' }}</span>
+            
+            <div class="matches-list">
+              <div class="match-pill" *ngFor="let p of getPartidosDelDia(dia.fecha)">
+                <span class="dot"></span>
+                <span class="match-teams">{{ p.equipo_local }} - {{ p.equipo_visitante }}</span>
+                <span class="match-time">{{ p.fecha_partido | date:'HH:mm' }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div *ngIf="notificationMsg" class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+    <div class="toast-icon">{{ isSuccess ? '✔' : '⚠️' }}</div>
+    <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalGenerar" (click)="cerrarModalGenerar()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: #2ed573;">🚀 Generar Calendario</h2>
+        <span class="close-btn" (click)="cerrarModalGenerar()">&times;</span>
+      </div>
+      
+      <div class="modal-body">
+        <p style="color: #ccc; font-size: 1rem; text-align: center; margin: 10px 0;">
+          ¿Estás seguro? Esto emparejará a todos los equipos y creará la liga completa (Ida y Vuelta).
+          <br><br>
+          <b style="color: #ff4757;">⚠️ Esta acción solo se puede hacer una vez.</b>
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cerrarModalGenerar()">Cancelar</button>
+        <button class="btn-confirmar" (click)="confirmarGenerarCalendario()" [disabled]="isGenerating">
+          <span *ngIf="!isGenerating">Sí, Empezar Liga</span>
+          <span *ngIf="isGenerating">⚽ Generando 38 Jornadas...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
