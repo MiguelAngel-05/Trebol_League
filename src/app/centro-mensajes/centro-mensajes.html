@@ -29,7 +29,11 @@
     <div class="panel-privados">
       <div class="panel-header">
         <h2>Buzón Privado</h2>
-        <span class="badge-contador" *ngIf="sinLeerCount > 0">{{ sinLeerCount }} Sin leer</span>      </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <span class="badge-contador" *ngIf="sinLeerCount > 0">{{ sinLeerCount }} Sin leer</span>
+          <button class="btn-clear" (click)="abrirModalBorrarBuzon()" *ngIf="mensajesPrivados.length > 0">🗑️ Vaciar</button>
+        </div>
+      </div>
 
       <div class="privados-list">
         
@@ -59,6 +63,7 @@
     <div class="panel-chat">
       <div class="panel-header chat-header">
         <h2>Vestuario (Chat de Liga)</h2>
+        <button class="btn-clear" (click)="abrirModalBorrarChat()" *ngIf="userRol === 'owner' || userRol === 'admin'">🗑️ Borrar Chat</button>
       </div>
 
       <div class="chat-messages">
@@ -142,6 +147,50 @@
   <div *ngIf="notificationMsg" class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
     <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
     <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalBorrarBuzon" (click)="cerrarModalBorrarBuzon()">
+    <div class="modal-content" (click)="$event.stopPropagation()" style="border-color: #ff4757; box-shadow: 0 0 30px rgba(255, 71, 87, 0.2);">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: #ff4757;">⚠️ Vaciar Buzón</h2>
+        <span class="close-btn" (click)="cerrarModalBorrarBuzon()">&times;</span>
+      </div>
+      
+      <div class="modal-body">
+        <p style="color: #ccc; font-size: 1rem; text-align: center; margin: 10px 0;">
+          ¿Estás seguro de vaciar tu buzón? Se borrarán todas las notificaciones y ofertas pasadas. Esta acción no se puede deshacer.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cerrarModalBorrarBuzon()">Cancelar</button>
+        <button class="btn-confirmar" style="background: linear-gradient(135deg, #ff4757, #ff6b81); color: white;" (click)="confirmarBorrarBuzon()">
+          Sí, Vaciar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalBorrarChat" (click)="cerrarModalBorrarChat()">
+    <div class="modal-content" (click)="$event.stopPropagation()" style="border-color: #ff4757; box-shadow: 0 0 30px rgba(255, 71, 87, 0.2);">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: #ff4757;">⚠️ Borrar Chat</h2>
+        <span class="close-btn" (click)="cerrarModalBorrarChat()">&times;</span>
+      </div>
+      
+      <div class="modal-body">
+        <p style="color: #ccc; font-size: 1rem; text-align: center; margin: 10px 0;">
+          ¿Seguro que quieres borrar TODO el chat de la liga? Todos los mensajes desaparecerán para todos los miembros y no se podrán recuperar.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cerrarModalBorrarChat()">Cancelar</button>
+        <button class="btn-confirmar" style="background: linear-gradient(135deg, #ff4757, #ff6b81); color: white;" (click)="confirmarBorrarChat()">
+          Sí, Borrar Chat
+        </button>
+      </div>
+    </div>
   </div>
 
 

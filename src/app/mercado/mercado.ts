@@ -250,17 +250,27 @@ export class Mercado implements OnInit, OnDestroy {
 
   iniciarTemporizador(fechaGeneracion: string) {
     clearInterval(this.timerInterval);
-    const fechaBase = new Date(fechaGeneracion).getTime();
+
     this.timerInterval = setInterval(() => {
-      const ahora = Date.now();
-      const limite = fechaBase + 24 * 60 * 60 * 1000;
-      const diff = limite - ahora;
+      const ahora = new Date();
+      
+      const limite = new Date();
+      limite.setHours(23, 59, 59, 999);
+
+      const diff = limite.getTime() - ahora.getTime();
+
       if (diff <= 0) {
-        this.tiempoRestante = '00:00:00';
+        this.tiempoRestante = 'Actualizando...';
         clearInterval(this.timerInterval);
-        this.cargarMercado();
+        
+        setTimeout(() => {
+          this.cargarMercado();
+          this.cargarHistorial();
+        }, 10000);
+        
         return;
       }
+      
       const h = Math.floor(diff / (1000 * 60 * 60));
       const m = Math.floor((diff / (1000 * 60)) % 60);
       const s = Math.floor((diff / 1000) % 60);

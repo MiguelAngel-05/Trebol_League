@@ -17,6 +17,10 @@ export class CentroMensajes implements OnInit {
   user: any = null;
   id_liga!: number;
   dinero: number = 0;
+  userRol: string = 'user';
+
+  mostrarModalBorrarBuzon = false;
+  mostrarModalBorrarChat = false;
 
   // Variables reales vacías
   nuevoMensaje: string = '';
@@ -53,7 +57,10 @@ export class CentroMensajes implements OnInit {
   cargarDatosUsuario() {
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/datos-usuario`, this.getHeaders())
       .subscribe({
-        next: (data) => this.dinero = Number(data.dinero),
+        next: (data) => {
+          this.dinero = Number(data.dinero);
+          this.userRol = data.rol;
+        },
         error: (err) => console.error(err)
       });
   }
@@ -206,6 +213,45 @@ export class CentroMensajes implements OnInit {
     this.notificationMsg = mensaje;
     this.isSuccess = exito;
     setTimeout(() => this.notificationMsg = '', 3500);
+  }
+
+  // Lógica para Borrar Buzón
+  abrirModalBorrarBuzon() { this.mostrarModalBorrarBuzon = true; }
+  cerrarModalBorrarBuzon() { this.mostrarModalBorrarBuzon = false; }
+
+  confirmarBorrarBuzon() {
+    this.http.delete(`${this.apiBase}/api/ligas/${this.id_liga}/privados`, this.getHeaders())
+      .subscribe({
+        next: () => {
+          this.mensajesPrivados = [];
+          this.sinLeerCount = 0;
+          this.mostrarNotificacion('Buzón vaciado correctamente', true);
+          this.cerrarModalBorrarBuzon();
+        },
+        error: () => {
+          this.mostrarNotificacion('Error al vaciar buzón', false);
+          this.cerrarModalBorrarBuzon();
+        }
+      });
+  }
+
+  // Lógica para Borrar Chat (Solo Admin/Owner)
+  abrirModalBorrarChat() { this.mostrarModalBorrarChat = true; }
+  cerrarModalBorrarChat() { this.mostrarModalBorrarChat = false; }
+
+  confirmarBorrarChat() {
+    this.http.delete(`${this.apiBase}/api/ligas/${this.id_liga}/chat`, this.getHeaders())
+      .subscribe({
+        next: () => {
+          this.chatGeneral = [];
+          this.mostrarNotificacion('Chat general eliminado', true);
+          this.cerrarModalBorrarChat();
+        },
+        error: () => {
+          this.mostrarNotificacion('Error al vaciar chat', false);
+          this.cerrarModalBorrarChat();
+        }
+      });
   }
 
 }

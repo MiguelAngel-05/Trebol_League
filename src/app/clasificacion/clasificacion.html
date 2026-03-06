@@ -53,7 +53,11 @@
                 </div>
                 <div class="name-block">
                   <span class="username">{{ jugador.username }}</span>
-                  <span class="rol-text" *ngIf="jugador.rol === 'owner'">(Admin)</span>
+                  
+                  <div class="badges-container">
+                    <span class="rol-badge owner" *ngIf="jugador.rol === 'owner'">👑 Creador</span>
+                    <span class="rol-badge admin" *ngIf="jugador.rol === 'admin'">⭐ Admin</span>
+                  </div>
                 </div>
                 
                 @if (jugador.id === user?.id) {
@@ -115,6 +119,11 @@
           
           <button class="btn-action btn-msg" (click)="mandarMensaje()">
             <span class="btn-icon"></span> Mandar Mensaje
+          </button>
+          
+          <button class="btn-action btn-admin" *ngIf="miRol === 'owner' && usuarioSeleccionado?.rol !== 'owner'" (click)="toggleAdmin()">
+            <span class="btn-icon">⭐</span> 
+            {{ usuarioSeleccionado?.rol === 'admin' ? 'Quitar Admin' : 'Hacer Admin' }}
           </button>
         </div>
 

@@ -160,6 +160,50 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .toast-icon { font-size: 1.5rem; }
 .toast-message { margin: 0; font-size: 0.9rem; font-weight: 600; }
 
+.btn-admin {
+  border-color: #ffd700 !important;
+  color: #ffd700 !important;
+}
+.btn-admin:hover {
+  background: rgba(255, 215, 0, 0.15) !important;
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3) !important;
+}
+
+/* === ETIQUETAS DE ROLES (OWNER / ADMIN) === */
+.badges-container {
+  display: flex;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.rol-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Etiqueta Dorada para el Creador */
+.rol-badge.owner {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+}
+
+/* Etiqueta Azul Eléctrico para los Admins */
+.rol-badge.admin {
+  background: rgba(0, 210, 255, 0.15);
+  color: #00d2ff;
+  border: 1px solid rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.2);
+}
+
 /* ANIMACIONES KEYFRAMES */
 @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

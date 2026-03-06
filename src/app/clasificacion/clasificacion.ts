@@ -16,6 +16,7 @@ export class Clasificacion implements OnInit {
   user: any = null;
   id_liga!: number;
   dinero: number = 0;
+  miRol: string = 'user';
   
   clasificacion: any[] = [];
   isLoading = true;
@@ -55,7 +56,10 @@ export class Clasificacion implements OnInit {
 
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/datos-usuario`, { headers })
       .subscribe({
-        next: (data) => this.dinero = Number(data.dinero),
+        next: (data) => {
+          this.dinero = Number(data.dinero);
+          this.miRol = data.rol;
+        },
         error: (err) => console.error(err)
       });
   }
@@ -163,6 +167,23 @@ export class Clasificacion implements OnInit {
           this.cerrarModalMensaje();
         },
         error: (err) => this.mostrarNotificacion('Error al enviar el mensaje.', false)
+      });
+  }
+
+  toggleAdmin() {
+    if (!this.usuarioSeleccionado) return;
+    
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+
+    this.http.put(`${this.apiBase}/api/ligas/${this.id_liga}/toggle-admin/${this.usuarioSeleccionado.id}`, {}, { headers })
+      .subscribe({
+        next: (res: any) => {
+          this.mostrarNotificacion(res.message, true);
+          this.cerrarModal();
+          this.cargarClasificacion(); // Recargar la tabla para ver la insignia de admin
+        },
+        error: (err) => this.mostrarNotificacion(err.error?.message || 'Error al cambiar rol', false)
       });
   }
 

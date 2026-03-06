@@ -182,6 +182,24 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .toast-icon { font-size: 1.5rem; }
 .toast-message { margin: 0; font-size: 0.9rem;}
 
+.btn-clear {
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  color: #ff4757;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-clear:hover {
+  background: #ff4757;
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .main-container { overflow-y: auto; padding-top: 10px; }
