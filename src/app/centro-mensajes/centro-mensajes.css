@@ -76,13 +76,24 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .privado-row.no-leido { background: rgba(46, 213, 115, 0.1); border-left: 4px solid #2ed573; }
 
 .icon-tipo { width: 45px; height: 45px; border-radius: 50%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; font-size: 1.5rem; }
-.privado-info { flex: 1; display: flex; flex-direction: column; }
+.privado-info { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  min-width: 0;
+}
 .privado-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .privado-remitente { color: white; font-weight: 700; font-size: 1.1rem; }
 .privado-fecha { color: #888; font-size: 0.8rem; }
 .privado-asunto { color: #2ed573; font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
-.privado-preview { color: #aaa; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90%; }
-.dot-unread { width: 10px; height: 10px; background: #2ed573; border-radius: 50%; box-shadow: 0 0 8px #2ed573; }
+.privado-preview { 
+  color: #aaa; 
+  font-size: 0.85rem; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; /* Pone los 3 puntitos (...) al final */
+  width: 100%; 
+}.dot-unread { width: 10px; height: 10px; background: #2ed573; border-radius: 50%; box-shadow: 0 0 8px #2ed573; }
 
 
 /* === CHAT GENERAL === */

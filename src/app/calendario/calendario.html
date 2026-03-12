@@ -61,10 +61,24 @@
             <span class="day-number">{{ dia.fecha | date:'d' }}</span>
             
             <div class="matches-list">
-              <div class="match-pill" *ngFor="let p of getPartidosDelDia(dia.fecha)">
+              <div class="match-pill" *ngFor="let p of getPartidosDelDia(dia.fecha)" 
+                   [ngClass]="getEstadoVisual(p)" 
+                   (click)="abrirPartido(p)">
+                
                 <span class="dot"></span>
                 <span class="match-teams">{{ p.equipo_local }} - {{ p.equipo_visitante }}</span>
-                <span class="match-time">{{ p.fecha_partido | date:'HH:mm' }}</span>
+                
+                <span class="match-time" *ngIf="getEstadoVisual(p) === 'pendiente'">
+                  {{ p.fecha_partido | date:'HH:mm' }}
+                </span>
+
+                <span class="match-live" *ngIf="getEstadoVisual(p) === 'en_curso'">
+                  <span class="pulse-ring"></span> EN VIVO
+                </span>
+
+                <span class="match-result" *ngIf="getEstadoVisual(p) === 'finalizado'">
+                  {{ p.goles_local }} - {{ p.goles_visitante }}
+                </span>
               </div>
             </div>
 
@@ -103,6 +117,65 @@
           <span *ngIf="isGenerating">⚽ Generando 38 Jornadas...</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalPartido" (click)="cerrarModalPartido()">
+    <div class="modal-content-partido" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header-partido">
+        
+        <div class="team local">{{ partidoSeleccionado.equipo_local }}</div>
+        
+        <div class="score-board">
+            <div class="score" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente'">
+                {{ golesLocalEnVivo }} - {{ golesVisitanteEnVivo }}
+            </div>
+            
+            <div class="time-status" *ngIf="getEstadoVisual(partidoSeleccionado) === 'pendiente'">
+                {{ partidoSeleccionado.fecha_partido | date:'dd MMM, HH:mm' }}
+            </div>
+            
+            <div class="time-status live-status" *ngIf="getEstadoVisual(partidoSeleccionado) === 'en_curso'">
+                Min {{ minutoActual }}' <span class="pulsing-dot-small"></span>
+            </div>
+            
+            <div class="time-status final-status" *ngIf="getEstadoVisual(partidoSeleccionado) === 'finalizado'">
+                FINAL
+            </div>
+        </div>
+        
+        <div class="team visit">{{ partidoSeleccionado.equipo_visitante }}</div>
+        
+        <span class="close-btn-partido" (click)="cerrarModalPartido()">&times;</span>
+      </div>
+
+      <div class="modal-body-partido">
+         <div class="no-empezado" *ngIf="getEstadoVisual(partidoSeleccionado) === 'pendiente'">
+            <span class="soccer-icon">⚽</span>
+            <p>El balón aún no echa a rodar. <br>¡Prepara tus alineaciones y diseña tu estrategia!</p>
+         </div>
+         
+         <div class="timeline" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente'">
+            <div class="timeline-event" *ngFor="let ev of eventosVisibles" [ngClass]="ev.equipo_jugador === partidoSeleccionado.equipo_local ? 'left' : 'right'">
+               <div class="event-box">
+                  <div class="event-min">{{ ev.minuto }}'</div>
+                  <div class="event-details">
+                     <div class="event-title">
+                        <span *ngIf="ev.tipo_evento === 'gol'">⚽ ¡GOL!</span>
+                        <span *ngIf="ev.tipo_evento === 'amarilla'">🟨 Amarilla</span>
+                        <span *ngIf="ev.tipo_evento === 'roja'">🟥 Roja</span>
+                     </div>
+                     <div class="event-desc">{{ ev.descripcion }}</div>
+                  </div>
+               </div>
+            </div>
+            <div class="no-events" *ngIf="eventosVisibles.length === 0">
+               Paseo de la pelota en el centro del campo. Sin eventos destacados por ahora...
+            </div>
+         </div>
+      </div>
+      
     </div>
   </div>
 

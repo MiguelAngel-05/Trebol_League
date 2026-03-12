@@ -20,6 +20,17 @@ export class Calendario implements OnInit {
   mostrarModalGenerar = false;
   isGenerating = false;
 
+  // para los partidos
+
+  mostrarModalPartido = false;
+  partidoSeleccionado: any = null;
+  eventosPartido: any[] = [];
+  eventosVisibles: any[] = [];
+  golesLocalEnVivo = 0;
+  golesVisitanteEnVivo = 0;
+  minutoActual = 0;
+  intervaloEnVivo: any;
+
   partidos: any[] = [];
   
   fechaActual: Date = new Date();
@@ -176,4 +187,83 @@ export class Calendario implements OnInit {
     this.isSuccess = exito;
     setTimeout(() => this.notificationMsg = '', 3500);
   }
+
+  // --- esto es para los partidos su logica ---
+  
+  // Devuelve 'pendiente', 'en_curso' o 'finalizado' calculando el tiempo real
+  getEstadoVisual(p: any): string {
+    if (!p || !p.fecha_partido) return 'pendiente';
+    const ahora = new Date().getTime();
+    const inicio = new Date(p.fecha_partido).getTime();
+    const fin = inicio + (60 * 60 * 1000); // El partido dura 60 minutos (1h)
+
+    if (ahora < inicio) return 'pendiente';
+    if (ahora >= inicio && ahora <= fin) return 'en_curso';
+    return 'finalizado';
+  }
+
+  abrirPartido(p: any) {
+    this.partidoSeleccionado = p;
+    this.mostrarModalPartido = true;
+    
+    const estado = this.getEstadoVisual(p);
+
+    // Si aún no empieza, no cargamos eventos
+    if (estado === 'pendiente') {
+       this.eventosVisibles = [];
+       this.golesLocalEnVivo = 0;
+       this.golesVisitanteEnVivo = 0;
+       return;
+    }
+
+    // Pedimos los datos y la línea de tiempo al backend
+    this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/partido/${p.id_partido}`, this.getHeaders())
+      .subscribe(res => {
+         this.eventosPartido = res.eventos;
+         this.actualizarMarcadorEnVivo();
+         
+         // Si se está jugando AHORA, activamos un reloj que refresca el minuto cada 10 segundos
+         if (estado === 'en_curso') {
+            this.intervaloEnVivo = setInterval(() => this.actualizarMarcadorEnVivo(), 10000);
+         }
+      });
+  }
+
+  actualizarMarcadorEnVivo() {
+     if (!this.partidoSeleccionado) return;
+     const estado = this.getEstadoVisual(this.partidoSeleccionado);
+     
+     if (estado === 'finalizado') {
+        this.minutoActual = 60;
+        this.eventosVisibles = this.eventosPartido;
+        this.golesLocalEnVivo = this.partidoSeleccionado.goles_local;
+        this.golesVisitanteEnVivo = this.partidoSeleccionado.goles_visitante;
+        if (this.intervaloEnVivo) clearInterval(this.intervaloEnVivo);
+        return;
+     }
+
+     if (estado === 'en_curso') {
+        const ahora = new Date().getTime();
+        const inicio = new Date(this.partidoSeleccionado.fecha_partido).getTime();
+        
+        // Calculamos en qué minuto estamos (1 minuto en la vida real = 1 minuto de juego)
+        this.minutoActual = Math.floor((ahora - inicio) / 60000);
+        if (this.minutoActual < 1) this.minutoActual = 1;
+
+        // Revelamos solo los eventos que ya han pasado hasta este minuto
+        this.eventosVisibles = this.eventosPartido.filter(e => e.minuto <= this.minutoActual);
+        
+        // Sumamos los goles dinámicamente viendo quién los ha marcado
+        this.golesLocalEnVivo = this.eventosVisibles.filter(e => e.tipo_evento === 'gol' && e.equipo_jugador === this.partidoSeleccionado.equipo_local).length;
+        this.golesVisitanteEnVivo = this.eventosVisibles.filter(e => e.tipo_evento === 'gol' && e.equipo_jugador === this.partidoSeleccionado.equipo_visitante).length;
+     }
+  }
+
+  cerrarModalPartido() {
+    this.mostrarModalPartido = false;
+    this.partidoSeleccionado = null;
+    if (this.intervaloEnVivo) clearInterval(this.intervaloEnVivo);
+  }
+
+
 }
