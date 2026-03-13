@@ -123,4 +123,11 @@ export class Menu {
       this.notificationMsg = '';
     }, 3000);
   }
+
+  irAPuntos() {
+    // Usamos el idLiga que ya tienes guardado en tu clase Menu
+    this.router.navigate(['/ligas', this.id_liga, 'puntos']); 
+  }
+
+
 }

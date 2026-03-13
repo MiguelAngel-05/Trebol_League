@@ -13,10 +13,10 @@
       </div>
     </div>
     <div class="header-optionsB bottom-row">
-      <div class="option-group icon-hover">
-        <img class="pinchar" src="Utensilios/Emojis/flecha-retroceso.png" alt="Volver" (click)="volverAtras()">
+          <div class="option-group icon-hover" (click)="volverAtras()">
+              <img src="Utensilios/Emojis/home-blanco.png" alt="Inicio" class="pinchar" style="height: 26px; width: auto;">
+          </div>
       </div>
-    </div>
     <div class="div-img-user" (click)="irAPerfil()">
       <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario">
     </div>

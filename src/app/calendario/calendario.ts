@@ -191,14 +191,23 @@ export class Calendario implements OnInit {
   // --- esto es para los partidos su logica ---
   
   // Devuelve 'pendiente', 'en_curso' o 'finalizado' calculando el tiempo real
+  // Devuelve 'pendiente', 'en_curso' o 'finalizado'
+  // Devuelve 'pendiente', 'en_curso' o 'finalizado' calculando el tiempo real (ViewModel)
   getEstadoVisual(p: any): string {
     if (!p || !p.fecha_partido) return 'pendiente';
+    
     const ahora = new Date().getTime();
     const inicio = new Date(p.fecha_partido).getTime();
-    const fin = inicio + (60 * 60 * 1000); // El partido dura 60 minutos (1h)
+    const fin = inicio + (60 * 60 * 1000); // El partido dura exactamente 60 minutos
 
+    // 1. El reloj dice que aún no es la hora
     if (ahora < inicio) return 'pendiente';
+
+    // 2. MAGIA MVVM: Si estamos dentro de los 60 minutos de juego,
+    // forzamos el estado a 'en_curso' (EN VIVO), ignorando si el backend ya simuló el final.
     if (ahora >= inicio && ahora <= fin) return 'en_curso';
+
+    // 3. Si ya pasó más de 1 hora, entonces sí mostramos que ha finalizado
     return 'finalizado';
   }
 

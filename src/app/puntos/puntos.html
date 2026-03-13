@@ -1,0 +1,147 @@
+<main class="main-container">
+  
+  <img class="logoTrebol" src="Logos/LogoTrebolLeague.png" alt="logo de trebol league">
+    
+  <header class="main-header">
+      <div class="header-options top-row">          
+          <div class="option-group">
+              <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+              <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
+                {{ user?.username || 'Cargando...' }}
+              </p>
+          </div>
+          <span class="separator-header">/</span>
+          <div class="option-group">
+              <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
+                {{ formatearDinero(dinero) }}
+              </p>
+              <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+          </div>
+      </div>
+      
+      <div class="header-optionsB bottom-row">
+          <div class="option-group icon-hover" (click)="volverAtras()">
+              <img src="Utensilios/Emojis/home-blanco.png" alt="Inicio" class="pinchar" style="height: 26px; width: auto;">
+          </div>
+      </div>
+
+      <div class="div-img-user" (click)="irAPerfil()">
+          <img class="img-user" 
+               [src]="user?.avatar ? user.avatar : 'Utensilios/Emojis/icono-usuario.png'" 
+               onerror="this.src='Utensilios/Emojis/icono-usuario.png'" 
+               alt="imagen de usuario"
+               title="Editar Perfil"> 
+      </div>
+  </header>
+
+  <section class="content-area">
+    <div class="glass-panel">
+      
+      <div class="tabs-header">
+        <button class="tab-btn" [class.active]="tabActiva === 'jornadas'" (click)="cambiarTab('jornadas')">
+          ⚽ Puntos por Jornada
+        </button>
+        <button class="tab-btn" [class.active]="tabActiva === 'general'" (click)="cambiarTab('general')">
+          🏆 Clasificación General
+        </button>
+      </div>
+
+      <div class="tab-content" *ngIf="tabActiva === 'jornadas'">
+        
+        <div class="filtros-jornada">
+          <select [(ngModel)]="managerSeleccionado" (change)="buscarPuntosJornada()" class="select-fantasy">
+            <option *ngFor="let m of managers" [value]="m.id">{{ m.username }}</option>
+          </select>
+          <select [(ngModel)]="jornadaSeleccionada" (change)="buscarPuntosJornada()" class="select-fantasy">
+            <option *ngFor="let j of jornadasDisponibles" [value]="j">Jornada {{ j }}</option>
+          </select>
+        </div>
+
+        <div class="puntos-resumen">
+          <h3>Puntos de la Jornada</h3>
+          <div class="big-score">{{ totalPuntosJornada }}</div>
+        </div>
+
+        <div class="table-container">
+          <table class="fantasy-table">
+            <thead>
+              <tr>
+                <th>Jugador</th>
+                <th>Posición</th>
+                <th>Valor</th>
+                <th>Goles</th>
+                <th>Asistencias</th>
+                <th>Puntos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let j of jugadoresJornada">
+                <td class="player-name">{{ j.nombre }}</td>
+                <td><span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span></td>
+                <td>{{ formatearDinero(j.valor) }} 🪙</td>
+                <td>{{ j.goles }} ⚽</td>
+                <td>{{ j.asistencias }} 👟</td>
+                <td class="pts-col">{{ j.puntos }} pts</td>
+              </tr>
+              <tr *ngIf="jugadoresJornada.length === 0">
+                <td colspan="6" class="empty-state">Sin datos para este equipo en esta jornada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-content" *ngIf="tabActiva === 'general'">
+        <div class="table-container">
+          <table class="fantasy-table">
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Club</th>
+                <th title="Partidos Jugados">PJ</th>
+                <th title="Partidos Ganados">PG</th>
+                <th title="Partidos Empatados">PE</th>
+                <th title="Partidos Perdidos">PP</th>
+                <th title="Goles a Favor">GF</th>
+                <th title="Goles en Contra">GC</th>
+                <th title="Diferencia de Goles">DIF</th>
+                <th>Puntos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let club of clasificacionClubes; let i = index">
+                <td class="rank">
+                    <span *ngIf="i === 0">🥇</span>
+                    <span *ngIf="i === 1">🥈</span>
+                    <span *ngIf="i === 2">🥉</span>
+                    <span *ngIf="i > 2">{{ i + 1 }}</span>
+                </td>
+                <td class="team-name">
+                    <div class="equipo-con-escudo">
+                        <img class="escudo-club" 
+                             [src]="getEscudoUrl(club.equipo)" 
+                             [alt]="club.equipo" 
+                             onerror="this.src='Utensilios/Escudos/default.png'">
+                        <span>{{ club.equipo }}</span>
+                    </div>
+                </td>
+                <td>{{ club.pj }}</td>
+                <td>{{ club.pg }}</td>
+                <td>{{ club.pe }}</td>
+                <td>{{ club.pp }}</td>
+                <td>{{ club.gf }}</td>
+                <td>{{ club.gc }}</td>
+                <td>{{ club.dif > 0 ? '+' + club.dif : club.dif }}</td>
+                <td class="pts-col highlight">{{ club.puntos_totales }}</td>
+              </tr>
+              <tr *ngIf="!clasificacionClubes || clasificacionClubes.length === 0">
+                <td colspan="10" class="empty-state">Aún no se ha jugado ningún partido en esta liga.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
