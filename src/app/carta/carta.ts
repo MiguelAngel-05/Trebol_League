@@ -26,7 +26,7 @@ export function obtenerRutaEscudoGlobal(nombreEquipo: string): string {
     'Titanes CF': 'titanes_cf.png',
     'Pangea FC': 'pangea_fc.png',
     'Cosmos United': 'cosmos_united.png',
-    'Real Trébol FC': 'real_trebol.png'
+    'Real Trébol FC': 'real_trebol_fc.png'
   };
   
   const archivo = mapeo[nombreEquipo];
