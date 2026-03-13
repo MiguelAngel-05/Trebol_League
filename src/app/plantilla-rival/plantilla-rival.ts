@@ -130,7 +130,7 @@ export class PlantillaRival implements OnInit {
       'Titanes CF': 'titanes_cf.png',
       'Pangea FC': 'pangea_fc.png',
       'Cosmos United': 'cosmos_united.png',
-      'Real Trébol FC': 'real_trebol.png'
+      'Real Trébol FC': 'real_trebol_fc.png'
     };
     const archivo = mapeo[nombreEquipo];
     return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.png';
