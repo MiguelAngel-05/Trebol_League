@@ -1,61 +1,12 @@
 /* =========================================
-   CONTENEDOR PRINCIPAL Y FONDO
+   CONTENEDOR PRINCIPAL Y FONDO (INTACTO)
    ========================================= */
-.main-container {
-    width: 100%;
-    min-height: 100vh;
-    background-image: url("/Fondos/FondoEstandar.png"); /* Asegúrate de que la ruta sea correcta */
-    background-color: rgba(10, 20, 15, 0.85); 
-    background-blend-mode: overlay;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
-}
-
-/* =========================================
-   ESCUDOS DE EQUIPOS
-   ========================================= */
-.equipo-con-escudo { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-}
-
-.escudo-club { 
-  width: 32px; 
-  height: 32px; 
-  object-fit: contain; 
-  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
-  transition: transform 0.2s ease;
-}
-
-.fantasy-table tbody tr:hover .escudo-club {
-  transform: scale(1.15); /* El escudo crece un poco al pasar el ratón por la fila */
-}
-
-.option-group p {
-    margin: 0;
-    color: white;
-    font-family: 'serif'; /* Para que se parezca a la fuente de la foto */
-    font-size: 1.3rem;
-    text-shadow: 1px 1px 2px black;
-}
-
-/* Asegúrate de que el contenedor de la foto de usuario tenga ese degradado verde */
-.div-img-user {
-    background: linear-gradient(to bottom right, #1f8f5f, #0d3a27);
-    border-radius: 20px;
-    border-bottom-left-radius: 50px; /* Ese efecto redondeado de tu foto */
-}
-
-/* =========================================
-   HEADER SUPERIOR (Barra de Navegación)
-   ========================================= */
+.main-container { width: 100%; min-height: 100vh; background-image: url("/Fondos/FondoEstandar.png"); background-color: rgba(10, 20, 15, 0.85); background-blend-mode: overlay; background-size: cover; background-position: center; background-attachment: fixed; display: flex; flex-direction: column; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
 .logoTrebol { width: 220px; height: 220px; position: absolute; top: 20px; left: 80px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); z-index: 10; animation: bounceInDown 1s ease forwards; }
+
+/* =========================================
+   HEADER SUPERIOR (INTACTO)
+   ========================================= */
 .main-header { background: transparent; width: 50%; height: 120px; position: absolute; top: 40px; right: 80px; display: flex; flex-direction: column; align-items: flex-start; filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.5)); z-index: 20; animation: slideDown 0.8s ease-out forwards; }
 .header-options.top-row { width: 100%; height: 50%; background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%); border-top-right-radius: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 160px 0 80px; box-sizing: border-box; }
 .header-optionsB.bottom-row { width: 100%; height: 50%; background: linear-gradient(90deg, #1f3327 0%, #15221b 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-around; padding: 0 160px 0 80px; box-sizing: border-box; }
@@ -70,57 +21,114 @@
 .div-img-user:hover .img-user { transform: scale(1.15); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
 
 /* =========================================
-   PANEL DE CRISTAL Y CONTENIDO
+   NUEVO REDISEÑO: PANEL PRINCIPAL
    ========================================= */
-.content-area { margin-top: 260px; padding: 0 80px 30px 80px; flex: 1; display: flex; flex-direction: column; }
-.glass-panel { background: rgba(20, 30, 25, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; flex: 1; box-shadow: 0 15px 40px rgba(0,0,0,0.5); animation: slideInUp 0.6s ease forwards; }
+.content-area { margin-top: 260px; padding: 0 80px 40px 80px; flex: 1; display: flex; flex-direction: column; z-index: 1; }
+.modern-panel { background: rgba(12, 16, 14, 0.7); backdrop-filter: blur(20px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden; animation: slideInUp 0.6s ease forwards; }
+
+/* Navegación Superior (Tabs) */
+.modern-tabs { display: flex; background: rgba(0, 0, 0, 0.3); border-bottom: 1px solid rgba(255,255,255,0.05); }
+.m-tab { flex: 1; background: transparent; color: #7a8c82; border: none; padding: 20px 0; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border-bottom: 3px solid transparent; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; }
+.m-tab:hover { color: #d1d8d4; background: rgba(255,255,255,0.02); }
+.m-tab.active { color: #1abc9c; border-bottom: 3px solid #1abc9c; background: linear-gradient(to top, rgba(26, 188, 156, 0.05) 0%, transparent 100%); }
+.m-icon { font-size: 1.2rem; filter: grayscale(0.5); }
+.m-tab.active .m-icon { filter: grayscale(0); }
+
+/* Animación contenido */
+.m-content { padding: 30px 40px; }
+.fade-in { animation: fadeIn 0.4s ease-in-out; }
+
+/* Dashboard Puntos (Filtros + Marcador) */
+.jornada-dashboard { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); border-radius: 16px; padding: 20px 30px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.03); }
+.filters-group { display: flex; gap: 15px; }
+.custom-select-wrapper { position: relative; }
+.m-select { appearance: none; background: rgba(255,255,255,0.05); color: #e0e0e0; border: 1px solid rgba(255,255,255,0.1); padding: 12px 40px 12px 20px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; outline: none; }
+.m-select:hover, .m-select:focus { background: rgba(255,255,255,0.1); border-color: #1abc9c; }
+.m-select option {
+    background-color: #15221b;
+    color: #e0e0e0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+.custom-select-wrapper::after { content: '▼'; font-size: 0.7rem; color: #1abc9c; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+
+.score-display { display: flex; flex-direction: column; align-items: flex-end; }
+.score-label { font-size: 0.75rem; color: #7a8c82; font-weight: 700; letter-spacing: 2px; }
+.score-value { font-size: 2.8rem; font-weight: 800; color: #1abc9c; line-height: 1.1; }
 
 /* =========================================
-   PESTAÑAS (TABS)
+   NUEVO LISTADO DE FILAS (Modern Rows)
    ========================================= */
-.tabs-header { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-.tab-btn { background: transparent; color: #aaa; border: none; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: 0.3s; padding: 10px 20px; border-radius: 10px; font-family: 'Poppins', sans-serif;}
-.tab-btn:hover { color: white; background: rgba(255,255,255,0.05); }
-.tab-btn.active { color: #2ed573; background: rgba(46, 213, 115, 0.1); box-shadow: inset 0 0 10px rgba(46, 213, 115, 0.2); }
+.modern-list-container { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+
+/* Cabecera */
+.list-header { display: flex; padding: 0 20px 10px 20px; color: #7a8c82; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
+
+/* Filas */
+.list-row { display: flex; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid transparent; border-radius: 12px; padding: 12px 20px; transition: all 0.2s ease; }
+.list-row:hover { background: rgba(26, 188, 156, 0.05); border: 1px solid rgba(26, 188, 156, 0.2); transform: translateX(5px); }
+.list-row:nth-child(even) { background: rgba(0,0,0,0.2); }
+.list-row:nth-child(even):hover { background: rgba(26, 188, 156, 0.05); }
+
+/* Columnas Generales */
+.col-player { flex: 2; display: flex; align-items: center; gap: 15px; }
+.col-pos { flex: 1; display: flex; justify-content: flex-start; }
+.col-val { flex: 1.5; display: flex; justify-content: flex-start; }
+.col-stats { flex: 1.5; display: flex; gap: 10px; }
+.col-pts { flex: 0.8; display: flex; justify-content: flex-end; }
+
+/* Detalles de Columnas */
+.player-name { font-weight: 600; color: #e0e0e0; font-size: 1.05rem; }
+.price-tag { color: #a0a0a0; font-size: 0.95rem; font-weight: 500; }
+.currency { font-size: 0.8rem; color: #666; }
+.pts-number { font-size: 1.3rem; font-weight: 800; color: #1abc9c; }
+.pts-number.highlight { font-size: 1.5rem; }
+
+/* Píldoras de Estadísticas */
+.stat-pill { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 4px 10px; font-size: 0.85rem; color: #ccc; display: flex; align-items: center; gap: 5px; }
+.stat-icon { font-size: 0.8rem; }
+
+/* Estado Vacío */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0; color: #5a6b62; }
+.empty-icon { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
+.empty-state p { font-size: 1.1rem; font-weight: 500; }
 
 /* =========================================
-   FILTROS (Desplegables)
+   ESPECÍFICO CLASIFICACIÓN GENERAL
    ========================================= */
-.filtros-jornada { display: flex; gap: 20px; margin-bottom: 20px; justify-content: center; }
-.select-fantasy { padding: 12px 20px; border-radius: 10px; background: rgba(0,0,0,0.6); color: #2ed573; border: 1px solid rgba(46, 213, 115, 0.5); font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 1rem; cursor: pointer; outline: none; transition: 0.3s; }
-.select-fantasy:hover, .select-fantasy:focus { border-color: #2ed573; box-shadow: 0 0 10px rgba(46, 213, 115, 0.3); background: rgba(0,0,0,0.8); }
+.ranking-header { padding-right: 30px; /* Compensa el scroll */ }
+.col-rank { flex: 0.5; display: flex; justify-content: center; }
+.col-club { flex: 2.5; display: flex; align-items: center; gap: 15px; }
+.col-mini { flex: 0.5; display: flex; justify-content: center; font-weight: 500; font-size: 0.95rem; color: #e0e0e0; }
+.col-total { flex: 1; display: flex; justify-content: flex-end; }
 
-/* =========================================
-   MARCADOR GIGANTE (PUNTOS)
-   ========================================= */
-.puntos-resumen { text-align: center; margin-bottom: 30px; background: linear-gradient(145deg, #1f3327, #0f1a14); padding: 20px; border-radius: 15px; border: 1px solid rgba(46, 213, 115, 0.3); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-.puntos-resumen h3 { color: #ccc; margin: 0 0 10px 0; font-weight: 500; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
-.big-score { font-size: 4.5rem; font-weight: 900; color: #2ed573; text-shadow: 0 0 20px rgba(46, 213, 115, 0.5); line-height: 1; }
+/* Escudos y Nombres */
+.club-shield { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); transition: transform 0.2s; }
+.ranking-row:hover .club-shield { transform: scale(1.15); }
+.club-name { font-weight: 600; color: white; font-size: 1.05rem; }
 
-/* =========================================
-   TABLAS ESTILO FANTASY
-   ========================================= */
-.table-container { overflow-x: auto; background: rgba(0,0,0,0.3); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
-.fantasy-table { width: 100%; border-collapse: collapse; text-align: center; color: white; }
-.fantasy-table th { background: rgba(0,0,0,0.6); padding: 18px 15px; color: #2ed573; font-weight: 700; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; border-bottom: 2px solid rgba(46, 213, 115, 0.3); }
-.fantasy-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
-.fantasy-table tbody tr { transition: 0.2s; }
-.fantasy-table tbody tr:hover { background: rgba(46, 213, 115, 0.05); transform: scale(1.01); }
+/* Medallas y Rangos */
+.rank-badge { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: #888; background: rgba(255,255,255,0.05); }
+.rank-badge.gold { background: linear-gradient(135deg, #FFD700, #DAA520); color: black; box-shadow: 0 0 10px rgba(255,215,0,0.4); }
+.rank-badge.silver { background: linear-gradient(135deg, #E0E0E0, #A9A9A9); color: black; box-shadow: 0 0 10px rgba(224,224,224,0.4); }
+.rank-badge.bronze { background: linear-gradient(135deg, #CD7F32, #8B4513); color: white; box-shadow: 0 0 10px rgba(205,127,50,0.4); }
 
-.player-name, .team-name { font-weight: 700; text-align: left; font-size: 1.1rem; letter-spacing: 0.5px; }
-.pts-col { font-weight: 800; color: #2ed573; font-size: 1.1rem; }
-.pts-col.highlight { font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 213, 115, 0.3); }
-.rank { font-weight: 900; color: #888; font-size: 1.4rem; }
-.empty-state { color: #aaa; padding: 30px !important; font-style: italic; text-align: center; }
+/* Colores en Stats Clasificación */
+.stat-dim { color: #7a8c82; }
+.stat-win { color: #2ecc71; }
+.stat-draw { color: #f39c12; }
+.stat-loss { color: #e74c3c; }
+.diff-pos { color: #1abc9c; font-weight: 600; }
+.diff-neg { color: #e74c3c; font-weight: 600; }
 
 /* =========================================
    BADGES (ETIQUETAS) DE POSICIÓN
    ========================================= */
-.badge { padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-.pos-por { background: #ff9f43; } /* Naranja */
-.pos-def { background: #0abde3; } /* Azul */
-.pos-med { background: #10ac84; } /* Verde */
-.pos-del { background: #ee5253; } /* Rojo */
+.badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.pos-por { background: #ff9f43; }
+.pos-def { background: #0abde3; }
+.pos-med { background: #10ac84; }
+.pos-del { background: #ee5253; }
 
 /* =========================================
    ANIMACIONES KEYFRAMES
@@ -128,23 +136,28 @@
 @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes bounceInDown { 0% { opacity: 0; transform: translateY(-200px); } 60% { opacity: 1; transform: translateY(25px); } 100% { transform: translateY(0); } }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
 /* =========================================
    RESPONSIVE (MÓVILES)
    ========================================= */
 @media (max-width: 768px) {
-  .content-area { padding: 0 15px 15px 15px; margin-top: 150px; }
+  .content-area { padding: 0 15px 20px 15px; margin-top: 150px; }
   .logoTrebol { width: 100px; height: 100px; position: relative; top: 0; left: 0; display: block; margin: 10px auto; animation: none; }
   .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 20px; }
   .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
   .div-img-user { display: none; }
   
-  .glass-panel { padding: 15px; }
-  .tabs-header { flex-direction: column; gap: 10px; }
-  .tab-btn { width: 100%; }
-  .filtros-jornada { flex-direction: column; gap: 10px; }
+  .modern-panel { border-radius: 16px; }
+  .m-content { padding: 20px 15px; }
+  .m-tab { font-size: 0.95rem; padding: 15px 0; }
   
-  .big-score { font-size: 3.5rem; }
-  .fantasy-table th, .fantasy-table td { padding: 10px; font-size: 0.9rem; }
-  .player-name, .team-name { font-size: 0.95rem; }
+  .jornada-dashboard { flex-direction: column; gap: 20px; padding: 15px; }
+  .filters-group { width: 100%; flex-direction: column; gap: 10px; }
+  .score-display { align-items: center; }
+  .score-value { font-size: 2.2rem; }
+  
+  /* En móviles permitimos scroll en las listas para no aplastar datos */
+  .modern-list-container { overflow-x: auto; padding-bottom: 10px; }
+  .list-header, .list-row { min-width: 600px; } /* Fuerza el ancho para móviles */
 }

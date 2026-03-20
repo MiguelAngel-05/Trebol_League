@@ -35,110 +35,125 @@
   </header>
 
   <section class="content-area">
-    <div class="glass-panel">
+    <div class="modern-panel">
       
-      <div class="tabs-header">
-        <button class="tab-btn" [class.active]="tabActiva === 'jornadas'" (click)="cambiarTab('jornadas')">
-          ⚽ Puntos por Jornada
+      <nav class="modern-tabs">
+        <button class="m-tab" [class.active]="tabActiva === 'jornadas'" (click)="cambiarTab('jornadas')">
+          <span class="m-icon"></span> Puntos Jornada
         </button>
-        <button class="tab-btn" [class.active]="tabActiva === 'general'" (click)="cambiarTab('general')">
-          🏆 Clasificación General
+        <button class="m-tab" [class.active]="tabActiva === 'general'" (click)="cambiarTab('general')">
+          <span class="m-icon"></span> Clasificación
         </button>
-      </div>
+      </nav>
 
-      <div class="tab-content" *ngIf="tabActiva === 'jornadas'">
+      <div class="m-content fade-in" *ngIf="tabActiva === 'jornadas'">
         
-        <div class="filtros-jornada">
-          <select [(ngModel)]="managerSeleccionado" (change)="buscarPuntosJornada()" class="select-fantasy">
-            <option *ngFor="let m of managers" [value]="m.id">{{ m.username }}</option>
-          </select>
-          <select [(ngModel)]="jornadaSeleccionada" (change)="buscarPuntosJornada()" class="select-fantasy">
-            <option *ngFor="let j of jornadasDisponibles" [value]="j">Jornada {{ j }}</option>
-          </select>
+        <div class="jornada-dashboard">
+          <div class="filters-group">
+            <div class="custom-select-wrapper">
+              <select [(ngModel)]="managerSeleccionado" (change)="buscarPuntosJornada()" class="m-select">
+                <option *ngFor="let m of managers" [value]="m.id">{{ m.username }}</option>
+              </select>
+            </div>
+            <div class="custom-select-wrapper">
+              <select [(ngModel)]="jornadaSeleccionada" (change)="buscarPuntosJornada()" class="m-select">
+                <option *ngFor="let j of jornadasDisponibles" [value]="j">Jornada {{ j }}</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="score-display">
+            <span class="score-label">TOTAL PUNTOS</span>
+            <span class="score-value">{{ totalPuntosJornada }}</span>
+          </div>
         </div>
 
-        <div class="puntos-resumen">
-          <h3>Puntos de la Jornada</h3>
-          <div class="big-score">{{ totalPuntosJornada }}</div>
-        </div>
+        <div class="modern-list-container">
+          <div class="list-header">
+            <div class="col-player">Jugador</div>
+            <div class="col-pos">Pos</div>
+            <div class="col-val">Valor</div>
+            <div class="col-stats">Stats</div>
+            <div class="col-pts">Pts</div>
+          </div>
 
-        <div class="table-container">
-          <table class="fantasy-table">
-            <thead>
-              <tr>
-                <th>Jugador</th>
-                <th>Posición</th>
-                <th>Valor</th>
-                <th>Goles</th>
-                <th>Asistencias</th>
-                <th>Puntos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let j of jugadoresJornada">
-                <td class="player-name">{{ j.nombre }}</td>
-                <td><span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span></td>
-                <td>{{ formatearDinero(j.valor) }} 🪙</td>
-                <td>{{ j.goles }} ⚽</td>
-                <td>{{ j.asistencias }} 👟</td>
-                <td class="pts-col">{{ j.puntos }} pts</td>
-              </tr>
-              <tr *ngIf="jugadoresJornada.length === 0">
-                <td colspan="6" class="empty-state">Sin datos para este equipo en esta jornada.</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="list-body">
+            <div class="list-row" *ngFor="let j of jugadoresJornada">
+              <div class="col-player">
+                <span class="player-name">{{ j.nombre }}</span>
+              </div>
+              <div class="col-pos">
+                <span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span>
+              </div>
+              <div class="col-val">
+                <span class="price-tag">{{ formatearDinero(j.valor) }} <span class="currency">Tc</span></span>
+              </div>
+              <div class="col-stats">
+                <div class="stat-pill"><span class="stat-icon">⚽</span> {{ j.goles }}</div>
+                <div class="stat-pill"><span class="stat-icon">👟</span> {{ j.asistencias }}</div>
+              </div>
+              <div class="col-pts">
+                <span class="pts-number">{{ j.puntos }}</span>
+              </div>
+            </div>
+
+            <div class="empty-state" *ngIf="jugadoresJornada.length === 0">
+              <span class="empty-icon">🏟️</span>
+              <p>Esperando el inicio del partido</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="tab-content" *ngIf="tabActiva === 'general'">
-        <div class="table-container">
-          <table class="fantasy-table">
-            <thead>
-              <tr>
-                <th>Pos</th>
-                <th>Club</th>
-                <th title="Partidos Jugados">PJ</th>
-                <th title="Partidos Ganados">PG</th>
-                <th title="Partidos Empatados">PE</th>
-                <th title="Partidos Perdidos">PP</th>
-                <th title="Goles a Favor">GF</th>
-                <th title="Goles en Contra">GC</th>
-                <th title="Diferencia de Goles">DIF</th>
-                <th>Puntos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let club of clasificacionClubes; let i = index">
-                <td class="rank">
-                    <span *ngIf="i === 0">🥇</span>
-                    <span *ngIf="i === 1">🥈</span>
-                    <span *ngIf="i === 2">🥉</span>
-                    <span *ngIf="i > 2">{{ i + 1 }}</span>
-                </td>
-                <td class="team-name">
-                    <div class="equipo-con-escudo">
-                        <img class="escudo-club" 
-                             [src]="getEscudoUrl(club.equipo)" 
-                             [alt]="club.equipo" 
-                             onerror="this.src='Utensilios/Escudos/default.png'">
-                        <span>{{ club.equipo }}</span>
-                    </div>
-                </td>
-                <td>{{ club.pj }}</td>
-                <td>{{ club.pg }}</td>
-                <td>{{ club.pe }}</td>
-                <td>{{ club.pp }}</td>
-                <td>{{ club.gf }}</td>
-                <td>{{ club.gc }}</td>
-                <td>{{ club.dif > 0 ? '+' + club.dif : club.dif }}</td>
-                <td class="pts-col highlight">{{ club.puntos_totales }}</td>
-              </tr>
-              <tr *ngIf="!clasificacionClubes || clasificacionClubes.length === 0">
-                <td colspan="10" class="empty-state">Aún no se ha jugado ningún partido en esta liga.</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="m-content fade-in" *ngIf="tabActiva === 'general'">
+        <div class="modern-list-container ranking-list">
+          
+          <div class="list-header ranking-header">
+            <div class="col-rank">#</div>
+            <div class="col-club">Club</div>
+            <div class="col-mini" title="Jugados">J</div>
+            <div class="col-mini" title="Ganados">G</div>
+            <div class="col-mini" title="Empatados">E</div>
+            <div class="col-mini" title="Perdidos">P</div>
+            <div class="col-mini" title="Goles a Favor">GF</div>
+            <div class="col-mini" title="Goles en Contra">GC</div>
+            <div class="col-mini" title="Diferencia">DIF</div>
+            <div class="col-total">TOTAL</div>
+          </div>
+
+          <div class="list-body">
+            <div class="list-row ranking-row" *ngFor="let club of clasificacionClubes; let i = index">
+              <div class="col-rank">
+                <div class="rank-badge" [ngClass]="{'gold': i === 0, 'silver': i === 1, 'bronze': i === 2}">
+                  {{ i + 1 }}
+                </div>
+              </div>
+              <div class="col-club">
+                <img class="club-shield" 
+                     [src]="getEscudoUrl(club.equipo)" 
+                     [alt]="club.equipo" 
+                     onerror="this.onerror=null; this.src='/Utensilios/Escudos/escudo_default.png'">
+                <span class="club-name">{{ club.equipo }}</span>
+              </div>
+              <div class="col-mini stat-dim">{{ club.pj }}</div>
+              <div class="col-mini stat-win">{{ club.pg }}</div>
+              <div class="col-mini stat-draw">{{ club.pe }}</div>
+              <div class="col-mini stat-loss">{{ club.pp }}</div>
+              <div class="col-mini stat-dim">{{ club.gf }}</div>
+              <div class="col-mini stat-dim">{{ club.gc }}</div>
+              <div class="col-mini" [ngClass]="{'diff-pos': club.dif > 0, 'diff-neg': club.dif < 0}">
+                {{ club.dif > 0 ? '+' + club.dif : club.dif }}
+              </div>
+              <div class="col-total">
+                <span class="pts-number highlight">{{ club.puntos_totales }}</span>
+              </div>
+            </div>
+
+            <div class="empty-state" *ngIf="!clasificacionClubes || clasificacionClubes.length === 0">
+              <span class="empty-icon">🏆</span>
+              <p>La temporada aún no ha comenzado</p>
+            </div>
+          </div>
         </div>
       </div>
 

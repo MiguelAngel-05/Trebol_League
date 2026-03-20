@@ -117,14 +117,34 @@ export class PuntosComponent implements OnInit {
   }
 
   // Transforma "Motor Club Chacón" en "motor_club_chacon" para buscar la imagen
+  // Utilizamos el mapeo exacto de tu base de datos a los archivos PNG
   getEscudoUrl(nombreEquipo: string): string {
-    if (!nombreEquipo) return '/Utensilios/Escudos/default.png';
+    const mapeo: { [key: string]: string } = {
+      'Real Pinar FC': 'real_pinar.png',
+      'Athletic Hullera': 'athletic_hullera.png',
+      'Club Náutico Brisamar': 'club_nautico_brisamar.png',
+      'Racing Vaguadas': 'racing_vaguadas.png',
+      'Motor Club Chacón': 'motor_club_chacon.png',
+      'Unión Fortaleza': 'union_fortaleza.png',
+      'CD Frontera': 'cd_frontera.png',
+      'Sporting Lechuza': 'sporting_lechuza.png',
+      'CF Átomo': 'cf_atomo.png',
+      'Deportivo Relámpago': 'deportivo_relampago.png',
+      'CD Refugio': 'cd_refugio.png',
+      'Dragones de Oriente': 'dragones_de_oriente.png',
+      'UD Recreo': 'ud_recreo.png',
+      'Alianza Metropolitana': 'alianza_metropolitana.png',
+      'Neón City FC': 'neon_city_fc.png',
+      'Pixel United': 'pixel_united.png',
+      'Gourmet FC': 'gourmet_fc.png',
+      'Titanes CF': 'titanes_cf.png',
+      'Pangea FC': 'pangea_fc.png',
+      'Cosmos United': 'cosmos_united.png',
+      'Real Trébol FC': 'real_trebol.png'
+    };
     
-    const nombreFormateado = nombreEquipo
-      .toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-      .replace(/\s+/g, '_'); 
-
-    return `/Utensilios/Escudos/${nombreFormateado}.png`;
+    const archivo = mapeo[nombreEquipo];
+    // Hemos añadido la barra inicial "/" para que busque desde la raíz
+    return archivo ? `/Utensilios/Escudos/${archivo}` : '/Utensilios/Escudos/escudo_default.png';
   }
 }
