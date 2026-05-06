@@ -64,7 +64,7 @@ export class Plantilla implements OnInit {
 
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/datos-usuario`, { headers })
       .subscribe(userData => {
-        // Leemos la formación que viene de la base de datos
+        // leemos de la bbdd
         if (userData.formacion && this.opcionesFormacion.includes(userData.formacion)) {
           this.formacionSeleccionada = userData.formacion;
         }
@@ -93,7 +93,7 @@ export class Plantilla implements OnInit {
         contadorHueco++;
         const idDropActual = `hueco-${contadorHueco}`;
         
-        // 🛑 AHORA BUSCAMOS EL HUECO EXACTO GUARDADO EN BASE DE DATOS 🛑
+        // buscamos el hueco en la bbdd
         const indexTitular = jugadoresDisponibles.findIndex(j => j.es_titular && j.hueco_plantilla === idDropActual);
         
         let ocupante = [];
@@ -180,14 +180,14 @@ export class Plantilla implements OnInit {
   }
 
   guardarPlantilla() {
-    // 🛑 AHORA RECOGEMOS EL ID DEL JUGADOR Y EN QUÉ HUECO EXACTO ESTÁ 🛑
+    // recogemis el id del jugador y en que hueco exacto esta
     const titularesData: any[] = [];
     for (const fila of this.filasCampo) {
       for (const hueco of fila) {
         if (hueco.jugadores.length > 0) {
           titularesData.push({
             id: hueco.jugadores[0].id_futbolista,
-            hueco: hueco.idDrop // Guardamos "hueco-1", "hueco-5", etc.
+            hueco: hueco.idDrop
           });
         }
       }

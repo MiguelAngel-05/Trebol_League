@@ -99,14 +99,14 @@ export class Tienda implements OnInit {
     }
 
     this.route.paramMap.subscribe(params => {
-      // 1. Intentamos la forma tradicional
+      // intentamos como siempre leer el ID de la liga desde la URL
       let id = params.get('id_liga') || params.get('id');
 
       if (!id && this.route.parent) {
         id = this.route.parent.snapshot.paramMap.get('id_liga') || this.route.parent.snapshot.paramMap.get('id');
       }
 
-      // 2. Leemos la URL "a lo bruto"
+      // leemos la url
       if (!id) {
         const urlPura = this.router.url.split('/');
         const idEncontrado = urlPura.find(fragmento => fragmento !== '' && !isNaN(Number(fragmento)));
@@ -115,7 +115,7 @@ export class Tienda implements OnInit {
         }
       }
 
-      // 3. Asignamos y pedimos el dinero
+      // pedimos el dinero
       if (id) {
         this.id_liga = Number(id);
         this.cargarDatosMios(); 
@@ -166,7 +166,7 @@ export class Tienda implements OnInit {
       return;
     }
 
-    // 1. Deshabilitamos la tienda y preparamos la arena de animación
+    // desabilitamos la tienda y preparamos la animación
     this.vistaActual = 'animacion'; 
     this.mostrarPosicion = false;
     this.mostrarEscudo = false;
@@ -177,7 +177,7 @@ export class Tienda implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    // 2. Configuramos la ruta y el body dependiendo del sobre
+    // depende el dobre una rutia o otra
     let urlEndpoint = '';
     let bodyData = {};
 
@@ -186,18 +186,17 @@ export class Tienda implements OnInit {
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-normal`;
       
     } else if (this.sobreSeleccionado.posicion) {
-      // Es un sobre posicional (15 Millones), mandamos la posición ('DL', 'MC'...) al backend
+      // es un sobre posicional (15 Millones) y mandamos la posición al backend
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-posicion`;
       bodyData = { posicion: this.sobreSeleccionado.posicion };
       
     } else {
-      // El sobre élite u otros
+      // El sobre elite o otro
       alert('La animación de este sobre llegará en el futuro.');
       this.vistaActual = 'tienda';
       return;
     }
 
-    // 3. Ejecutamos la llamada HTTP a la ruta correspondiente
     this.http.post<any>(urlEndpoint, bodyData, { headers })
       .subscribe({
         next: (res) => {
@@ -211,7 +210,7 @@ export class Tienda implements OnInit {
       });
   }
 
-  // Arranca la secuencia pasándole el jugador de la base de datos
+  // pasamos el jugador a la bbdd al arrancar
   iniciarAnimacionSobre(jugadorReal: any) {
     this.jugadorObtenido = jugadorReal;
 
@@ -232,7 +231,7 @@ export class Tienda implements OnInit {
     }, 9000);
   }
 
-  // La Tienda ya no calcula el escudo, se lo pide a la lógica central de la Carta
+  // pedimos el escudo a la carta
   getRutaEscudo(equipo: string): string {
     return obtenerRutaEscudoGlobal(equipo);
   }

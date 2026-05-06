@@ -22,7 +22,6 @@ export class CentroMensajes implements OnInit {
   mostrarModalBorrarBuzon = false;
   mostrarModalBorrarChat = false;
 
-  // Variables reales vacías
   nuevoMensaje: string = '';
   chatGeneral: any[] = [];
   mensajesPrivados: any[] = [];
@@ -32,7 +31,6 @@ export class CentroMensajes implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  // IMPORTANTE: Asegúrate de que esta URL sea la de tu API real en Vercel
   private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
@@ -42,13 +40,13 @@ export class CentroMensajes implements OnInit {
       try { this.user = jwtDecode(token); } catch {}
     }
     
-    // Al entrar, cargamos todo de la base de datos
+    // cargamos todo
     this.cargarDatosUsuario();
     this.cargarChatGeneral();
     this.cargarBuzonPrivado();
   }
 
-  // Método helper para no repetir los headers
+  // metodo helper para no repetir los headers
   private getHeaders() {
     const token = localStorage.getItem('token');
     return { headers: new HttpHeaders({ 'Authorization': `Bearer ${token}` }) };
@@ -65,19 +63,19 @@ export class CentroMensajes implements OnInit {
       });
   }
 
-  // --- LÓGICA DEL CHAT GENERAL (WhatsApp) ---
+  // logica
   cargarChatGeneral() {
     this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/chat`, this.getHeaders())
       .subscribe({
         next: (data) => {
-          // Mapeamos los datos para que el HTML los entienda como antes
+          // mapeamos los datos para que el HTML los entienda como antes
           this.chatGeneral = data.map(msg => ({
             remitente: msg.remitente,
             texto: msg.texto,
-            mio: msg.id_remitente === this.user.id, // Si el ID coincide, es mío
+            mio: msg.id_remitente === this.user.id,
             hora: new Date(msg.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }));
-          this.hacerScrollAbajo(); // Bajamos el scroll automático
+          this.hacerScrollAbajo();
         },
         error: (err) => console.error('Error al cargar el chat:', err)
       });
@@ -91,31 +89,28 @@ export class CentroMensajes implements OnInit {
     this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/chat`, body, this.getHeaders())
       .subscribe({
         next: () => {
-          this.nuevoMensaje = ''; // Limpiamos el input
-          this.cargarChatGeneral(); // Volvemos a pedir los mensajes para ver el nuestro
+          this.nuevoMensaje = '';
+          this.cargarChatGeneral();
         },
         error: (err) => console.error('Error al enviar mensaje:', err)
       });
   }
 
-  // --- LÓGICA DEL BUZÓN PRIVADO (Gmail) ---
+  // logica chat privado - tengo q terminar
   cargarBuzonPrivado() {
     this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/privados`, this.getHeaders())
       .subscribe({
         next: (data) => {
           this.mensajesPrivados = data.map(msg => ({
             ...msg,
-            // Formateamos la fecha para que quede bonita (ej: 01/03/2026)
             fecha: new Date(msg.fecha).toLocaleDateString()
           }));
-          // Contamos cuántos están sin leer
           this.sinLeerCount = this.mensajesPrivados.filter(m => !m.leido).length;
         },
         error: (err) => console.error('Error al cargar los mensajes privados:', err)
       });
   }
 
-  // Un detalle pro: al cargar el chat, bajamos la barra de scroll abajo del todo
   hacerScrollAbajo() {
     setTimeout(() => {
       const chatContainer = document.querySelector('.chat-messages');
@@ -133,7 +128,7 @@ export class CentroMensajes implements OnInit {
     this.router.navigate(['/ligas', this.id_liga, 'menu']);
   }
 
-  // --- VARIABLES PARA LEER MENSAJES Y OFERTAS ---
+  // leer mensajes
   mensajeSeleccionado: any = null;
   mostrarModalLeer = false;
   
@@ -143,12 +138,12 @@ export class CentroMensajes implements OnInit {
   notificationMsg = '';
   isSuccess = false;
 
-  // 1. Abrir un mensaje del buzón
+  // abrir un mensaje del buzon
   abrirMensaje(msg: any) {
     this.mensajeSeleccionado = msg;
     this.mostrarModalLeer = true;
 
-    // Si no está leído, avisamos a la base de datos
+    // si no esta leido avisamos a la base de datos
     if (!msg.leido) {
       msg.leido = true;
       this.sinLeerCount = Math.max(0, this.sinLeerCount - 1);
@@ -164,7 +159,7 @@ export class CentroMensajes implements OnInit {
     this.respuestaInput = '';
   }
 
-  // 2. ACEPTAR OFERTA (¡La magia de los billetes!)
+  // aceptar oferta
   aceptarOferta() {
     if (!this.mensajeSeleccionado || !this.mensajeSeleccionado.id_oferta) return;
 
@@ -178,14 +173,13 @@ export class CentroMensajes implements OnInit {
         next: (res: any) => {
           this.mostrarNotificacion(res.message, true);
           this.cerrarMensajes();
-          this.cargarDatosUsuario(); // Recargamos para ver nuestro nuevo dinerito
-          this.cargarBuzonPrivado(); // Recargamos para que el mensaje salga como "Aceptado"
+          this.cargarDatosUsuario();
+          this.cargarBuzonPrivado();
         },
         error: (err) => this.mostrarNotificacion(err.error?.message || 'Error al aceptar', false)
       });
   }
 
-  // 3. RECHAZAR O CONTRAOFERTAR
   abrirContraoferta() {
     this.mostrarModalLeer = false;
     this.mostrarModalRespuesta = true;
@@ -195,7 +189,7 @@ export class CentroMensajes implements OnInit {
     const body = { 
       id_oferta: this.mensajeSeleccionado.id_oferta, 
       id_mensaje: this.mensajeSeleccionado.id_privado,
-      motivo: this.respuestaInput // Si escribe algo, es una contraoferta. Si no, es un rechazo normal.
+      motivo: this.respuestaInput // si escribe algo, es una contraoferta. Si no, es un rechazo normal.
     };
 
     this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/ofertas/rechazar`, body, this.getHeaders())
@@ -215,7 +209,6 @@ export class CentroMensajes implements OnInit {
     setTimeout(() => this.notificationMsg = '', 3500);
   }
 
-  // Lógica para Borrar Buzón
   abrirModalBorrarBuzon() { this.mostrarModalBorrarBuzon = true; }
   cerrarModalBorrarBuzon() { this.mostrarModalBorrarBuzon = false; }
 
@@ -235,7 +228,6 @@ export class CentroMensajes implements OnInit {
       });
   }
 
-  // Lógica para Borrar Chat (Solo Admin/Owner)
   abrirModalBorrarChat() { this.mostrarModalBorrarChat = true; }
   cerrarModalBorrarChat() { this.mostrarModalBorrarChat = false; }
 

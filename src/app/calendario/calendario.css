@@ -1,4 +1,3 @@
-/* ESTILOS GENERALES */
 body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 
 .main-container {
@@ -21,7 +20,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; transition: 0.3s; }
 .div-img-user:hover .img-user { transform: scale(1.15); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
 
-/* EL CALENDARIO  */
 .content-area {
   margin-top: 190px; 
   padding: 0 80px 30px 80px;
@@ -45,7 +43,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   animation: slideInUp 0.6s ease forwards;
 }
 
-/* === TOOLBAR === */
 .calendar-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .month-title { color: white; font-size: 1.8rem; margin: 0; font-weight: 400; letter-spacing: 1px; }
 .toolbar-right { display: flex; gap: 15px; align-items: center; }
@@ -59,7 +56,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .btn-generar:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(46, 213, 115, 0.6); }
 .btn-generar:disabled { opacity: 0.7; cursor: not-allowed; }
 
-/* === EL GRID DEL CALENDARIO === */
 .calendar-wrapper {
   flex: 1;
   display: flex;
@@ -74,7 +70,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .calendar-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 .calendar-wrapper::-webkit-scrollbar-thumb { background: rgba(46, 213, 115, 0.6); border-radius: 10px; }
 
-/* LA MAGIA ANTI-SCROLL: minmax(0, 1fr) OBLIGA a que las 7 celdas sean iguales y no crezcan */
 .grid-header {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -92,7 +87,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   grid-auto-rows: minmax(100px, auto); 
 }
 
-/* CAJA DE CADA DÍA */
 .day-cell {
   border-right: 1px solid rgba(255,255,255,0.1);
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -100,7 +94,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   display: flex;
   flex-direction: column;
   transition: 0.2s;
-  overflow: hidden; /* Para que el contenido interno no rompa la celda */
+  overflow: hidden;
 }
 .day-cell:hover { background: rgba(255,255,255,0.03); }
 
@@ -112,7 +106,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .is-today { background: rgba(46, 213, 115, 0.08); }
 .is-today .day-number { background: #2ed573; color: #1a2b22; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 800; font-size: 0.8rem; }
 
-/* === PARTIDOS DENTRO DEL DÍA === */
 .matches-list {
   flex: 1;
   display: flex; 
@@ -124,7 +117,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .matches-list::-webkit-scrollbar { width: 2px; }
 .matches-list::-webkit-scrollbar-thumb { background: #2ed573; border-radius: 2px; }
 
-/* ESTADOS VISUALES DEL PARTIDO (Pills) */
 .match-pill { cursor: pointer; border-left: 2px solid #555; transition: 0.3s; display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.6); padding: 4px 6px; border-radius: 4px;}
 .match-pill:hover { transform: translateX(3px); background: rgba(255,255,255,0.1); }
 .dot { width: 5px; height: 5px; background: #2ed573; border-radius: 50%; flex-shrink: 0; }
@@ -147,7 +139,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 
 .no-partidos { text-align: center; color: #aaa; font-style: italic; margin-top: 50px; font-size: 1.2rem; }
 
-/* MODAL GENERAL */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 99999; animation: fadeIn 0.3s ease forwards; }
 .modal-content { background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%); border: 1px solid rgba(46, 213, 115, 0.4); border-radius: 25px; padding: 30px; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(46, 213, 115, 0.1); display: flex; flex-direction: column; gap: 20px; animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
@@ -162,7 +153,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .btn-confirmar:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(31, 143, 95, 0.6); }
 .btn-confirmar:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Toast & Animaciones */
 .toast-notification { position: fixed; bottom: 30px; right: 30px; z-index: 100000; background: #000; border-left: 5px solid #2ed573; padding: 15px 25px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 .toast-notification.error { border-left-color: #ff4757; }
 .toast-icon { font-size: 1.5rem; }
@@ -173,10 +163,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-
-/* =========================================
-   MODAL DE RETRANSMISCIÓN DEL PARTIDO (CARTEL)
-   ========================================= */
 .modal-content-partido {
   background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%);
   border: 1px solid rgba(46, 213, 115, 0.4);
@@ -241,7 +227,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .final-status { color: #888; letter-spacing: 2px; }
 .pulsing-dot-small { width: 8px; height: 8px; background: #ff4757; border-radius: 50%; animation: pulse 1s infinite; }
 
-/* CUERPO DEL PARTIDO */
 .modal-body-partido { 
   padding: 30px; 
   max-height: 55vh; 
@@ -303,7 +288,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   .calendar-wrapper { overflow-x: auto; border: none; }
   .grid-header, .grid-body { min-width: 600px; }
   
-  /* Ajustes Móvil para el Modal del Partido */
   .modal-header-partido { padding: 15px 20px; }
   .team { font-size: 1.1rem; }
   .score { font-size: 2.5rem; }

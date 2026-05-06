@@ -37,7 +37,7 @@ export class ListaJugadores implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  // API URL
+  // api
   private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {

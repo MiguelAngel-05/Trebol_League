@@ -15,7 +15,6 @@ main {
     font-family: 'Poppins', sans-serif;
 }
 
-/* === CONTENEDOR PRINCIPAL (GLASSMORPHISM) === */
 .EspacioLogin {
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(10px); 
@@ -45,7 +44,6 @@ main {
     animation: expandirRightaLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* LOGO */
 .logo {
     text-align: center;
     margin-bottom: 30px;
@@ -73,7 +71,7 @@ main {
 .trebolT { color: #167834; }
 .trebolL { color: #3dae8d; }
 
-/* FORMULARIO */
+/* formulario */
 form {
     width: 100%;
     max-width: 400px;
@@ -90,7 +88,6 @@ label {
     display: block;
 }
 
-/* INPUTS MODERNOS */
 input {
     width: 100%;
     padding: 12px 15px;
@@ -108,14 +105,12 @@ input {
     position: relative;
 }
 
-/* Estados de Focus */
 input:focus {
     background: rgba(22, 120, 52, 0.1); 
     border-color: #3dae8d;
     box-shadow: 0 0 15px rgba(22, 120, 52, 0.4);
 }
 
-/* Estado de Error (Clase aplicada por Angular) */
 .errorInput {
     border-color: #ff4d4d !important;
     background: rgba(255, 77, 77, 0.05) !important;
@@ -131,7 +126,6 @@ input:focus {
     animation: fadeIn 0.3s ease;
 }
 
-/* CHECKBOX */
 .checkbox {
     display: flex;
     align-items: center;
@@ -154,7 +148,6 @@ input:focus {
     margin: 0;
 }
 
-/* BOTÓN */
 .login-btnDIV {
     display: flex;
     justify-content: center;
@@ -192,7 +185,6 @@ input:focus {
     opacity: 0.8;
 }
 
-/* SPINNER DE CARGA */
 .spinner {
     width: 18px;
     height: 18px;
@@ -211,7 +203,6 @@ input:focus {
     to { transform: rotate(360deg); }
 }
 
-/* LINKS */
 .links {
     text-align: center;
     margin-top: 25px;
@@ -232,7 +223,6 @@ input:focus {
     text-decoration: underline;
 }
 
-/* === NOTIFICACIÓN FLOTANTE (TOAST) === */
 .toast-notification {
     position: fixed;
     top: 20px;
@@ -276,7 +266,6 @@ input:focus {
     color: #ccc;
 }
 
-/* ANIMACIONES */
 @keyframes expandirRightaLeft {
     from { transform: scaleX(0); opacity: 0; }
     to { transform: scaleX(1); opacity: 1; }
@@ -292,7 +281,6 @@ input:focus {
     to { transform: translateX(0); opacity: 1; }
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     main { justify-content: center; padding: 20px; box-sizing: border-box; }
     .EspacioLogin { width: 100%; max-width: 400px; height: auto; min-height: 450px; padding: 40px 25px; clip-path: none; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transform-origin: center; animation: zoomInMobile 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }

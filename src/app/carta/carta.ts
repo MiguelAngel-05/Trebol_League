@@ -41,7 +41,7 @@ export function obtenerImagenJugadorGlobal(nombreJugador: string): string {
   return `https://api.dicebear.com/9.x/micah/svg?seed=${nombreSeguro}&backgroundColor=transparent`;
 }
 
-// 3. EL COMPONENTE CARTA
+// el componente carta
 @Component({
   selector: 'app-carta',
   standalone: true, 

@@ -24,7 +24,7 @@ export class Mercado implements OnInit, OnDestroy {
   jugadoresMostrados: Jugador[] = [];
   historial: any[] = [];
 
-  // Variables para el Modal de Puja
+  // variabls para puja
   mostrarModalPuja: boolean = false;
   mostrarModalCompraDirecta: boolean = false;
   jugadorSeleccionado: Jugador | null = null;
@@ -32,7 +32,6 @@ export class Mercado implements OnInit, OnDestroy {
 
   filtroActivo: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT' = 'TODOS';
   
-  // === AQUÍ ESTABA EL ERROR: FALTABA ESTA VARIABLE ===
   isAnimatingFilter: boolean = false; 
   
   isLoading = false;
@@ -119,7 +118,7 @@ export class Mercado implements OnInit, OnDestroy {
       });
   }
 
-  // --- LÓGICA DE FILTRADO CON ANIMACIÓN ---
+  // filtrado
   filtrarPor(posicion: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT') {
     if (this.filtroActivo === posicion) return; 
 
@@ -137,7 +136,8 @@ export class Mercado implements OnInit, OnDestroy {
     }, 300);
   }
 
-  // --- LÓGICA DEL MODAL DE PUJA ---
+  // pujas
+
   gestionarClicJugador(jugador: Jugador) {
     if (jugador.id_vendedor === this.user.id) {
       this.mostrarNotificacion('Este jugador es tuyo. Ve a tu plantilla si quieres cancelar su venta.', false);
@@ -245,8 +245,6 @@ export class Mercado implements OnInit, OnDestroy {
         error: () => this.mostrarNotificacion('Error en la compra', false)
       });
   }
-
-  // --- RESTO DE FUNCIONES ---
 
   iniciarTemporizador(fechaGeneracion: string) {
     clearInterval(this.timerInterval);

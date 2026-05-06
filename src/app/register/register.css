@@ -14,7 +14,7 @@ main {
     font-family: 'Poppins', sans-serif;
 }
 
-/* === CONTENEDOR REGISTRO === */
+/* registro */
 .EspacioLogin {
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(10px); 
@@ -46,11 +46,10 @@ main {
     overflow-y: auto; 
 }
 
-/* Scrollbar sutil */
 .EspacioLogin::-webkit-scrollbar { width: 6px; }
 .EspacioLogin::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-/* LOGO */
+/* logo */
 .logo {
     text-align: center;
     margin-bottom: 10px;
@@ -77,7 +76,7 @@ main {
 .trebolT { color: #167834; }
 .trebolL { color: #3dae8d; }
 
-/* FORMULARIO */
+/* formulario */
 form {
     width: 100%;
     max-width: 450px;
@@ -101,7 +100,6 @@ label {
     margin-left: 2px;
 }
 
-/* INPUTS MODERNOS */
 input {
     width: 100%;
     padding: 8px 12px;
@@ -135,7 +133,7 @@ input:focus {
     font-weight: 500;
 }
 
-/* MENSAJES DE ERROR GLOBALES */
+/* mensajes de error*/
 .errorNoCoincide {
     color: #ff6b6b;
     font-size: 12px;
@@ -148,7 +146,6 @@ input:focus {
     display: block;
 }
 
-/* === REGLAS PASSWORD (GRID) === */
 .reglas-container {
     display: flex;
     flex-wrap: wrap;
@@ -167,7 +164,6 @@ input:focus {
     gap: 4px;
 }
 
-/* CHECKBOX */
 .checkbox {
     display: flex;
     align-items: center;
@@ -183,7 +179,6 @@ input:focus {
 }
 .checkbox p { color: #bbb; font-size: 13px; margin: 0; }
 
-/* BOTÓN */
 .login-btnDIV {
     display: flex;
     justify-content: center;
@@ -220,7 +215,6 @@ input:focus {
     opacity: 0.8;
 }
 
-/* SPINNER */
 .spinner {
     width: 16px; height: 16px;
     border: 3px solid rgba(0,0,0,0.2);
@@ -232,7 +226,6 @@ input:focus {
 .login-btn:hover .spinner { border-top-color: white; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* LINKS */
 .links {
     text-align: center; margin-top: 15px;
     font-size: 13px; color: #aaa;
@@ -267,11 +260,10 @@ input:focus {
 .toast-title { margin: 0; font-weight: 700; font-size: 14px; }
 .toast-message { margin: 2px 0 0 0; font-size: 12px; color: #ccc; }
 
-/* ANIMACIONES */
+/* animaciiones */
 @keyframes expandirRightaLeft { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     main { justify-content: center; padding: 15px; box-sizing: border-box; }
     .EspacioLogin { width: 100%; max-width: 400px; height: auto; max-height: 95vh; padding: 30px 20px; clip-path: none; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transform-origin: center; animation: zoomInMobile 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; overflow-y: auto; }

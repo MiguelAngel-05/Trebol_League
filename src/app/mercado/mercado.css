@@ -1,6 +1,3 @@
-/* =========================================
-   1. ESTRUCTURA BASE Y FONDO
-   ========================================= */
 body { 
     margin: 0; 
     font-family: 'Poppins', sans-serif; 
@@ -21,9 +18,7 @@ body {
     flex-direction: column;
 }
 
-/* =========================================
-   2. HEADER (Fixed)
-   ========================================= */
+/* header */
 .main-header {
     width: 50%; 
     height: 120px;
@@ -84,9 +79,7 @@ body {
 }
 
 
-/* =========================================
-   3. LAYOUT 3 COLUMNAS
-   ========================================= */
+/* que sea en 3 columnas*/
 .mercado-layout {
     display: grid;
     margin-top: 15px;
@@ -100,9 +93,7 @@ body {
     gap: 20px;
 }
 
-/* =========================================
-   4. SIDEBAR IZQUIERDA (FILTROS)
-   ========================================= */
+/* sidebar izquiera */
 .sidebar-filters {
     padding: 20px 30px;
     /* Degradado VERTICAL como pediste */
@@ -136,28 +127,25 @@ body {
 .tag { width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 .dl { background: #ff4757; } .mc { background: #2ed573; } .df { background: #1e90ff; } .pt { background: #ffa502; }
 
-/* =========================================
-   5. ÁREA CENTRAL (LISTA CON SCROLL)
-   ========================================= */
+/* solo el centro tiene scroll*/
 .content-area {
     display: flex; 
     flex-direction: column;
-    overflow: hidden; /* Clave para el scroll interno */
+    overflow: hidden;
     padding-bottom: 20px;
 }
 
 .scrollable-content {
-    flex: 1; /* Ocupa el espacio restante */
-    overflow-y: auto; /* Solo esto hace scroll */
-    padding-right: 15px; /* Espacio para la barra */
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 15px;
 }
 
-/* Scrollbar Personalizada */
 .scrollable-content::-webkit-scrollbar { width: 8px; }
 .scrollable-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
 .scrollable-content::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3b614b, #2ed573); border-radius: 10px; }
 
-/* Cards & Banner */
+/* las cards y el baner */
 .league-banner {
     height: 150px; border-radius: 20px; position: relative; overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -175,7 +163,7 @@ body {
 .amount { font-size: 1.4rem; font-weight: 700; color: white; }
 .amount.positive { color: #2ed573; text-shadow: 0 0 10px rgba(46, 213, 115, 0.4); }
 
-/* Contenedor Lista */
+/* contenedor lista */
 .players-list-container {
     background: rgba(15, 25, 20, 0.6); 
     backdrop-filter: blur(20px); 
@@ -186,7 +174,6 @@ body {
 }
 .list-header { display: flex; justify-content: space-between; color: #889990; font-weight: 600; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
 
-/* === FILA JUGADOR (SOLUCIÓN BUGS VISUALES) === */
 .player-row {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px 20px; margin-bottom: 10px;
@@ -195,12 +182,10 @@ body {
     border-radius: 16px; cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     
-    /* FIX CRUCIAL PARA BICHOS TRANSPARENTES */
     position: relative; 
     z-index: 1;
     will-change: transform, opacity; 
     
-    /* Animación staggered */
     opacity: 0; 
     animation: slideInUp 0.5s ease forwards;
 }
@@ -213,7 +198,6 @@ body {
     z-index: 2;
 }
 
-/* Venta usuario (Naranja) */
 .player-row.user-sale {
     border-left: 5px solid #ffa502 !important;
     background: linear-gradient(90deg, rgba(255, 165, 2, 0.15), rgba(40, 50, 45, 0.7));
@@ -239,24 +223,20 @@ body {
 .price-tag { font-family: monospace; font-size: 1.2rem; font-weight: 700; color: white; min-width: 100px; text-align: right; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 .currency { font-size: 0.8rem; color: #2ed573; margin-left: 2px; }
 
-/* Medias */
 .rating-box { width: 40px; height: 38px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-/* Media Colors */
-/* Bronce (60 - 69) */
+/* medias */
 .media-bronze { 
   border-color: #cd7f32; 
   background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(160, 82, 45, 0.15)); 
 }
 .media-bronze .rating-num, .media-bronze.rating-box-mini { color: #cd7f32; }
 
-/* Plata (70 - 79) */
 .media-silver { 
   border-color: #c0c0c0; 
   background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(169, 169, 169, 0.15)); 
 }
 .media-silver .rating-num, .media-silver.rating-box-mini { color: #e0e0e0; }
 
-/* Oro (80 - 89) */
 .media-gold { 
   border-color: #ffd700; 
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(212, 175, 55, 0.15)); 
@@ -266,7 +246,6 @@ body {
   text-shadow: 0 0 5px rgba(255,215,0,0.5); 
 }
 
-/* Diamante / Élite (90 - 94) */
 .media-diamond { 
   border-color: #00d2ff; 
   background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.2)); 
@@ -277,7 +256,6 @@ body {
   text-shadow: 0 0 8px rgba(0,210,255,0.6); 
 }
 
-/*  GALAXIA (95 - 99)  */
 .media-galaxy { 
   border-color: #b145e9; 
   background: linear-gradient(45deg, rgba(255, 0, 128, 0.4), rgba(106, 13, 173, 0.4), rgba(0, 210, 255, 0.4)); 
@@ -291,12 +269,10 @@ body {
   font-weight: 900;
 }
 
-/* =========================================
-   6. SIDEBAR DERECHA (HISTORIAL)
-   ========================================= */
+/* sidebar derecha*/
 .sidebar-history {
     padding: 20px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.2)); /* Degradado Vertical */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
     border-left: 1px solid rgba(255,255,255,0.05);
     display: flex; flex-direction: column;
     animation: slideInRight 0.8s ease forwards;
@@ -321,9 +297,6 @@ body {
 .h-price { color: #2ed573; font-weight: 700; font-size: 0.8rem; display: block; margin-top: 3px; }
 .empty-history { text-align: center; color: #666; font-style: italic; margin-top: 20px; }
 
-/* =========================================
-   7. MODALES (SOLUCIÓN CAPAS Y DISEÑO)
-   ========================================= */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0, 0, 0, 0.95); 
@@ -347,13 +320,11 @@ body {
 .close-btn { color: #888; font-size: 2rem; cursor: pointer; line-height: 1; transition: 0.2s; }
 .close-btn:hover { color: #ff4757; transform: rotate(90deg); }
 
-/* Resumen en Modal */
 .player-summary { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
 .team-token.large { width: 60px; height: 60px; }
 .player-name-modal { font-size: 1.2rem; font-weight: 700; color: white; display: block; }
 .player-team-modal { color: #aaa; font-size: 0.9rem; }
 
-/* Input */
 .input-group label { display: block; color: #2ed573; margin-bottom: 10px; font-weight: 600; }
 .input-puja { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid #2ed573; border-radius: 10px; color: white; font-size: 1.2rem; font-weight: 700; text-align: center; outline: none; box-sizing: border-box; transition: 0.3s; }
 .input-puja:focus { background: rgba(46, 213, 115, 0.1); box-shadow: 0 0 15px rgba(46, 213, 115, 0.3); }
@@ -389,7 +360,6 @@ body {
 .compra-text { color: #ddd; text-align: center; line-height: 1.5; font-size: 1rem; }
 .compra-text strong { color: white; color: #2ed573; }
 
-/* Contenedor de etiquetas (por si tiene las dos cosas, aunque es raro) */
 .status-labels {
   display: flex;
   flex-direction: column;
@@ -412,14 +382,12 @@ body {
   gap: 4px;
 }
 
-/* Estilo Venta (Usuario) */
 .tag-label.venta {
   background: rgba(255, 165, 2, 0.2);
   color: #ffa502;
   border: 1px solid rgba(255, 165, 2, 0.4);
 }
 
-/* Estilo Pujado (Tú) */
 .tag-label.pujado {
   background: rgba(46, 213, 115, 0.2);
   color: #2ed573;
@@ -460,7 +428,6 @@ body {
   min-width: 240px;
 }
 
-/* === TOAST === */
 .toast-notification {
     position: fixed; bottom: 30px; right: 30px; z-index: 100000;
     background: #000; border-left: 5px solid #2ed573;
@@ -472,7 +439,6 @@ body {
 .toast-notification.error { border-left-color: #ff4757; }
 .toast-icon { font-size: 1.5rem; }
 
-/* === ANIMACIONES KEYFRAMES === */
 @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -487,7 +453,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     .main-container { padding-top: 10px; overflow-y: auto; }
     .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 10px; }

@@ -41,19 +41,20 @@ export class PlantillaRival implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  // API URL
+  // api url
   private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
-    this.id_rival = Number(this.route.snapshot.paramMap.get('idUsuario')); // ID del rival
+    // ID del rival
+    this.id_rival = Number(this.route.snapshot.paramMap.get('idUsuario'));
     const token = localStorage.getItem('token');
 
     if (token) {
       try { this.user = jwtDecode(token); } catch {}
     }
-
-    this.cargarDatosMios(); // Para mostrar tu dinero en el header
+// para mostrar tu dinero en el header
+    this.cargarDatosMios();
     this.cargarJugadoresRival();
   }
 
@@ -173,7 +174,7 @@ export class PlantillaRival implements OnInit {
 
   abrirModalOferta(jugador: Jugador) {
     this.jugadorOfertado = jugador;
-    this.montoOfertaInput = Number(jugador.precio); // Sugerimos su valor de mercado
+    this.montoOfertaInput = Number(jugador.precio);
     this.mostrarModalOferta = true;
   }
 

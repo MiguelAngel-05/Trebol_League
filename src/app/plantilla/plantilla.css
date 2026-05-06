@@ -1,6 +1,4 @@
-/* =========================================
-   ESTILOS GENERALES
-   ========================================= */
+/* general */
 body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #0b1a12; }
 
 .main-container {
@@ -13,7 +11,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
   box-sizing: border-box;
 }
 
-/* 3 COLUMNAS: Izquierda - Centro (1fr) - Derecha */
+/* q sean 3 columnas */
 .plantilla-layout {
   display: flex;
   width: 100%;
@@ -23,9 +21,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
   box-sizing: border-box;
 }
 
-/* =========================================
-   SIDEBAR IZQUIERDA
-   ========================================= */
+/* sidebar izquierda */
 .sidebar-izq {
   width: 270px; 
   background: rgba(30, 50, 40, 0.85);
@@ -60,9 +56,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 .parpadeo { animation: pulseWarning 1.5s infinite; background: linear-gradient(90deg, #ff4757, #ff6b81); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
 @keyframes pulseWarning { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
-/* =========================================
-   EL CÉSPED CENTRAL
-   ========================================= */
+/* cesped*/
 .campo-container {
   flex: 1; 
   display: flex;
@@ -140,11 +134,9 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 .carta-titular:hover .carta-escala-campo { transform: scale(0.36); z-index: 30; }
 
 
-/* =========================================
-   SIDEBAR DERECHA (BANQUILLO VERTICAL)
-   ========================================= */
+/* sidebar dereca */
 .sidebar-der {
-  width: 200px; /* Estrecho, lo justo para la carta */
+  width: 200px;
   background: rgba(20, 30, 25, 0.85);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(46, 213, 115, 0.3);
@@ -163,13 +155,13 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 }
 
 .banquillo-scroll {
-  flex: 1; /* Ocupa todo el alto */
+  flex: 1;
   display: flex; 
-  flex-direction: column; /* SCROLL VERTICAL */
+  flex-direction: column;
   gap: 15px; 
   overflow-y: auto; 
   overflow-x: hidden;
-  align-items: center; /* Centra las cartas */
+  align-items: center;
   padding: 10px 0;
 }
 .banquillo-scroll::-webkit-scrollbar { width: 6px; }
@@ -187,9 +179,9 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 
 .carta-escala-banquillo {
   position: absolute;
-  top: 0; left: 50%; /* Centrado absoluto */
-  transform: translateX(-50%) scale(0.45); /* Escala más grande porque hay espacio */
-  transform-origin: top center; /* Crece desde el centro superior */
+  top: 0; left: 50%;
+  transform: translateX(-50%) scale(0.45);
+  transform-origin: top center;
   pointer-events: none;
   transition: 0.2s;
 }
@@ -198,11 +190,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 .empty-banquillo { color: #888; font-style: italic; margin-top: 20px; font-size: 0.85rem; text-align: center;}
 
 
-/* =========================================
-   DRAG PREVIEW Y SOMBRAS
-   ========================================= */
-
-/* 1. El contenedor que sigue al ratón. Le damos el tamaño exacto físico para que no salgan scrollbars */
+/* el contenedor sigue al raton - tenemos que terminarlo*/
 .preview-escala-drag {
   width: 90px;
   height: 130px;
@@ -213,11 +201,11 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
   position: relative;
 }
 
-/* 2. La carta gigante la sacamos del "espacio físico" con position: absolute para que no empuje la pantalla */
+/* la carta gigante la sacamos del con position: absolute para que no empuje la pantalla */
 .preview-escala-drag app-carta {
   position: absolute;
-  transform: scale(0.20); /* Un poco más grande que en el campo (0.33) para que parezca que la has levantado */
-  transform-origin: center center; /* IMPORTANTE: Para que se quede pegada al centro del ratón */
+  transform: scale(0.20);
+  transform-origin: center center;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
 }
 
@@ -226,7 +214,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
   z-index: 99999 !important; 
 }
 
-/* Sombras en el sitio vacío */
 .drag-placeholder { background: rgba(0, 0, 0, 0.6); border: 2px dashed #aaa; border-radius: 10px; width: 75px; height: 110px; }
 .drag-placeholder-banquillo { background: rgba(0, 0, 0, 0.4); border: 2px dashed #888; border-radius: 8px; width: 110px; height: 160px; }
 
@@ -234,10 +221,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 .zona-drop.cdk-drop-list-dragging .carta-titular:not(.cdk-drag-placeholder) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
 .banquillo-scroll.cdk-drop-list-dragging .carta-reserva:not(.cdk-drag-placeholder-banquillo) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
 
-
-/* =========================================
-   MODAL Y TOAST
-   ========================================= */
 .modal-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 100000; animation: fadeIn 0.3s; }
 .modal-content { background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%); padding: 30px; border-radius: 20px; border: 1px solid #ff4757; text-align: center; max-width: 400px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.8); animation: zoomIn 0.3s; }
 .modal-content h2 { margin-top: 0; color: #ff4757; }
@@ -255,9 +238,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
-    /* 1. Ajuste General y Scroll */
     .main-container {
         height: auto; 
         min-height: 100vh;
@@ -265,14 +246,12 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
         padding: 10px;
     }
 
-    /* Rompemos las 3 columnas y las apilamos verticalmente */
     .plantilla-layout {
         flex-direction: column;
         padding: 0;
         gap: 15px;
     }
 
-    /* 2. Panel Izquierdo (Datos y Botones) */
     .sidebar-izq {
         width: 100%;
         padding: 15px;
@@ -284,7 +263,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
     }
     .stat-row { flex: 1; flex-direction: column; gap: 5px; text-align: center; }
 
-    /* 3. EL CÉSPED (Lo giramos 90 grados) */
     .campo-container {
         width: 100%;
         height: 550px; 
@@ -295,7 +273,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
         background-size: cover; 
     }
 
-    /* Las filas (Ataque, Medio, Defensa...) ahora son horizontales */
     .fila-campo {
         flex-direction: row;
         width: 100%;
@@ -304,7 +281,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
         gap: 2px; 
     }
 
-    /* 4. Escala de Cartas en el Campo */
     .zona-drop {
         width: 55px;  
         height: 85px;
@@ -320,7 +296,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
         top: -8px;
     }
 
-    /* 5. BANQUILLO (Abajo del todo) */
     .sidebar-der {
         width: 100%;
         padding: 15px;
@@ -343,20 +318,17 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
     }
     .carta-reserva:hover .carta-escala-banquillo { transform: translateX(-50%) scale(0.35); }
 
-    /* 6. Solución al arrastre táctil (Drag & Drop Móvil) */
-    /* IMPORTANTE: Evita que al intentar arrastrar, arrastres la pantalla entera */
+    /* 6. para arrastraas con el movil*/
     .carta-titular, .carta-reserva {
         touch-action: none; 
     }
 
-    /* Escala del clon que sigues con el dedo */
     .preview-escala-drag app-carta {
         transform: scale(0.30);
     }
     .drag-placeholder { width: 55px; height: 85px; }
     .drag-placeholder-banquillo { width: 75px; height: 110px; }
 
-    /* 7. Modales y Toast */
     .modal-content { width: 95%; padding: 20px; }
     .modal-botones { flex-direction: column; }
     .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }

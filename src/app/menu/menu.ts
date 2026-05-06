@@ -54,7 +54,7 @@ export class Menu {
       });
   }
 
-  // Navegación
+  // navegacion
   volverAtras() {
     this.router.navigate(['/ligas']);
   }
@@ -125,7 +125,7 @@ export class Menu {
   }
 
   irAPuntos() {
-    // Usamos el idLiga que ya tienes guardado en tu clase Menu
+    // usamos el idLiga que ya tienes guardado en tu clase Menu
     this.router.navigate(['/ligas', this.id_liga, 'puntos']); 
   }
 

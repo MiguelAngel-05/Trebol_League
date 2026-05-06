@@ -13,7 +13,6 @@ import { jwtDecode } from 'jwt-decode';
   styleUrls: ['./puntos.css']
 })
 export class PuntosComponent implements OnInit {
-  // Inyecciones de servicios al estilo moderno de Angular
   private http = inject(HttpClient);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -23,11 +22,10 @@ export class PuntosComponent implements OnInit {
   idLiga!: number; 
   apiBase: string = 'https://api-trebol-league.vercel.app'; 
 
-  // Variables para el Header
   user: any = null; 
   dinero: number = 0;
 
-  // Variables para Pestaña 1 (Jornadas)
+  // variables pra los puntos por jornada - hay q mirar esto samu
   managers: any[] = [];
   jornadasDisponibles: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   managerSeleccionado: number = 0;
@@ -101,13 +99,21 @@ export class PuntosComponent implements OnInit {
   }
 
   buscarPuntosJornada() {
-    if (!this.managerSeleccionado) return;
-    this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.idLiga}/puntos-jornada?id_manager=${this.managerSeleccionado}&jornada=${this.jornadaSeleccionada}`, this.getHeaders())
-      .subscribe(res => {
+  if (!this.managerSeleccionado || !this.jornadaSeleccionada) return;
+
+  console.log("Consultando Puntos -> Liga:", this.idLiga, "Manager:", this.managerSeleccionado, "Jornada:", this.jornadaSeleccionada);
+
+  this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.idLiga}/puntos-jornada?id_manager=${this.managerSeleccionado}&jornada=${this.jornadaSeleccionada}`, this.getHeaders())
+    .subscribe({
+      next: (res) => {
+        console.log("Jugadores recibidos:", res); 
         this.jugadoresJornada = res;
         this.totalPuntosJornada = this.jugadoresJornada.reduce((sum, j) => sum + Number(j.puntos || 0), 0);
-      });
-  }
+      },
+      error: (err) => console.error("Error API:", err)
+    });
+}
+
 
   cargarClasificacionClubes() {
     this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.idLiga}/clasificacion-clubes`, this.getHeaders())

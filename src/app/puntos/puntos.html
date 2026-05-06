@@ -90,7 +90,7 @@
               </div>
               <div class="col-stats">
                 <div class="stat-pill"><span class="stat-icon">⚽</span> {{ j.goles }}</div>
-                <div class="stat-pill"><span class="stat-icon">👟</span> {{ j.asistencias }}</div>
+                <div class="stat-pill"><span class="stat-icon">🤝</span> {{ j.asistencias }}</div>
               </div>
               <div class="col-pts">
                 <span class="pts-number">{{ j.puntos }}</span>
@@ -98,8 +98,7 @@
             </div>
 
             <div class="empty-state" *ngIf="jugadoresJornada.length === 0">
-              <span class="empty-icon">🏟️</span>
-              <p>Esperando el inicio del partido</p>
+              <p>No has empezado a puntuar aún</p>
             </div>
           </div>
         </div>
@@ -150,7 +149,6 @@
             </div>
 
             <div class="empty-state" *ngIf="!clasificacionClubes || clasificacionClubes.length === 0">
-              <span class="empty-icon">🏆</span>
               <p>La temporada aún no ha comenzado</p>
             </div>
           </div>

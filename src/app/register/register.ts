@@ -15,11 +15,8 @@ export class Register {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);
-
-  // Variables UI
-  mostrarPassword = false;
   
-  // Variables Estado (Carga y Toast)
+  mostrarPassword = false;
   isLoading = false;
   notificationMsg = '';
   isSuccess = false;
@@ -42,7 +39,7 @@ export class Register {
   { validators: [passwordMatchValidator, emailMatchValidator] }
   );
 
-  // Getters para usar en el HTML
+  // getters
   get correo() { return this.registerForm.get('correo'); }
   get usuario() { return this.registerForm.get('usuario'); }
   get contra() { return this.registerForm.get('contra'); }
@@ -70,7 +67,7 @@ export class Register {
         return;
     }
 
-    // 1. Activar carga
+    // cargamos los datos
     this.isLoading = true;
     this.registerForm.disable();
 
@@ -109,7 +106,7 @@ export class Register {
   }
 }
 
-// Validadores personalizados
+// validadores
 export function passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
   const pass = form.get('contra')?.value;
   const rep = form.get('contraRep')?.value;

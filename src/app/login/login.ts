@@ -69,7 +69,7 @@ export class Login implements OnInit {
       return;
     }
 
-    // 1. Iniciar Carga
+    // iniciamos carga de datos
     this.isLoading = true;
     this.loginForm.disable();
 

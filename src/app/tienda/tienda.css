@@ -8,7 +8,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   display: flex; flex-direction: column; overflow: hidden; position: relative;
 }
 
-/* === HEADER REUTILIZADO === */
+/* header */
 .main-header {
   background: transparent; width: 50%; height: 120px;
   position: absolute; top: 40px; right: 80px;
@@ -27,7 +27,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .div-img-user:hover .img-user { transform: scale(1.15); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
 
 
-/* ================= ÁREA DE LA TIENDA ================= */
+/* tienda */
 .store-area {
   margin-top: 190px;
   height: calc(100vh - 220px);
@@ -37,14 +37,14 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   animation: fadeIn 0.8s ease forwards;
 }
 
-/* === PANEL IZQUIERDO (Lista de sobres) === */
+/* lista de sobres*/
 .store-left {
-  flex: 1; /* Ocupa todo el espacio restante (aprox 70%) */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* Pestañas */
+/* pestañas */
 .store-tabs {
   display: flex;
   gap: 5px;
@@ -71,7 +71,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   background: #2ed573; box-shadow: 0 0 10px rgba(46, 213, 115, 0.5);
 }
 
-/* Cuadrícula Horizontal de Sobres */
 .packs-grid {
   display: flex;
   gap: 25px;
@@ -84,9 +83,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .packs-grid::-webkit-scrollbar { height: 8px; }
 .packs-grid::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
 
-/* Diseño del Sobre*/
-
-/* Contenedor individual de cada sobre */
+/* cada sobre */
 .pack-item {
   min-width: 250px;
   display: flex;
@@ -96,7 +93,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   cursor: pointer;
   position: relative;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  opacity: 0.5; /* Opacos por defecto como en el FIFA */
+  opacity: 0.5;
   filter: grayscale(40%);
 }
 
@@ -106,7 +103,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   transform: translateY(-10px) scale(1.05);
 }
 
-/* Título superior (Fuera de la imagen) */
+/* titulo de arriba de la imagen */
 .pack-top-title {
   color: #ccc;
   font-size: 1rem;
@@ -123,7 +120,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   text-shadow: 0 0 10px var(--glow-color);
 }
 
-/* Contenedor de tu imagen PNG */
+/* contenedor principal d la imagen */
 .pack-image-container {
   width: 100%;
   height: 320px;
@@ -138,17 +135,14 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  /* El drop-shadow genera una sombra con la forma exacta de tu PNG */
   filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8));
   transition: filter 0.3s ease;
 }
 
-/* El brillo mágico cuando seleccionas el sobre (usa la variable --glow-color) */
 .pack-item.selected .pack-image {
   filter: drop-shadow(0 0 30px var(--glow-color)) drop-shadow(0 15px 15px rgba(0,0,0,0.5));
 }
 
-/* Píldora de precio debajo de la imagen */
 .pack-price-pill {
   background: rgba(0, 0, 0, 0.8);
   border: 1px solid rgba(255,255,255,0.2);
@@ -175,7 +169,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   object-fit: contain;
 }
 
-/* Etiqueta flotante para los sobres por posición (PT, DF, etc.) */
 .pos-badge-floating {
   position: absolute;
   top: 0px;
@@ -191,10 +184,8 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 }
 .currency { color: #2ed573; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 800; }
 
-
-/* === PANEL DERECHO (Info del Sobre) === */
 .store-right {
-  width: 380px; /* Ancho fijo para el panel de información */
+  width: 380px;
   display: flex;
   flex-direction: column;
 }
@@ -202,7 +193,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 .info-panel {
   background: linear-gradient(145deg, #15221b 0%, #0a100c 100%);
   border: 1px solid rgba(255,255,255,0.1);
-  border-top: 5px solid; /* El color se inyecta por estilo en línea */
+  border-top: 5px solid;
   border-radius: 15px;
   padding: 30px;
   height: 100%;
@@ -223,7 +214,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 
 .info-contents {
   background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 3px solid #2ed573;
-  margin-bottom: auto; /* Empuja el botón de compra hacia el fondo */
+  margin-bottom: auto;
   display: flex; flex-direction: column; gap: 5px;
 }
 .contents-label { color: #889990; font-size: 0.8rem; text-transform: uppercase; font-weight: 700; }
@@ -258,9 +249,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-/* ========================================================= */
-/* === ANIMACIÓN DE APERTURA DE SOBRES (ESTILO FIFA)     === */
-/* ========================================================= */
+/* animacion*/
 
 .pack-opening-arena {
   position: absolute;
@@ -273,7 +262,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   overflow: hidden;
 }
 
-/* Luces de fondo rotando lentamente */
 .pack-opening-arena::before {
   content: ''; position: absolute; width: 200vw; height: 200vw;
   background: conic-gradient(from 0deg, transparent 0deg, rgba(46, 213, 115, 0.1) 60deg, transparent 120deg, rgba(255, 215, 0, 0.05) 180deg, transparent 240deg, rgba(46, 213, 115, 0.1) 300deg, transparent 360deg);
@@ -289,7 +277,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   z-index: 10;
 }
 
-/* Items que caen (Posición, Escudo, Media) */
 .reveal-item {
   animation: dropAndBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   opacity: 0;
@@ -318,7 +305,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   font-size: 8rem;
 }
 
-/* Pantallazo Blanco (Explosión) */
 .flash-bang {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background: white; z-index: 9999;
@@ -327,7 +313,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 }
 .flash-bang.active { opacity: 1; transition: opacity 0.1s ease-in; }
 
-/* Carta final y botón */
 .final-card-container {
   z-index: 10;
   display: flex;
@@ -350,7 +335,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 }
 .btn-continuar:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 30px rgba(46, 213, 115, 0.8); }
 
-/* --- KEYFRAMES --- */
 @keyframes rotateLights { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 @keyframes dropAndBounce {
@@ -360,7 +344,6 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     .main-container { overflow-y: auto; padding-top: 10px; }
     .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 10px; }

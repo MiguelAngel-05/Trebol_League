@@ -35,7 +35,7 @@ export class Clasificacion implements OnInit {
   notificationMsg = '';
   isSuccess = false;
 
-  // API URL
+  // api
   private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
@@ -108,11 +108,11 @@ export class Clasificacion implements OnInit {
   }
 
   mandarMensaje() {
-    // 1. Guardamos el usuario seleccionado como destinatario del mensaje
+    // guardamos el usuario seleccionado como destinatario del mensaje
     this.destinatarioMensaje = this.usuarioSeleccionado;
-    // 2. Cerramos el primer modal (el de opciones)
+    // cerramos el primer modal
     this.cerrarModal();
-    // 3. Abrimos el segundo modal (el del correo)
+    // abrimos el segundo modal
     this.mostrarModalMensaje = true;
   }
 
@@ -152,7 +152,6 @@ export class Clasificacion implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
     
-    // CAMBIO: usamos this.destinatarioMensaje.id 
     const body = {
       id_destinatario: this.destinatarioMensaje.id, 
       asunto: this.asuntoInput,
@@ -162,7 +161,6 @@ export class Clasificacion implements OnInit {
     this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/mensajes-texto`, body, { headers })
       .subscribe({
         next: () => {
-          // CAMBIO: usamos this.destinatarioMensaje.username
           this.mostrarNotificacion(`Mensaje enviado a ${this.destinatarioMensaje.username}`, true);
           this.cerrarModalMensaje();
         },
@@ -181,7 +179,7 @@ export class Clasificacion implements OnInit {
         next: (res: any) => {
           this.mostrarNotificacion(res.message, true);
           this.cerrarModal();
-          this.cargarClasificacion(); // Recargar la tabla para ver la insignia de admin
+          this.cargarClasificacion();
         },
         error: (err) => this.mostrarNotificacion(err.error?.message || 'Error al cambiar rol', false)
       });
