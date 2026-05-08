@@ -3,14 +3,14 @@
     <header class="main-header">
         <div class="header-options top-row">          
             <div class="option-group">
-                <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+                <img class="icon" src="Utensilios/Emojis/icono-usuario.webp" alt="Usuario">
                 <p>{{user?.username || 'Usuario'}}</p>
             </div>
         </div>
         
         <div class="header-optionsB bottom-row">
             <div class="option-group icon-hover">
-                <img class="pinchar" src="Utensilios/Emojis/logout.png" alt="Cerrar Sesion" (click)="volverAtras()">
+                <img class="pinchar" src="Utensilios/Emojis/logout.webp" alt="Cerrar Sesion" (click)="volverAtras()">
             </div>
         </div>
 
@@ -19,7 +19,7 @@
         </div>
     </header>
 
-    <img class="logoTrebol" src="Logos/LogoTrebolLeague.png" alt="logo de trebol league">
+    <img class="logoTrebol" src="Logos/LogoTrebolLeague.webp" alt="logo de trebol league">
 
     <section class="content">
         <div class="titulo-ligas">
@@ -46,7 +46,7 @@
                     </div>
                     
                     <div class="div-opciones-liga" (click)="toggleMenu($index, $event)">
-                        <img class="icon" src="Utensilios/Emojis/tres-puntos.png" alt="opciones">
+                        <img class="icon" src="Utensilios/Emojis/tres-puntos.webp" alt="opciones">
 
                         @if (activeMenuIndex === $index) {
                             <div class="dropdown-menu">

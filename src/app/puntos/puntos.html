@@ -1,11 +1,11 @@
 <main class="main-container">
   
-  <img class="logoTrebol" src="Logos/LogoTrebolLeague.png" alt="logo de trebol league">
+  <img class="logoTrebol" src="Logos/LogoTrebolLeague.webp" alt="logo de trebol league">
     
   <header class="main-header">
       <div class="header-options top-row">          
           <div class="option-group">
-              <img class="icon" src="Utensilios/Emojis/icono-usuario.png" alt="Usuario">
+              <img class="icon" src="Utensilios/Emojis/icono-usuario.webp" alt="Usuario">
               <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
                 {{ user?.username || 'Cargando...' }}
               </p>
@@ -15,20 +15,20 @@
               <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
                 {{ formatearDinero(dinero) }}
               </p>
-              <img class="icon" src="Utensilios/Emojis/moneda-tc.png" alt="Moneda TC">
+              <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
           </div>
       </div>
       
       <div class="header-optionsB bottom-row">
           <div class="option-group icon-hover" (click)="volverAtras()">
-              <img src="Utensilios/Emojis/home-blanco.png" alt="Inicio" class="pinchar" style="height: 26px; width: auto;">
+              <img src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" class="pinchar" style="height: 26px; width: auto;">
           </div>
       </div>
 
       <div class="div-img-user" (click)="irAPerfil()">
           <img class="img-user" 
-               [src]="user?.avatar ? user.avatar : 'Utensilios/Emojis/icono-usuario.png'" 
-               onerror="this.src='Utensilios/Emojis/icono-usuario.png'" 
+               [src]="user?.avatar ? user.avatar : 'Utensilios/Emojis/icono-usuario.webp'" 
+               onerror="this.src='Utensilios/Emojis/icono-usuario.webp'" 
                alt="imagen de usuario"
                title="Editar Perfil"> 
       </div>
@@ -131,7 +131,7 @@
                 <img class="club-shield" 
                      [src]="getEscudoUrl(club.equipo)" 
                      [alt]="club.equipo" 
-                     onerror="this.onerror=null; this.src='/Utensilios/Escudos/escudo_default.png'">
+                     onerror="this.onerror=null; this.src='/Utensilios/Escudos/escudo_default.webp'">
                 <span class="club-name">{{ club.equipo }}</span>
               </div>
               <div class="col-mini stat-dim">{{ club.pj }}</div>

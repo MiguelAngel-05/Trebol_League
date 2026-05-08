@@ -54,13 +54,13 @@ export class Tienda implements OnInit {
       id: 'norm_1', nombre: 'Sobre Normal', precio: 10000000,
       descripcion: 'El sobre clásico de la Trébol League. Contiene 1 jugador aleatorio de cualquier posición y media.',
       contenidoInfo: '1 Jugador Aleatorio', colorBorde: '#2ed573',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png'
+      imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     },
     {
       id: 'norm_2', nombre: 'Sobre Especial', precio: 25000000,
       descripcion: 'Para los mánagers más exigentes. Más posibilidades de conseguir a las estrellas de la liga.',
       contenidoInfo: '1 Jugador Aleatorio (Alta Probabilidad)', colorBorde: '#ff9100',
-      imagen: 'Utensilios/Sobres/SobreTL_especial.png'
+      imagen: 'Utensilios/Sobres/SobreTL_especial.webp'
     }
   ];
 
@@ -70,25 +70,25 @@ export class Tienda implements OnInit {
       id: 'pos_dl', nombre: 'Sobre Delantero', precio: 15000000,
       descripcion: '¿Te falta gol? Este sobre garantiza un jugador atacante (DL) para perforar la red rival.',
       contenidoInfo: '1 Jugador (Posición: DL)', colorBorde: '#ff4757', posicion: 'DL',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png' 
+      imagen: 'Utensilios/Sobres/SobreTL_normal.webp' 
     },
     {
       id: 'pos_mc', nombre: 'Sobre Medio', precio: 15000000,
       descripcion: 'Controla el ritmo del partido. Garantiza un mediocentro (MC) creador o destructor.',
       contenidoInfo: '1 Jugador (Posición: MC)', colorBorde: '#2ed573', posicion: 'MC',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png'
+      imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     },
     {
       id: 'pos_df', nombre: 'Sobre Defensa', precio: 15000000,
       descripcion: 'Construye un muro infranqueable. Garantiza un defensa (DF) puro y duro.',
       contenidoInfo: '1 Jugador (Posición: DF)', colorBorde: '#1e90ff', posicion: 'DF',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png'
+      imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     },
     {
       id: 'pos_pt', nombre: 'Sobre Portero', precio: 15000000,
       descripcion: 'Asegura tu portería a cero. Garantiza un guardameta (PT) bajo palos.',
       contenidoInfo: '1 Jugador (Posición: PT)', colorBorde: '#ffa502', posicion: 'PT',
-      imagen: 'Utensilios/Sobres/SobreTL_normal.png'
+      imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     }
   ];
 

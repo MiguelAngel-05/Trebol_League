@@ -1,7 +1,7 @@
 main {
     margin: 0;
     overflow: hidden; 
-    background: url("/Fondos/FondoLoginRegister.png");
+    background: url("/Fondos/FondoLoginRegister.webp");
     background-color: rgba(0,0,0,0.6); 
     background-blend-mode: overlay;
     background-size: cover;

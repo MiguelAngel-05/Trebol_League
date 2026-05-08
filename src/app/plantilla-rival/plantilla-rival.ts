@@ -111,30 +111,30 @@ export class PlantillaRival implements OnInit {
 
   obtenerRutaEscudo(nombreEquipo: string): string {
     const mapeo: { [key: string]: string } = {
-      'Real Pinar FC': 'real_pinar.png',
-      'Athletic Hullera': 'athletic_hullera.png',
-      'Club Náutico Brisamar': 'club_nautico_brisamar.png',
-      'Racing Vaguadas': 'racing_vaguadas.png',
-      'Motor Club Chacón': 'motor_club_chacon.png',
-      'Unión Fortaleza': 'union_fortaleza.png',
-      'CD Frontera': 'cd_frontera.png',
-      'Sporting Lechuza': 'sporting_lechuza.png',
-      'CF Átomo': 'cf_atomo.png',
-      'Deportivo Relámpago': 'deportivo_relampago.png',
-      'CD Refugio': 'cd_refugio.png',
-      'Dragones de Oriente': 'dragones_de_oriente.png',
-      'UD Recreo': 'ud_recreo.png',
-      'Alianza Metropolitana': 'alianza_metropolitana.png',
-      'Neón City FC': 'neon_city_fc.png',
-      'Pixel United': 'pixel_united.png',
-      'Gourmet FC': 'gourmet_fc.png',
-      'Titanes CF': 'titanes_cf.png',
-      'Pangea FC': 'pangea_fc.png',
-      'Cosmos United': 'cosmos_united.png',
-      'Real Trébol FC': 'real_trebol_fc.png'
+      'Real Pinar FC': 'real_pinar.webp',
+      'Athletic Hullera': 'athletic_hullera.webp',
+      'Club Náutico Brisamar': 'club_nautico_brisamar.webp',
+      'Racing Vaguadas': 'racing_vaguadas.webp',
+      'Motor Club Chacón': 'motor_club_chacon.webp',
+      'Unión Fortaleza': 'union_fortaleza.webp',
+      'CD Frontera': 'cd_frontera.webp',
+      'Sporting Lechuza': 'sporting_lechuza.webp',
+      'CF Átomo': 'cf_atomo.webp',
+      'Deportivo Relámpago': 'deportivo_relampago.webp',
+      'CD Refugio': 'cd_refugio.webp',
+      'Dragones de Oriente': 'dragones_de_oriente.webp',
+      'UD Recreo': 'ud_recreo.webp',
+      'Alianza Metropolitana': 'alianza_metropolitana.webp',
+      'Neón City FC': 'neon_city_fc.webp',
+      'Pixel United': 'pixel_united.webp',
+      'Gourmet FC': 'gourmet_fc.webp',
+      'Titanes CF': 'titanes_cf.webp',
+      'Pangea FC': 'pangea_fc.webp',
+      'Cosmos United': 'cosmos_united.webp',
+      'Real Trébol FC': 'real_trebol_fc.webp'
     };
     const archivo = mapeo[nombreEquipo];
-    return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.png';
+    return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.webp';
   }
 
   getMediaClass(media: number): string {

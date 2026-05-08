@@ -3,7 +3,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
 
 .main-container {
     width: 100%; min-height: 100vh;
-    background-image: url("/Fondos/FondoEstandar.png");
+    background-image: url("/Fondos/FondoEstandar.webp");
     background-color: rgba(10, 20, 15, 0.85); background-blend-mode: overlay;
     background-size: cover; background-position: center; background-attachment: fixed;
     

@@ -8,7 +8,7 @@ body {
 .main-container {
     width: 100%; 
     height: 100vh;
-    background-image: url("/Fondos/FondoEstandar.png");
+    background-image: url("/Fondos/FondoEstandar.webp");
     background-color: rgba(10, 20, 15, 0.92); /* Fondo oscuro sólido */
     background-blend-mode: overlay;
     background-size: cover; 
@@ -151,7 +151,7 @@ body {
     border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     margin-bottom: 25px; animation: zoomIn 0.8s ease forwards;
 }
-.banner-image-placeholder { position: absolute; width: 100%; height: 100%; background: url("/Utensilios/Jugadores/estadio-banner.png") center/cover; filter: grayscale(40%) brightness(50%); transition: 5s ease; }
+.banner-image-placeholder { position: absolute; width: 100%; height: 100%; background: url("/Utensilios/Jugadores/estadio-banner.webp") center/cover; filter: grayscale(40%) brightness(50%); transition: 5s ease; }
 .league-banner:hover .banner-image-placeholder { transform: scale(1.1); filter: grayscale(0%) brightness(80%); }
 
 .balance-cards { display: flex; gap: 20px; margin-bottom: 25px; animation: slideInUp 0.6s ease forwards 0.2s; opacity: 0; }
