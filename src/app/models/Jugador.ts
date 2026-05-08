@@ -2,6 +2,9 @@ export interface Jugador {
   id_futbolista: number;
   nombre: string;
   posicion: 'DL' | 'MC' | 'DF' | 'PT';
+  tipo_carta: string;
+  codigo_habilidad?: string;
+  descripcion?: string;
   precio: number;
   equipo: string;
   media: number;

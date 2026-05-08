@@ -5,11 +5,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Jugador } from '../models/Jugador';
 import { FormsModule } from '@angular/forms';
+import { CartaComponent } from '../carta/carta';
+import { obtenerInfoHabilidad } from '../models/Habilidades';
 
 @Component({
   selector: 'app-plantilla-rival',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CartaComponent],
   templateUrl: './plantilla-rival.html',
   styleUrl: './plantilla-rival.css'
 })
@@ -34,6 +36,9 @@ export class PlantillaRival implements OnInit {
   avatarRival: string = '';
 
   mostrarModalOferta = false;
+  mostrarModalDetalle: boolean = false;
+  mostrarModalHabilidad: boolean = false;
+  jugadorSeleccionado: any = null;
   jugadorOfertado: Jugador | null = null;
   montoOfertaInput: number = 0;
 
@@ -137,10 +142,37 @@ export class PlantillaRival implements OnInit {
     return archivo ? `Utensilios/Escudos/${archivo}` : 'Utensilios/Escudos/escudo_default.webp';
   }
 
+  abrirDetalle(jugador: Jugador, event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('btn-oferta')) return;
+
+    this.jugadorSeleccionado = jugador;
+    this.mostrarModalDetalle = true;
+  }
+
+  cerrarModales() {
+    this.mostrarModalDetalle = false;
+    this.mostrarModalHabilidad = false;
+    this.jugadorSeleccionado = null;
+  }
+
+  abrirHabilidad() {
+    this.mostrarModalHabilidad = true;
+  }
+
+  cerrarHabilidad() {
+    this.mostrarModalHabilidad = false;
+  }
+
+  getInfoHabilidad(codigo: string) {
+    return obtenerInfoHabilidad(codigo);
+  }
+
   getMediaClass(media: number): string {
-    if (media >= 90) return 'media-elite';
+    if (media >= 95) return 'media-galaxy';
+    if (media >= 90) return 'media-diamond';
     if (media >= 80) return 'media-gold';
-    if (media >= 75) return 'media-silver';
+    if (media >= 70) return 'media-silver';
     return 'media-bronze';
   }
 

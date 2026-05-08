@@ -1,7 +1,6 @@
 .card {
   width: 360px; 
   height: 540px; 
-  background-image: url('/Utensilios/Cartas/CartaTL_normal.webp'); 
   background-color: transparent;
   background-size: contain;
   background-repeat: no-repeat;
@@ -34,7 +33,6 @@
   height: 150px;
   object-fit: cover;
   z-index: 1;
-  /* Este truco difumina la parte de abajo de la foto para que se mezcle con el nombre */
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
@@ -106,4 +104,3 @@
   font-size: 24px;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
-

@@ -27,7 +27,6 @@
   <section class="content-area">
     
     <div class="team-header">
-      
       <div class="rival-badge">
         <img [src]="avatarRival" alt="Avatar Rival" class="rival-avatar" *ngIf="avatarRival">
         <div class="rival-info-text">
@@ -58,13 +57,18 @@
       <div class="list-scroll">
         
         @if (isLoading) {
-          <div class="loading-msg">Espiando la plantilla de {{ nombreRival }}... 🕵️‍♂️</div>
+          <div class="loading-container">
+            <div class="loading-icon">🍀</div>
+            <h3 class="loading-text">Sincronizando...</h3>
+            <p class="loading-subtext">Accediendo a los archivos de Isla Trébol</p>
+          </div>
         } @else {
           
           <div
             class="player-row"
             *ngFor="let jugador of jugadoresRival; let i = index"
             [style.animation-delay]="i * 0.05 + 's'"
+            (click)="abrirDetalle(jugador, $event)"
           >
             <div class="player-left-section">
               <div class="team-token">
@@ -87,42 +91,83 @@
                 {{ jugador.posicion }}
               </div>
 
-              <div class="price-tag">
-                {{ formatearDinero(jugador.en_venta ? (jugador.precio_venta || 0) : jugador.precio) }} <span class="currency">Tc</span>
+              <div class="price-tag" [class.price-venta]="jugador.en_venta">
+                {{ formatearDinero(jugador.en_venta ? (jugador.precio_venta || 0) : jugador.precio) }} 
+                <span class="currency">Tc</span>
               </div>
 
               <div class="action-zone">
-                <div *ngIf="jugador.en_venta" class="tag-label venta" style="margin-right: 10px;">
-                  EN VENTA
-                </div>
+                @if (jugador.en_venta) {
+                  <div class="tag-label venta">EN VENTA</div>
+                }
                 
                 <button class="btn-oferta" (click)="abrirModalOferta(jugador)">
-                  HACER OFERTA
+                  <span class="icon-oferta">💸</span> HACER OFERTA
                 </button>
               </div>
-
             </div>
           </div>
-
         }
 
         @if (!isLoading && jugadoresRival.length === 0) {
           <div class="empty-msg">
-            {{ nombreRival }} no tiene jugadores todavía. ¡Menudo novato!
+            {{ nombreRival }} no tiene jugadores todavía. ¡Está ahorrando!
           </div>
         }
       </div>
     </div>
   </section>
 
-  @if (notificationMsg) {
-    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
-      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-      <div class="toast-content">
-        <p class="toast-message">{{ notificationMsg }}</p>
+  <div class="modal-overlay" *ngIf="mostrarModalDetalle && jugadorSeleccionado" (click)="cerrarModales()">
+    <div class="modal-content-detalle" (click)="$event.stopPropagation()">
+      <span class="close-btn-top" (click)="cerrarModales()">&times;</span>
+      
+      <div class="detalle-layout">
+        <div class="detalle-left">
+          <app-carta [jugador]="jugadorSeleccionado"></app-carta>
+        </div>
+
+        <div class="detalle-right">
+          <div class="detalle-header">
+            <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="escudo-detalle">
+            <div class="detalle-title-group">
+              <h2 class="detalle-nombre">{{ jugadorSeleccionado.nombre }}</h2>
+              <p class="detalle-equipo">{{ jugadorSeleccionado.equipo }}</p>
+            </div>
+          </div>
+
+          <div class="detalle-lore">
+            <p>"{{ jugadorSeleccionado.descripcion || 'Este jugador prefiere mantener su pasado en secreto.' }}"</p>
+          </div>
+
+          <div class="detalle-stats-footer">
+            <div class="stat-mini">
+              <span class="label">Valoración del Trébol</span>
+              <span class="value">{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</span>
+            </div>
+
+            @if (jugadorSeleccionado.tipo_carta === 'especial') {
+              <button class="btn-habilidad-info" (click)="abrirHabilidad()">
+                VER HABILIDAD ✨
+              </button>
+            }
+          </div>
+        </div>
       </div>
     </div>
-  }
+  </div>
+
+  <div class="modal-overlay skill-overlay" *ngIf="mostrarModalHabilidad" (click)="cerrarHabilidad()">
+    <div class="modal-content-habilidad" (click)="$event.stopPropagation()">
+      <div class="habilidad-header">
+        <h3>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.nombre }}</h3>
+        <span class="close-small" (click)="cerrarHabilidad()">✕</span>
+      </div>
+      <div class="habilidad-body">
+        <p>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.descripcion }}</p>
+      </div>
+    </div>
+  </div>
 
   <div class="modal-overlay" *ngIf="mostrarModalOferta && jugadorOfertado" (click)="cerrarModalOferta()">
     <div class="modal-content" (click)="$event.stopPropagation()">
@@ -143,7 +188,7 @@
 
         <div class="input-group">
           <label style="color:#1e90ff;">¿Cuánto dinero ofreces?</label>
-          <input type="number" [(ngModel)]="montoOfertaInput" class="input-puja" style="border-color:#1e90ff;" placeholder="Cantidad a ofertar...">
+          <input type="number" [(ngModel)]="montoOfertaInput" class="input-puja" style="border-color:#1e90ff;" placeholder="Cantidad a ofertar..." autofocus>
         </div>
       </div>
 
@@ -155,5 +200,14 @@
       </div>
     </div>
   </div>
+
+  @if (notificationMsg) {
+    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+      <div class="toast-content">
+        <p class="toast-message">{{ notificationMsg }}</p>
+      </div>
+    </div>
+  }
 
 </main>

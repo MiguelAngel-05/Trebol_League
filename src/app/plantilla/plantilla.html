@@ -21,7 +21,7 @@
         </div>
         <div class="stat-row">
           <span>Media global:</span>
-          <div class="stat-box med" [ngClass]="{'media-alta': mediaGlobal >= 80}">{{ mediaGlobal }}</div>
+          <div class="stat-box med">{{ mediaGlobal }}</div>
         </div>
       </div>
 
@@ -61,12 +61,12 @@
                    (dblclick)="mandarAlBanquillo(jugador, hueco, $event)">
                 
                 <div class="carta-escala-campo">
-                  <app-carta [jugador]="jugador"></app-carta>
+                  <app-carta [jugador]="jugador" [class]="jugador.tipo_carta"></app-carta>
                 </div>
                 
                 <div *cdkDragPreview>
                   <div class="preview-escala-drag">
-                    <app-carta [jugador]="jugador"></app-carta>
+                    <app-carta [jugador]="jugador" [class]="jugador.tipo_carta"></app-carta>
                   </div>
                 </div>
                 
@@ -85,21 +85,21 @@
       </div>
       
       <div class="banquillo-scroll"
-           cdkDropList
-           id="banquilloList"
-           cdkDropListOrientation="vertical"
-           [cdkDropListData]="banquillo"
-           [cdkDropListConnectedTo]="obtenerIdsConectados()"
-           (cdkDropListDropped)="drop($event)">
+            cdkDropList
+            id="banquilloList"
+            cdkDropListOrientation="vertical"
+            [cdkDropListData]="banquillo"
+            [cdkDropListConnectedTo]="obtenerIdsConectados()"
+            (cdkDropListDropped)="drop($event)">
         
         <div class="carta-reserva" *ngFor="let suplente of banquillo" cdkDrag [cdkDragData]="suplente">
           <div class="carta-escala-banquillo">
-            <app-carta [jugador]="suplente"></app-carta>
+            <app-carta [jugador]="suplente" [class]="suplente.tipo_carta"></app-carta>
           </div>
           
           <div *cdkDragPreview>
             <div class="preview-escala-drag">
-              <app-carta [jugador]="suplente"></app-carta>
+              <app-carta [jugador]="suplente" [class]="suplente.tipo_carta"></app-carta>
             </div>
           </div>
 
@@ -107,7 +107,7 @@
         </div>
 
         <div class="empty-banquillo" *ngIf="banquillo.length === 0">
-          Vacío
+          No quedan efectivos en reserva
         </div>
       </div>
     </aside>
@@ -116,8 +116,8 @@
 
   <div class="modal-overlay" *ngIf="mostrarModalSalir" (click)="cerrarModalSalir()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>⚠️ Cambios sin guardar</h2>
-      <p>Has modificado tu alineación pero no has guardado. Si sales ahora, perderás los cambios.</p>
+      <h2>⚠️ Cambios pendientes</h2>
+      <p>La estrategia actual no ha sido enviada a la oficina. Si abandonas ahora, se perderán las modificaciones.</p>
       <div class="modal-botones">
         <button class="btn-cancelar" (click)="salirSinGuardar()">Salir sin guardar</button>
         <button class="btn-confirmar" (click)="guardarYSalir()">Guardar y Salir</button>
@@ -125,9 +125,13 @@
     </div>
   </div>
 
-  <div class="toast-notification" *ngIf="notificationMsg" [class.success]="isSuccess" [class.error]="!isSuccess">
-    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-    <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
-  </div>
+  @if (notificationMsg) {
+    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
+      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+      <div class="toast-content">
+        <p class="toast-message">{{ notificationMsg }}</p>
+      </div>
+    </div>
+  }
 
 </main>

@@ -235,6 +235,40 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
 .toast-icon { font-size: 1.5rem; font-weight: bold; }
 .toast-message { margin: 0; font-size: 0.95rem; }
 
+
+.carta-escala-campo app-carta.especial,
+.carta-escala-banquillo app-carta.especial {
+    filter: drop-shadow(0 0 15px rgba(255, 165, 2, 0.6)) brightness(1.1);
+}
+
+.carta-escala-campo app-carta.ultra,
+.carta-escala-banquillo app-carta.ultra {
+    filter: drop-shadow(0 0 20px rgba(177, 69, 233, 0.8)) brightness(1.2);
+}
+
+.carta-titular:has(.especial), .carta-titular:has(.ultra) {
+    animation: floatCard 3s infinite ease-in-out;
+}
+
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.preview-escala-drag:has(.especial) {
+    filter: drop-shadow(0 0 30px rgba(255, 165, 2, 0.8));
+}
+
+.preview-escala-drag:has(.ultra) {
+    filter: drop-shadow(0 0 40px rgba(177, 69, 233, 0.9));
+}
+
+.btn-guardar.parpadeo {
+    animation: pulseWarning 1.5s infinite;
+    background: linear-gradient(90deg, #ff4757, #ff6b81);
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.6);
+}
+
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 

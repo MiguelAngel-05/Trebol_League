@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { CartaComponent, obtenerRutaEscudoGlobal } from '../carta/carta';
+import { obtenerInfoHabilidad } from '../models/Habilidades';
 
 interface Sobre {
   id: string;
@@ -42,11 +43,17 @@ export class Tienda implements OnInit {
   mostrarCarta = false;
   flashActivo = false;
 
+  alertaEspecialActiva = false; 
+
   // Control de pestañas de la tienda
   tabActiva: 'normales' | 'posiciones' = 'normales';
   
   // El sobre que el usuario tiene pinchado para ver la info a la derecha
   sobreSeleccionado: Sobre | null = null;
+
+  getInfoHabilidad(codigo: string) {
+    return obtenerInfoHabilidad(codigo);
+  }
 
   // Catálogo de Sobres Normales
   sobresNormales: Sobre[] = [
@@ -177,7 +184,7 @@ export class Tienda implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    // depende el dobre una rutia o otra
+    // depende el sobre una ruta u otra
     let urlEndpoint = '';
     let bodyData = {};
 
@@ -185,13 +192,17 @@ export class Tienda implements OnInit {
       // Es un sobre normal (10 Millones)
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-normal`;
       
+    } else if (this.sobreSeleccionado.id === 'norm_2') {
+      // ¡EL NUEVO SOBRE ESPECIAL! (25 Millones)
+      urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-especial`;
+
     } else if (this.sobreSeleccionado.posicion) {
       // es un sobre posicional (15 Millones) y mandamos la posición al backend
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-posicion`;
       bodyData = { posicion: this.sobreSeleccionado.posicion };
       
     } else {
-      // El sobre elite o otro
+      // El sobre elite u otro
       alert('La animación de este sobre llegará en el futuro.');
       this.vistaActual = 'tienda';
       return;
@@ -213,10 +224,22 @@ export class Tienda implements OnInit {
   // pasamos el jugador a la bbdd al arrancar
   iniciarAnimacionSobre(jugadorReal: any) {
     this.jugadorObtenido = jugadorReal;
+    
+    const esEspecial = this.jugadorObtenido.tipo_carta === 'especial';
+    let delayExtra = 0;
 
-    setTimeout(() => { this.mostrarPosicion = true; }, 2000);
-    setTimeout(() => { this.mostrarEscudo = true; }, 4500);
-    setTimeout(() => { this.mostrarMedia = true; }, 7000);
+    if (esEspecial) {
+      this.alertaEspecialActiva = true; 
+      delayExtra = 3500; 
+      
+      setTimeout(() => { 
+        this.alertaEspecialActiva = false; 
+      }, delayExtra);
+    }
+
+    setTimeout(() => { this.mostrarPosicion = true; }, 2000 + delayExtra);
+    setTimeout(() => { this.mostrarEscudo = true; }, 4500 + delayExtra);
+    setTimeout(() => { this.mostrarMedia = true; }, 7000 + delayExtra);
     
     setTimeout(() => {
       this.flashActivo = true; 
@@ -228,7 +251,7 @@ export class Tienda implements OnInit {
         this.flashActivo = false;
         this.mostrarCarta = true;
       }, 500);
-    }, 9000);
+    }, 9000 + delayExtra);
   }
 
   // pedimos el escudo a la carta

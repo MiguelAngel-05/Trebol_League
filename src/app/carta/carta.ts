@@ -59,4 +59,11 @@ export class CartaComponent {
   get fotoJugador() { 
     return obtenerImagenJugadorGlobal(this.jugador?.nombre); 
   }
+
+  get fondoCarta() {
+    if (this.jugador?.tipo_carta === 'especial') {
+      return "url('/Utensilios/Cartas/CartaTL_especial.webp')";
+    }
+    return "url('/Utensilios/Cartas/CartaTL_normal.webp')";
+  }
 }

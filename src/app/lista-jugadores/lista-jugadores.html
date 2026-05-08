@@ -27,7 +27,6 @@
   <section class="content-area">
     
     <div class="team-header">
-      
       <div class="stats-row">
         <div class="stat-card">
           <span class="stat-label">Valor Plantilla</span>
@@ -52,13 +51,14 @@
       <div class="list-scroll">
         
         @if (isLoading) {
-          <div class="loading-msg">Cargando jugadores...</div>
+          <div class="loading-msg">Cargando la élite de Isla Trébol...</div>
         } @else {
           
           <div
             class="player-row"
             *ngFor="let jugador of misJugadores; let i = index"
             [style.animation-delay]="i * 0.05 + 's'"
+            (click)="abrirDetalle(jugador, $event)"
           >
             <div class="player-left-section">
               <div class="team-token">
@@ -91,28 +91,75 @@
                 </button>
                 
                 <ng-container *ngIf="jugador.en_venta">
-                  <div class="tag-label venta">
-                    EN VENTA
-                  </div>
+                  <div class="tag-label venta">EN VENTA</div>
                   <button class="btn-cancelar-venta" (click)="cancelarVenta(jugador)" title="Cancelar Venta">
                     ✖
                   </button>
                 </ng-container>
               </div>
-
             </div>
           </div>
-
         }
 
         @if (!isLoading && misJugadores.length === 0) {
           <div class="empty-msg">
-            Aún no tienes jugadores. ¡Ve al mercado a fichar!
+            Aún no tienes jugadores. ¡Ve a la tienda a buscar leyendas!
           </div>
         }
       </div>
     </div>
   </section>
+
+  <div class="modal-overlay" *ngIf="mostrarModalDetalle && jugadorSeleccionado" (click)="cerrarModales()">
+    <div class="modal-content-detalle" (click)="$event.stopPropagation()">
+      <span class="close-btn-top" (click)="cerrarModales()">&times;</span>
+      
+      <div class="detalle-layout">
+        <div class="detalle-left">
+          <app-carta [jugador]="jugadorSeleccionado"></app-carta>
+        </div>
+
+        <div class="detalle-right">
+          <div class="detalle-header">
+            <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="escudo-detalle">
+            <div class="detalle-title-group">
+              <h2 class="detalle-nombre">{{ jugadorSeleccionado.nombre }}</h2>
+              <p class="detalle-equipo">{{ jugadorSeleccionado.equipo }}</p>
+            </div>
+          </div>
+
+          <div class="detalle-lore">
+            <p>"{{ jugadorSeleccionado.descripcion || 'Este jugador prefiere que sus botas hablen por él. No hay registros de su pasado en la oficina central.' }}"</p>
+          </div>
+
+          <div class="detalle-stats-footer">
+            <div class="stat-mini">
+              <span class="label">Valor de Mercado</span>
+              <span class="value">{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</span>
+            </div>
+
+            @if (jugadorSeleccionado.tipo_carta === 'especial') {
+              <button class="btn-habilidad-info" (click)="abrirHabilidad()">
+                VER HABILIDAD ✨
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay skill-overlay" *ngIf="mostrarModalHabilidad" (click)="cerrarHabilidad()">
+    <div class="modal-content-habilidad" (click)="$event.stopPropagation()">
+      <div class="habilidad-header">
+        <h3>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.nombre }}</h3>
+        <span class="close-small" (click)="cerrarHabilidad()">✕</span>
+      </div>
+      <div class="habilidad-body">
+        <p>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.descripcion }}</p>
+      </div>
+    </div>
+  </div>
 
   <div class="modal-overlay" *ngIf="mostrarModalVenta && jugadorAVender" (click)="cerrarModalVenta()">
     <div class="modal-content" (click)="$event.stopPropagation()">
@@ -122,7 +169,6 @@
       </div>
       
       <div class="modal-body">
-        
         <div class="player-summary">
           <div class="team-token large">
             <img [src]="obtenerRutaEscudo(jugadorAVender.equipo)" class="team-img">

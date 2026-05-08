@@ -102,12 +102,20 @@
     </div>
 
   </section>
+  
   } @else if (vistaActual === 'animacion') {
-    <div class="pack-opening-arena">
-      
+    <div class="pack-opening-arena" [ngClass]="{'arena-especial': jugadorObtenido?.tipo_carta === 'especial'}">
+  
       <div class="flash-bang" [class.active]="flashActivo"></div>
 
-      @if (!mostrarCarta) {
+      @if (alertaEspecialActiva) {
+        <div class="alerta-especial-container">
+          <h1 class="alerta-titulo">¡ANOMALÍA DETECTADA!</h1>
+          <p class="alerta-sub">Sincronizando Habilidad Única...</p>
+        </div>
+      }
+
+      @if (!mostrarCarta && !alertaEspecialActiva) {
         <div class="reveal-container">
           @if (mostrarPosicion) {
             <div class="reveal-item reveal-text" style="animation-delay: 0s;">
@@ -122,7 +130,9 @@
           }
 
           @if (mostrarMedia) {
-            <div class="reveal-item reveal-text glow-gold" style="animation-delay: 0s;">
+            <div class="reveal-item reveal-text" 
+                 [ngClass]="jugadorObtenido?.tipo_carta === 'especial' ? 'glow-orange' : 'glow-gold'" 
+                 style="animation-delay: 0s;">
               {{ jugadorObtenido.media }}
             </div>
           }
@@ -135,6 +145,13 @@
           
           <app-carta [jugador]="jugadorObtenido"></app-carta>
           
+          @if (jugadorObtenido.tipo_carta === 'especial' && jugadorObtenido.codigo_habilidad) {
+            <div class="habilidad-panel">
+              <h4>✨ {{ getInfoHabilidad(jugadorObtenido.codigo_habilidad)?.nombre }}</h4>
+              <p>{{ getInfoHabilidad(jugadorObtenido.codigo_habilidad)?.descripcion }}</p>
+            </div>
+          }
+
           <button class="btn-continuar" (click)="volverATienda()">Aceptar y Continuar</button>
         </div>
       }

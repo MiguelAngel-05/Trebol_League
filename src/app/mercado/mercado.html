@@ -60,24 +60,20 @@
             <div class="icon-circle-thick">C</div>
             <div class="balance-text">
               <span class="label-balance">Saldo Actual / Futuro</span>
-              
               <div class="money-row">
                 <span class="amount positive">{{ formatearDinero(dinero) }}</span>
-                
                 <span class="arrow">➔</span>
-                
                 <span class="amount future" [class.negative]="saldoFuturo < 0">
                   {{ formatearDinero(saldoFuturo) }}
                 </span>
               </div>
-              
             </div>
           </div>
 
           <div class="card-balance">
             <div class="icon-circle-thick">⏱</div>
             <div class="balance-text">
-              <span class="label-balance">Nuevo mercado en:</span>
+              <span class="label-balance">Cierre de Mercado:</span>
               <span class="amount">{{ tiempoRestante }}</span>
             </div>
           </div>
@@ -86,7 +82,7 @@
         <div class="players-list-container">
           <div class="list-header">
             <span style="flex: 2;">Jugador</span>
-            <span style="flex: 1; text-align: right;">Precio</span>
+            <span style="flex: 1; text-align: right;">Precio de Salida</span>
           </div>
 
           <div class="list-scroll" [class.fade-out]="isAnimatingFilter">
@@ -96,20 +92,18 @@
               *ngFor="let jugador of jugadoresMostrados; let i = index"
               [style.animation-delay]="i * 0.05 + 's'"
               [class.user-sale]="jugador.id_vendedor"
+              [class.especial]="jugador.tipo_carta === 'especial'"
+              [class.ultra]="jugador.tipo_carta === 'ultra'"
               (click)="gestionarClicJugador(jugador)"
             >
               <div class="player-left-section">
                 <div class="team-token">
-                  <img 
-                    [src]="obtenerRutaEscudo(jugador.equipo)" 
-                    alt="{{ jugador.equipo }}" 
-                    class="team-img"
-                  >
+                  <img [src]="obtenerRutaEscudo(jugador.equipo)" alt="{{ jugador.equipo }}" class="team-img">
                 </div>
                 <div class="player-info">
                   <span class="name-text">{{ jugador.nombre }}</span>
                   <span class="team-subtext">
-                    {{ jugador.id_vendedor ? (jugador.id_vendedor === user?.id ? 'Puesto en venta por ti' : 'Vendido por ' + jugador.vendedor_name) : 'Jugador de ' + jugador.equipo }}
+                    {{ jugador.id_vendedor ? (jugador.id_vendedor === user?.id ? 'Tu transferencia' : 'Oferta de ' + jugador.vendedor_name) : 'Libre de ' + jugador.equipo }}
                   </span>
                 </div>
               </div>
@@ -126,54 +120,54 @@
                 </div>
 
                 <div class="status-labels">
-                  <div *ngIf="jugador.id_vendedor" class="tag-label venta">
-                    EN VENTA
-                  </div>
+                  <div *ngIf="jugador.id_vendedor" class="tag-label venta">MERCADO</div>
                   <div *ngIf="jugador.pujado_por_mi" class="tag-label pujado">
-                    <span class="icon-small">✔</span> PUJADO
+                    <span class="icon-small">✔</span> TU PUJA
                   </div>
                 </div>
               </div>
             </div>
 
-            <div *ngIf="jugadoresMostrados.length === 0" class="empty-msg">
-              No hay jugadores en esta posición
+            <div *ngIf="jugadoresMostrados.length === 0 && !isLoading" class="empty-msg">
+              No hay efectivos disponibles en esta zona
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
     <aside class="sidebar-history">
-      <h2 class="history-title">Historial</h2>
+      <h2 class="history-title">Últimos Movimientos</h2>
       <div class="history-list">
         <div class="history-item" *ngFor="let item of historial">
-          <div class="h-icon">🔄</div>
+          <div class="h-icon">{{ !item.comprador ? '🤖' : '🔄' }}</div>
+          
           <div class="h-info">
-            <p><strong>{{ item.comprador }}</strong> fichó a <strong>{{ item.jugador }}</strong></p>
+            <p>
+              @if (!item.comprador) {
+                <span class="system-label">SISTEMA</span>
+              } @else {
+                <strong>{{ item.comprador }}</strong>
+              }
+              
+              fichó a <strong>{{ item.jugador }}</strong>
+            </p>
             <span class="h-price">{{ formatearDinero(item.monto) }} Tc</span>
           </div>
         </div>
+        
         <div *ngIf="historial.length === 0" class="empty-history">
-          No hay movimientos
+          Sin registros en el libro de cuentas
         </div>
       </div>
     </aside>
 
   </section>
 
-  <div class="toast-notification" *ngIf="notificationMsg" [class.success]="isSuccess" [class.error]="!isSuccess">
-    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-    <div class="toast-content">
-      <p class="toast-message">{{ notificationMsg }}</p>
-    </div>
-  </div>
-
   <div class="modal-overlay" *ngIf="mostrarModalPuja && jugadorSeleccionado" (click)="cerrarModales()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2 class="modal-title">Pujar por {{ jugadorSeleccionado.nombre }}</h2>
+        <h2 class="modal-title">Realizar Puja</h2>
         <span class="close-btn" (click)="cerrarModales()">&times;</span>
       </div>
       <div class="modal-body">
@@ -190,18 +184,16 @@
           </div>
         </div>
         <div class="input-group">
-          <label>Tu oferta (Mínimo: {{ formatearDinero(jugadorSeleccionado.precio) }} Tc)</label>
-          <input type="number" [(ngModel)]="ofertaPuja" class="input-puja" placeholder="Cantidad...">
+          <label>Monto de la oferta (Mín: {{ formatearDinero(jugadorSeleccionado.precio) }} Tc)</label>
+          <input type="number" [(ngModel)]="ofertaPuja" class="input-puja" placeholder="Tc..." autofocus>
         </div>
-        <p class="warning-msg" *ngIf="ofertaPuja > dinero">⚠️ No tienes suficiente saldo</p>
+        <p class="warning-msg" *ngIf="ofertaPuja > dinero">⚠️ Fondos insuficientes</p>
       </div>
       <div class="modal-footer">
-      <button *ngIf="jugadorSeleccionado.pujado_por_mi" class="btn-borrar" (click)="borrarPuja()">
-          Retirar
-        </button>        
-      <button class="btn-confirmar" (click)="confirmarPuja()" [disabled]="ofertaPuja < jugadorSeleccionado.precio || ofertaPuja > dinero">
-        Pujar
-      </button>
+        <button *ngIf="jugadorSeleccionado.pujado_por_mi" class="btn-borrar" (click)="borrarPuja()">Retirar Puja</button>
+        <button class="btn-confirmar" (click)="confirmarPuja()" [disabled]="ofertaPuja < jugadorSeleccionado.precio || ofertaPuja > dinero">
+          Enviar Oferta
+        </button>
       </div>
     </div>
   </div>
@@ -209,20 +201,25 @@
   <div class="modal-overlay" *ngIf="mostrarModalCompraDirecta && jugadorSeleccionado" (click)="cerrarModales()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2 class="modal-title">Compra Directa</h2>
+        <h2 class="modal-title">Fichaje Directo</h2>
         <span class="close-btn" (click)="cerrarModales()">&times;</span>
       </div>
       <div class="modal-body">
-        <p class="compra-text">¿Quieres fichar a <strong>{{ jugadorSeleccionado.nombre }}</strong> por <strong>{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</strong>?</p>
+        <p class="compra-text">¿Confirmas el traspaso de <strong>{{ jugadorSeleccionado.nombre }}</strong> por <strong>{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</strong>?</p>
       </div>
       <div class="modal-footer">
-        <button *ngIf="jugadorSeleccionado.pujado_por_mi" class="btn-borrar" (click)="borrarPuja()">
-          Retirar
-        </button>        
+        <button class="btn-cancelar" (click)="cerrarModales()">Cancelar</button>
         <button class="btn-confirmar" (click)="confirmarCompraDirecta()" [disabled]="jugadorSeleccionado.precio > dinero">
-          Comprar
+          Confirmar Fichaje
         </button>
       </div>
+    </div>
+  </div>
+
+  <div class="toast-notification" *ngIf="notificationMsg" [class.success]="isSuccess" [class.error]="!isSuccess">
+    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+    <div class="toast-content">
+      <p class="toast-message">{{ notificationMsg }}</p>
     </div>
   </div>
 

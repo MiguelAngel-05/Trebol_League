@@ -5,11 +5,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { FormsModule } from '@angular/forms'; 
 import { Jugador } from '../models/Jugador';
+import { obtenerInfoHabilidad } from '../models/Habilidades';
+import { CartaComponent } from '../carta/carta';
 
 @Component({
   selector: 'app-lista-jugadores',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CartaComponent],
   templateUrl: './lista-jugadores.html',
   styleUrl: './lista-jugadores.css'
 })
@@ -27,6 +29,9 @@ export class ListaJugadores implements OnInit {
   totalJugadores: number = 0;
 
   mostrarModalVenta: boolean = false;
+  mostrarModalDetalle: boolean = false;
+  mostrarModalHabilidad: boolean = false;
+  jugadorSeleccionado: any = null;
   jugadorAVender: Jugador | null = null;
   precioVentaInput: number = 0;
   
@@ -50,6 +55,33 @@ export class ListaJugadores implements OnInit {
 
     this.cargarDatosUsuario();
     this.cargarMisJugadores();
+  }
+
+  abrirDetalle(jugador: Jugador, event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('btn-vender') || target.classList.contains('btn-cancelar-venta')) {
+      return;
+    }
+    this.jugadorSeleccionado = jugador;
+    this.mostrarModalDetalle = true;
+  }
+
+  cerrarModales() {
+    this.mostrarModalDetalle = false;
+    this.mostrarModalHabilidad = false;
+    this.jugadorSeleccionado = null;
+  }
+
+  abrirHabilidad() {
+    this.mostrarModalHabilidad = true;
+  }
+
+  cerrarHabilidad() {
+    this.mostrarModalHabilidad = false;
+  }
+
+  getInfoHabilidad(codigo: string) {
+    return obtenerInfoHabilidad(codigo);
   }
 
   cargarDatosUsuario() {
