@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'; 
 import { Jugador } from '../models/Jugador';
+import { obtenerInfoHabilidad } from '../models/Habilidades'; // <--- IMPORTANTE
 
 @Component({
   selector: 'app-mercado',
@@ -24,9 +25,10 @@ export class Mercado implements OnInit, OnDestroy {
   jugadoresMostrados: Jugador[] = [];
   historial: any[] = [];
 
-  // variabls para puja
+  // variables para puja y modales
   mostrarModalPuja: boolean = false;
   mostrarModalCompraDirecta: boolean = false;
+  mostrarModalHabilidad: boolean = false; // <--- NUEVO
   jugadorSeleccionado: Jugador | null = null;
   ofertaPuja: number = 0;
 
@@ -63,6 +65,13 @@ export class Mercado implements OnInit, OnDestroy {
     clearInterval(this.timerInterval);
   }
 
+  // --- HABILIDADES ---
+  abrirHabilidad() { this.mostrarModalHabilidad = true; }
+  cerrarHabilidad() { this.mostrarModalHabilidad = false; }
+  getInfoHabilidad(codigo: string | undefined) {
+    if (!codigo) return null;
+    return obtenerInfoHabilidad(codigo);
+  }
   cargarDatosUsuarioLiga() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
@@ -71,10 +80,8 @@ export class Mercado implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.dinero = Number(data.dinero);
-          
           const pujado = Number(data.total_pujado);
           const ventas = Number(data.total_ventas_esperadas);
-          
           this.saldoFuturo = this.dinero - pujado + ventas;
         },
         error: (err) => console.error('Error cargando dinero', err)
@@ -109,19 +116,13 @@ export class Mercado implements OnInit, OnDestroy {
   cargarHistorial() {
     this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/historial`, this.getAuthHeaders())
       .subscribe({
-        next: (data) => {
-          this.historial = data;
-        },
-        error: (err) => {
-          console.error('Error al cargar el historial', err);
-        }
+        next: (data) => { this.historial = data; },
+        error: (err) => { console.error('Error al cargar el historial', err); }
       });
   }
 
-  // filtrado
   filtrarPor(posicion: 'TODOS' | 'DL' | 'MC' | 'DF' | 'PT') {
     if (this.filtroActivo === posicion) return; 
-
     this.isAnimatingFilter = true;
     this.filtroActivo = posicion; 
 
@@ -130,13 +131,9 @@ export class Mercado implements OnInit, OnDestroy {
         ? [...this.jugadores] 
         : this.jugadores.filter(j => j.posicion === posicion);
       
-      setTimeout(() => {
-        this.isAnimatingFilter = false;
-      }, 50);
+      setTimeout(() => { this.isAnimatingFilter = false; }, 50);
     }, 300);
   }
-
-  // pujas
 
   gestionarClicJugador(jugador: Jugador) {
     if (jugador.id_vendedor === this.user.id) {
@@ -152,7 +149,6 @@ export class Mercado implements OnInit, OnDestroy {
       this.ofertaPuja = jugador.pujado_por_mi && jugador.mi_puja_actual 
         ? jugador.mi_puja_actual 
         : jugador.precio;
-        
       this.mostrarModalPuja = true;
     }
   }
@@ -160,18 +156,17 @@ export class Mercado implements OnInit, OnDestroy {
   cerrarModales() {
     this.mostrarModalPuja = false;
     this.mostrarModalCompraDirecta = false;
+    this.mostrarModalHabilidad = false; // <--- Cierra también el de habilidad
     this.jugadorSeleccionado = null;
     this.ofertaPuja = 0;
   }
 
   confirmarPuja() {
     if (!this.jugadorSeleccionado) return;
-
     if (this.ofertaPuja < this.jugadorSeleccionado.precio) {
       this.mostrarNotificacion(`La puja mínima es ${this.formatearDinero(this.jugadorSeleccionado.precio)}`, false);
       return;
     }
-
     if (this.ofertaPuja > this.dinero) {
       this.mostrarNotificacion('No tienes suficiente dinero', false);
       return;
@@ -179,11 +174,7 @@ export class Mercado implements OnInit, OnDestroy {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    const body = {
-      id_liga: this.id_liga,
-      id_futbolista: this.jugadorSeleccionado.id_futbolista,
-      monto: this.ofertaPuja
-    };
+    const body = { id_liga: this.id_liga, id_futbolista: this.jugadorSeleccionado.id_futbolista, monto: this.ofertaPuja };
 
     this.http.post<any>(`${this.apiBase}/api/mercado/pujar`, body, { headers })
       .subscribe({
@@ -202,13 +193,9 @@ export class Mercado implements OnInit, OnDestroy {
 
   borrarPuja() {
     if (!this.jugadorSeleccionado) return;
-
     const options = {
       headers: new HttpHeaders({ 'Authorization': `Bearer ${localStorage.getItem('token')}` }),
-      body: {
-        id_liga: this.id_liga,
-        id_futbolista: this.jugadorSeleccionado.id_futbolista
-      }
+      body: { id_liga: this.id_liga, id_futbolista: this.jugadorSeleccionado.id_futbolista }
     };
 
     this.http.delete(`${this.apiBase}/api/mercado/pujar`, options)
@@ -225,7 +212,6 @@ export class Mercado implements OnInit, OnDestroy {
 
   confirmarCompraDirecta() {
     if (!this.jugadorSeleccionado) return;
-
     const body = {
       id_liga: this.id_liga,
       id_futbolista: this.jugadorSeleccionado.id_futbolista,
@@ -248,24 +234,16 @@ export class Mercado implements OnInit, OnDestroy {
 
   iniciarTemporizador(fechaGeneracion: string) {
     clearInterval(this.timerInterval);
-
     this.timerInterval = setInterval(() => {
       const ahora = new Date();
-      
       const limite = new Date();
       limite.setHours(23, 59, 59, 999);
-
       const diff = limite.getTime() - ahora.getTime();
 
       if (diff <= 0) {
         this.tiempoRestante = 'Actualizando...';
         clearInterval(this.timerInterval);
-        
-        setTimeout(() => {
-          this.cargarMercado();
-          this.cargarHistorial();
-        }, 10000);
-        
+        setTimeout(() => { this.cargarMercado(); this.cargarHistorial(); }, 10000);
         return;
       }
       
@@ -280,13 +258,10 @@ export class Mercado implements OnInit, OnDestroy {
 
   normalizarPosicion(pos: string): 'DL' | 'MC' | 'DF' | 'PT' {
     if (!pos) return 'MC';
-    
     const p = pos.trim().toUpperCase();
-    
     if (p === 'DL' || p.includes('DEL')) return 'DL';
     if (p === 'DF' || p.includes('DEF')) return 'DF';
     if (p === 'PT' || p.includes('POR')) return 'PT';
-    
     return 'MC'; 
   }
 
@@ -319,33 +294,22 @@ export class Mercado implements OnInit, OnDestroy {
   }
 
   getMediaClass(media: number): string {
-    if (media >= 95) return 'media-galaxy';   // 95 a 99 (Galaxia)
-    if (media >= 90) return 'media-diamond';  // 90 a 94 (Diamante)
-    if (media >= 80) return 'media-gold';     // 80 a 89 (Oro)
-    if (media >= 70) return 'media-silver';   // 70 a 79 (Plata)
-    return 'media-bronze';                    // 60 a 69 (Bronce)
+    if (media >= 95) return 'media-galaxy';
+    if (media >= 90) return 'media-diamond';
+    if (media >= 80) return 'media-gold';
+    if (media >= 70) return 'media-silver';
+    return 'media-bronze';
   }
 
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
-    return {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    return { headers: new HttpHeaders({ 'Authorization': `Bearer ${token}` }) };
   }
 
-  formatearDinero(valor: number): string {
-    return new Intl.NumberFormat('es-ES').format(valor);
-  }
-
+  formatearDinero(valor: number): string { return new Intl.NumberFormat('es-ES').format(valor); }
   volverAtras() { this.router.navigate(['/ligas', this.id_liga, 'menu']); }
-  irAPerfil() {
-    this.router.navigate(['/perfil']);
-  }
-  irATienda() { this.mostrarNotificacion('La tienda está cerrada por hoy', false); }
-  verInfo() { this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true); }
-
+  irAPerfil() { this.router.navigate(['/perfil']); }
+  
   mostrarNotificacion(mensaje: string, exito: boolean) {
     this.notificationMsg = mensaje;
     this.isSuccess = exito;

@@ -104,3 +104,38 @@
   font-size: 24px;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
+
+/* Hacer que el GRL de las cartas Ultra destaque más */
+.card.ultra .grl-box {
+  color: #fff;
+  text-shadow: 0 0 10px #b145e9, 0 0 20px #ff0080;
+}
+
+/* El nombre en las cartas Ultra (Cambiando el negro por blanco si el fondo es oscuro) */
+.card.ultra .name-box .first-name {
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(177, 69, 233, 0.8);
+}
+
+/* Las estadísticas de la fila inferior con brillo */
+.card.ultra .stat {
+  text-shadow: 0 0 8px rgba(177, 69, 233, 0.8);
+}
+
+/* Efecto de carta brillante o "foil" opcional para las ultra */
+.card.ultra::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.3) 30%,
+    transparent 40%,
+    rgba(177, 69, 233, 0.1) 60%,
+    transparent 80%
+  );
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  z-index: 10;
+}

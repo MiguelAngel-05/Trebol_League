@@ -423,6 +423,63 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   font-weight: 500;
 }
 
+/* Color del número de la Media en Ultra */
+.glow-purple {
+    color: #b145e9;
+    text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 50px rgba(177, 69, 233, 0.9);
+    font-size: 8rem;
+}
+
+/* El texto de "Leyenda del Trébol" en Ultra */
+.ultra-text {
+    color: #b145e9;
+    text-shadow: 0 0 20px rgba(177, 69, 233, 0.8);
+    font-size: 1.8rem !important;
+}
+
+/* Fondo de la Arena si toca Ultra */
+.pack-opening-arena.arena-ultra {
+    background: radial-gradient(circle at center, #1a052b 0%, #07020a 80%);
+    transition: background 1s ease-in-out;
+}
+
+.pack-opening-arena.arena-ultra::before {
+    background: conic-gradient(
+      from 0deg, 
+      transparent 0deg, 
+      rgba(177, 69, 233, 0.15) 60deg, 
+      transparent 120deg, 
+      rgba(255, 0, 255, 0.1) 180deg, 
+      transparent 240deg, 
+      rgba(177, 69, 233, 0.15) 300deg, 
+      transparent 360deg
+    );
+}
+
+/* Panel de Habilidad si es Ultra */
+.habilidad-panel.panel-ultra {
+    background: linear-gradient(180deg, rgba(177, 69, 233, 0.15) 0%, rgba(0, 0, 0, 0.6) 100%);
+    border-color: rgba(177, 69, 233, 0.5);
+    border-top-color: #b145e9;
+    box-shadow: 0 10px 30px rgba(177, 69, 233, 0.2);
+}
+.habilidad-panel.panel-ultra h4 { color: #d68bff; text-shadow: 0 2px 4px rgba(177, 69, 233, 0.8); }
+
+/* La pantalla temblorosa en modo Ultra (Morado galáctico) */
+.alerta-especial-container.alerta-morada {
+    animation: alarmaMorada 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes alarmaMorada {
+    from { box-shadow: inset 0 0 50px rgba(177, 69, 233, 0.2); }
+    to { 
+      box-shadow: inset 0 0 200px rgba(177, 69, 233, 0.9); 
+      background: radial-gradient(circle at center, #2e0040 0%, #000000 100%); 
+    }
+}
+.alerta-morada .alerta-titulo { text-shadow: 0 0 20px #8e2de2, 0 0 40px #4a00e0; }
+.alerta-morada .alerta-sub { color: #d68bff; text-shadow: 0 0 10px #8e2de2; }
+
 @keyframes slideUpFade {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }

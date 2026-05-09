@@ -98,7 +98,7 @@
 
               <div class="action-zone">
                 @if (jugador.en_venta) {
-                  <div class="tag-label venta">EN VENTA</div>
+                  <div class="tag-label venta" style="margin-right: 10px;">EN VENTA</div>
                 }
                 
                 <button class="btn-oferta" (click)="abrirModalOferta(jugador)">
@@ -124,7 +124,7 @@
       
       <div class="detalle-layout">
         <div class="detalle-left">
-          <app-carta [jugador]="jugadorSeleccionado"></app-carta>
+          <app-carta [jugador]="jugadorSeleccionado" [class]="jugadorSeleccionado.tipo_carta"></app-carta>
         </div>
 
         <div class="detalle-right">
@@ -146,8 +146,10 @@
               <span class="value">{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</span>
             </div>
 
-            @if (jugadorSeleccionado.tipo_carta === 'especial') {
-              <button class="btn-habilidad-info" (click)="abrirHabilidad()">
+            @if (jugadorSeleccionado.tipo_carta === 'especial' || jugadorSeleccionado.tipo_carta === 'ultra') {
+              <button class="btn-habilidad-info" 
+                      [ngClass]="{'btn-ultra': jugadorSeleccionado.tipo_carta === 'ultra'}"
+                      (click)="abrirHabilidad()">
                 VER HABILIDAD ✨
               </button>
             }
@@ -158,7 +160,9 @@
   </div>
 
   <div class="modal-overlay skill-overlay" *ngIf="mostrarModalHabilidad" (click)="cerrarHabilidad()">
-    <div class="modal-content-habilidad" (click)="$event.stopPropagation()">
+    <div class="modal-content-habilidad" 
+         [ngClass]="{'panel-ultra': jugadorSeleccionado?.tipo_carta === 'ultra'}"
+         (click)="$event.stopPropagation()">
       <div class="habilidad-header">
         <h3>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.nombre }}</h3>
         <span class="close-small" (click)="cerrarHabilidad()">✕</span>

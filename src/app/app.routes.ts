@@ -13,7 +13,6 @@ import { Perfil } from './perfil/perfil';
 import { CentroMensajes } from './centro-mensajes/centro-mensajes';
 import { Plantilla } from './plantilla/plantilla';
 import { Calendario } from './calendario/calendario';
-import { PuntosComponent } from './puntos/puntos';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -33,7 +32,6 @@ export const routes: Routes = [
             { path: 'mensajes', component: CentroMensajes },
             { path: 'plantilla', component: Plantilla },
             { path: 'calendario', component: Calendario},
-            { path: 'puntos', component: PuntosComponent }
         ]
     },
     { path: 'perfil', component: Perfil, canActivate: [authGuard] },

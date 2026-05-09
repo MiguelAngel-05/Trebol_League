@@ -269,6 +269,75 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; backgrou
     box-shadow: 0 0 20px rgba(255, 71, 87, 0.6);
 }
 
+/* --- ESTILOS DEL JUGADOR 12 / TÓTEM --- */
+
+.jugador-12-wrapper {
+    position: absolute;
+    top: 20px;
+    left: 20px; /* Esquina superior izquierda del campo */
+    z-index: 15;
+}
+
+/* El fondo del hueco cuando está vacío */
+.totem-fondo {
+    border: 2px dashed #b145e9;
+    background: rgba(177, 69, 233, 0.1);
+}
+
+/* El fondo cuando estás arrastrando una carta encima */
+.zona-drop.cdk-drop-list-receiving .totem-fondo {
+    background: rgba(177, 69, 233, 0.4); 
+    border-color: #d68bff; 
+    box-shadow: 0 0 15px rgba(177, 69, 233, 0.5);
+}
+
+/* Etiqueta especial */
+.totem-label {
+    background: linear-gradient(90deg, #8e2de2, #4a00e0);
+    border: 1px solid #d68bff;
+    color: white;
+    font-size: 0.65rem;
+    top: -12px;
+    white-space: nowrap;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+}
+
+/* Ajuste para móviles para que no se superponga con la portería */
+@media (max-width: 768px) {
+    .jugador-12-wrapper {
+        top: 10px;
+        left: 10px;
+    }
+}
+
+/* --- ESTILOS PARA CARTAS ESPECIALES EN EL CAMPO (Mantener) --- */
+.carta-escala-campo app-carta.especial,
+.carta-escala-banquillo app-carta.especial {
+    filter: drop-shadow(0 0 15px rgba(255, 165, 2, 0.6)) brightness(1.1);
+}
+
+.carta-escala-campo app-carta.ultra,
+.carta-escala-banquillo app-carta.ultra {
+    filter: drop-shadow(0 0 20px rgba(177, 69, 233, 0.8)) brightness(1.2);
+}
+
+.carta-titular:has(.especial), .carta-titular:has(.ultra) {
+    animation: floatCard 3s infinite ease-in-out;
+}
+
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.preview-escala-drag:has(.especial) {
+    filter: drop-shadow(0 0 30px rgba(255, 165, 2, 0.8));
+}
+
+.preview-escala-drag:has(.ultra) {
+    filter: drop-shadow(0 0 40px rgba(177, 69, 233, 0.9));
+}
+
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 

@@ -1,98 +1,267 @@
 <main class="main-container">
-
-  <header class="main-header">
-    <div class="header-options top-row">
-      <div class="option-group">
-        <img class="icon" src="Utensilios/Emojis/icono-usuario.webp" alt="Usuario">
-        <p>{{ user?.username || 'Usuario' }}</p>
-      </div>
-      <span class="separator-header">/</span>
-      <div class="option-group">
-        <p>{{ formatearDinero(dinero) }}</p>
-        <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
-      </div>
-    </div>
-
-    <div class="header-optionsB bottom-row">
-      <div class="option-group icon-hover">
-        <img class="pinchar" src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" (click)="volverAtras()">
-      </div>
-    </div>
     
-    <div class="div-img-user" (click)="irAPerfil()">
-      <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario" title="Editar Perfil"> 
-    </div>
+  <header class="main-header">
+      <div class="header-options top-row">          
+          <div class="option-group">
+              <img class="icon" src="Utensilios/Emojis/icono-usuario.webp" alt="Usuario">
+              <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
+                {{ user?.username || 'Cargando...' }}
+              </p>
+          </div>
+          <span class="separator-header">/</span>
+          <div class="option-group">
+              <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
+                {{ formatearDinero(dinero) }}
+              </p>
+              <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
+          </div>
+      </div>
+      
+      <div class="header-optionsB bottom-row">
+          <div class="option-group icon-hover" (click)="volverAtras()">
+              <img src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" class="pinchar" style="height: 26px; width: auto;">
+          </div>
+      </div>
+
+      <div class="div-img-user" (click)="irAPerfil()">
+          <img class="img-user" 
+               [src]="user?.avatar ? user.avatar : 'Utensilios/Emojis/icono-usuario.webp'" 
+               onerror="this.src='Utensilios/Emojis/icono-usuario.webp'" 
+               alt="imagen de usuario" title="Editar Perfil"> 
+      </div>
   </header>
 
   <section class="content-area">
-    <div class="team-header">
-      <h1 class="page-title">Clasificación</h1>
-    </div>
+    <div class="modern-panel">
+      
+      <nav class="modern-tabs">
+        <button class="m-tab" [class.active]="tabActiva === 'general'" (click)="cambiarTab('general')">Clasificación</button>
+        <button class="m-tab" [class.active]="tabActiva === 'jornada_ranking'" (click)="cambiarTab('jornada_ranking')">Ranking Jornada</button>
+        <button class="m-tab" [class.active]="tabActiva === 'mis_puntos'" (click)="cambiarTab('mis_puntos')">Alineaciones</button>
+        <button class="m-tab" [class.active]="tabActiva === 'clubes'" (click)="cambiarTab('clubes')">Clubes (IA)</button>
+      </nav>
 
-    <div class="scrollable-content">
-      @if (isLoading) {
-        <div class="loading-msg">Calculando posiciones...</div>
-      } @else {
-        <div class="clasificacion-list">
-          
-          @for (jugador of clasificacion; track jugador.id; let i = $index) {
-            <div class="user-row" 
-                 [style.animation-delay]="i * 0.1 + 's'"
-                 [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
-              
-              <div class="rank-badge">
-                @if (i === 0) { 🥇 }
-                @else if (i === 1) { 🥈 }
-                @else if (i === 2) { 🥉 }
-                @else { {{ i + 1 }} }
-              </div>
-
-              <div class="user-info">
-                <div class="avatar-container">
-                  <img [src]="jugador.avatar" alt="Avatar" class="user-avatar">
+      <div class="m-content fade-in" *ngIf="tabActiva === 'general'">
+        <div class="modern-list-container">
+          @if (isLoading) {
+            <div class="loading-msg">Calculando posiciones...</div>
+          } @else {
+            @for (jugador of clasificacionGeneral; track jugador.id; let i = $index) {
+              <div class="user-row" [style.animation-delay]="i * 0.1 + 's'" [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
+                <div class="rank-badge">
+                  @if (i === 0) { 🥇 } @else if (i === 1) { 🥈 } @else if (i === 2) { 🥉 } @else { {{ i + 1 }} }
                 </div>
-                <div class="name-block">
-                  <span class="username">{{ jugador.username }}</span>
-                  
-                  <div class="badges-container">
-                    <span class="rol-badge owner" *ngIf="jugador.rol === 'owner'">👑 Creador</span>
-                    <span class="rol-badge admin" *ngIf="jugador.rol === 'admin'">⭐ Admin</span>
+                <div class="user-info">
+                  <div class="avatar-container"><img [src]="jugador.avatar" alt="Avatar" class="user-avatar"></div>
+                  <div class="name-block">
+                    <span class="username">{{ jugador.username }}</span>
+                    <div class="badges-container">
+                      <span class="rol-badge owner" *ngIf="jugador.rol === 'owner'">👑 Creador</span>
+                      <span class="rol-badge admin" *ngIf="jugador.rol === 'admin'">⭐ Admin</span>
+                    </div>
                   </div>
+                  @if (jugador.id === user?.id) { <span class="me-badge">Tú</span> }
                 </div>
-                
-                @if (jugador.id === user?.id) {
-                  <span class="me-badge">Tú</span>
-                }
-              </div>
-
-              <div class="points-section">
-                <div class="money-box">
-                  <span class="money-value">{{ jugador.total_jugadores }} <span class="currency">Jug.</span></span>
-                </div>
-                <div class="points-box">
-                  <span class="pts-value">{{ jugador.puntos }}</span>
-                  <span class="pts-label">PTS</span>
-                </div>
-                
-                @if (jugador.id !== user?.id) {
-                  <div class="btn-opciones" (click)="abrirModalOpciones(jugador)">
-                    <img src="Utensilios/Emojis/tres-puntos.webp" alt="Opciones" class="icon-small-btn">
+                <div class="points-section">
+                  <div class="money-box"><span class="money-value">{{ jugador.total_jugadores }} <span class="currency">Jug.</span></span></div>
+                  <div class="points-box">
+                    <span class="pts-value">{{ jugador.puntos }}</span>
+                    <span class="pts-label">PTS</span>
                   </div>
-                }
+                  @if (jugador.id !== user?.id) {
+                    <div class="btn-opciones" (click)="abrirModalOpciones(jugador)">
+                      <img src="Utensilios/Emojis/tres-puntos.webp" alt="Opciones" class="icon-small-btn">
+                    </div>
+                  }
+                </div>
               </div>
-
-            </div>
+            }
           }
-          
         </div>
-      }
+      </div>
+
+      <div class="m-content fade-in" *ngIf="tabActiva === 'jornada_ranking'">
+        <div class="jornada-dashboard">
+          <div class="filters-group">
+            <div class="custom-select-wrapper">
+              <select [(ngModel)]="jornadaSeleccionada" (change)="alCambiarJornada()" class="m-select">
+                <option *ngFor="let j of jornadasDisponibles" [value]="j">Jornada {{ j }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="score-display">
+            <span class="score-label">PREMIOS EN JUEGO</span>
+            <span class="score-value" style="font-size: 1.5rem; color:#ffd700;">Próximamente...</span>
+          </div>
+        </div>
+
+        <div class="modern-list-container">
+            @for (jugador of clasificacionJornada; track jugador.id; let i = $index) {
+              <div class="user-row" [style.animation-delay]="i * 0.1 + 's'" [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
+                <div class="rank-badge">{{ i + 1 }}</div>
+                <div class="user-info">
+                  <div class="avatar-container"><img [src]="jugador.avatar" class="user-avatar"></div>
+                  <span class="username">{{ jugador.username }}</span>
+                </div>
+                <div class="points-section">
+                  <div class="points-box">
+                    <span class="pts-value">{{ jugador.puntos_jornada }}</span>
+                    <span class="pts-label">PTS (J{{ jornadaSeleccionada }})</span>
+                  </div>
+                </div>
+              </div>
+            }
+        </div>
+      </div>
+
+      <div class="m-content fade-in" *ngIf="tabActiva === 'mis_puntos'">
+        <div class="jornada-dashboard">
+          <div class="filters-group">
+            <div class="custom-select-wrapper">
+              <select [(ngModel)]="managerSeleccionado" (change)="buscarPuntosJornada()" class="m-select">
+                <option *ngFor="let m of managers" [value]="m.id">{{ m.username }}</option>
+              </select>
+            </div>
+            <div class="custom-select-wrapper">
+              <select [(ngModel)]="jornadaSeleccionada" (change)="alCambiarJornada()" class="m-select">
+                <option *ngFor="let j of jornadasDisponibles" [value]="j">Jornada {{ j }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="score-display">
+            <span class="score-label">TOTAL PUNTOS</span>
+            <span class="score-value">{{ totalPuntosJornada }}</span>
+          </div>
+        </div>
+
+        <div class="modern-list-container">
+          <div class="list-header">
+            <div class="col-player">Jugador</div><div class="col-pos">Pos</div>
+            <div class="col-val">Valor</div><div class="col-stats">Stats</div><div class="col-pts">Pts</div>
+          </div>
+          <div class="list-body">
+            <div class="list-row" *ngFor="let j of jugadoresJornada">
+              <div class="col-player"><span class="player-name">{{ j.nombre }}</span></div>
+              <div class="col-pos"><span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span></div>
+              <div class="col-val"><span class="price-tag">{{ formatearDinero(j.valor) }} <span class="currency">Tc</span></span></div>
+              <div class="col-stats">
+                <div class="stat-pill" title="Goles"><span class="stat-icon">⚽</span> {{ j.goles }}</div>
+                <div class="stat-pill" title="Asistencias"><span class="stat-icon">🤝</span> {{ j.asistencias }}</div>
+              </div>
+              <div class="col-pts"><span class="pts-number">{{ j.puntos }}</span></div>
+            </div>
+            <div class="empty-state" *ngIf="jugadoresJornada.length === 0">
+              <span class="empty-icon">📉</span><p>No ha puntuado en esta jornada.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-content fade-in" *ngIf="tabActiva === 'clubes'">
+        <div class="modern-list-container ranking-list">
+          <div class="list-header ranking-header">
+            <div class="col-rank">#</div><div class="col-club">Club</div>
+            <div class="col-mini" title="Jugados">J</div><div class="col-mini" title="Ganados">G</div>
+            <div class="col-mini" title="Empatados">E</div><div class="col-mini" title="Perdidos">P</div>
+            <div class="col-mini" title="Diferencia">DIF</div><div class="col-total">TOTAL</div>
+          </div>
+          <div class="list-body">
+            <div class="list-row ranking-row" *ngFor="let club of clasificacionClubes; let i = index" (click)="abrirModalClub(club)" style="cursor: pointer;">
+              <div class="col-rank">
+                <div class="rank-badge" [ngClass]="{'gold': i === 0, 'silver': i === 1, 'bronze': i === 2}">{{ i + 1 }}</div>
+              </div>
+              <div class="col-club">
+                <img class="club-shield" [src]="getEscudoUrl(club.equipo)" [alt]="club.equipo">
+                <span class="club-name">{{ club.equipo }}</span>
+              </div>
+              <div class="col-mini stat-dim">{{ club.pj }}</div><div class="col-mini stat-win">{{ club.pg }}</div>
+              <div class="col-mini stat-draw">{{ club.pe }}</div><div class="col-mini stat-loss">{{ club.pp }}</div>
+              <div class="col-mini" [ngClass]="{'diff-pos': club.dif > 0, 'diff-neg': club.dif < 0}">
+                {{ club.dif > 0 ? '+' + club.dif : club.dif }}
+              </div>
+              <div class="col-total"><span class="pts-number highlight">{{ club.puntos_totales }}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
+
+  <div class="modal-overlay" *ngIf="mostrarModalClub && clubSeleccionado" (click)="cerrarModalClub()">
+    <div class="modal-content club-modal" (click)="$event.stopPropagation()">
+      
+      <div class="hero-section">
+        <span class="close-btn" (click)="cerrarModalClub()">&times;</span>
+        <img [src]="getEscudoUrl(clubSeleccionado.equipo)" class="big-shield" [alt]="clubSeleccionado.equipo">
+        <div class="club-info">
+            <h1 class="club-title">{{ clubSeleccionado.equipo }}</h1>
+            <div class="lore-box">
+                <span class="quote-icon">❝</span>
+                <p class="club-lore">{{ clubSeleccionado.lore }}</p>
+            </div>
+        </div>
+      </div>
+
+      <div class="modal-body layout-modal-body">
+        
+        <div class="stats-bento">
+            <div class="stat-card" *ngIf="pichichi">
+                <div class="stat-icon">⚽</div>
+                <div class="stat-data">
+                    <span class="stat-label">Pichichi</span>
+                    <span class="stat-player" [ngClass]="pichichi.tipo_carta">{{ pichichi.nombre }}</span>
+                    <span class="stat-number">{{ pichichi.goles }} goles</span>
+                </div>
+            </div>
+            <div class="stat-card" *ngIf="maxAsistente">
+                <div class="stat-icon">🤝</div>
+                <div class="stat-data">
+                    <span class="stat-label">Asistente</span>
+                    <span class="stat-player" [ngClass]="maxAsistente.tipo_carta">{{ maxAsistente.nombre }}</span>
+                    <span class="stat-number">{{ maxAsistente.asistencias }} asist.</span>
+                </div>
+            </div>
+            <div class="stat-card" *ngIf="masTarjetas">
+                <div class="stat-icon">🟨</div>
+                <div class="stat-data">
+                    <span class="stat-label">Tarjetero</span>
+                    <span class="stat-player" [ngClass]="masTarjetas.tipo_carta">{{ masTarjetas.nombre }}</span>
+                    <span class="stat-number">{{ masTarjetas.amarillas }} 🟨 | {{ masTarjetas.rojas }} 🟥</span>
+                </div>
+            </div>
+            <div class="stat-card empty-stat" *ngIf="!pichichi && !maxAsistente && !masTarjetas">
+                <p style="margin: 0;">Las estadísticas se actualizarán tras los primeros partidos.</p>
+            </div>
+        </div>
+
+        <div class="roster-header-container">
+            <h2 class="roster-title">Plantilla Oficial</h2>
+            <span class="roster-count">{{ clubSeleccionado.plantilla.length }} Jugadores</span>
+        </div>
+        
+        <div class="roster-list">
+            <div class="player-row" *ngFor="let j of clubSeleccionado.plantilla" [ngClass]="j.tipo_carta">
+                <div class="pr-left">
+                    <span class="pos-badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span>
+                </div>
+                <div class="pr-center">
+                    <span class="player-name">{{ j.nombre }}</span>
+                </div>
+                <div class="pr-right">
+                    <div class="mini-stat" title="Goles"><span class="icon">⚽</span> {{ j.goles }}</div>
+                    <div class="mini-stat" title="Asistencias"><span class="icon">🤝</span> {{ j.asistencias }}</div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   @if (mostrarModalUsuario && usuarioSeleccionado) {
     <div class="modal-overlay" (click)="cerrarModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
-        
         <div class="modal-header">
           <div style="display: flex; align-items: center; gap: 15px;">
             <img [src]="usuarioSeleccionado.avatar" class="user-avatar" style="width: 50px; height: 50px;">
@@ -100,33 +269,21 @@
           </div>
           <span class="close-btn" (click)="cerrarModal()">&times;</span>
         </div>
-
         <div class="modal-body user-stats-modal">
           <div class="stat-item">
-            <span class="stat-label">Puntos Totales</span>
-            <span class="stat-value text-green">{{ usuarioSeleccionado.puntos }} PTS</span>
+            <span class="stat-label">Puntos Totales</span><span class="stat-value text-green">{{ usuarioSeleccionado.puntos }} PTS</span>
           </div>
           <div class="stat-item">
-            <span class="stat-label">Tamaño Plantilla</span>
-            <span class="stat-value">{{ usuarioSeleccionado.total_jugadores }} Jugadores</span>
+            <span class="stat-label">Tamaño Plantilla</span><span class="stat-value">{{ usuarioSeleccionado.total_jugadores }} Jugadores</span>
           </div>
         </div>
-
         <div class="modal-footer action-buttons">
-          <button class="btn-action" (click)="verPlantillaRival()">
-            <span class="btn-icon"></span> Ver Plantilla
-          </button>
-          
-          <button class="btn-action btn-msg" (click)="mandarMensaje()">
-            <span class="btn-icon"></span> Mandar Mensaje
-          </button>
-          
+          <button class="btn-action" (click)="verPlantillaRival()"><span class="btn-icon"></span> Ver Plantilla</button>
+          <button class="btn-action btn-msg" (click)="mandarMensaje()"><span class="btn-icon"></span> Mandar Mensaje</button>
           <button class="btn-action btn-admin" *ngIf="miRol === 'owner' && usuarioSeleccionado?.rol !== 'owner'" (click)="toggleAdmin()">
-            <span class="btn-icon">⭐</span> 
-            {{ usuarioSeleccionado?.rol === 'admin' ? 'Quitar Admin' : 'Hacer Admin' }}
+            <span class="btn-icon">⭐</span> {{ usuarioSeleccionado?.rol === 'admin' ? 'Quitar Admin' : 'Hacer Admin' }}
           </button>
         </div>
-
       </div>
     </div>
   }
@@ -134,12 +291,10 @@
   @if (mostrarModalMensaje && destinatarioMensaje) {
     <div class="modal-overlay" (click)="cerrarModalMensaje()">
       <div class="modal-content correo-modal" (click)="$event.stopPropagation()">
-        
         <div class="modal-header">
           <h2 class="modal-title">Escribir a {{ destinatarioMensaje?.username }}</h2>
           <span class="close-btn" (click)="cerrarModalMensaje()">&times;</span>
         </div>
-        
         <div class="modal-body">
           <div class="input-group">
             <label>Asunto</label>
@@ -150,14 +305,12 @@
             <textarea [(ngModel)]="contenidoInput" class="input-puja" rows="4" placeholder="Escribe tu mensaje aquí..." style="resize: none;"></textarea>
           </div>
         </div>
-
         <div class="modal-footer">
           <button class="btn-cancelar" (click)="cerrarModalMensaje()">Cancelar</button>
           <button class="btn-confirmar" style="background: linear-gradient(135deg, #1e90ff, #00d2ff);" (click)="enviarMensajePrivado()" [disabled]="!asuntoInput || !contenidoInput">
             Enviar Mensaje
           </button>
         </div>
-
       </div>
     </div>
   }
@@ -165,9 +318,7 @@
   @if (notificationMsg) {
     <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
       <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-      <div class="toast-content">
-        <p class="toast-message">{{ notificationMsg }}</p>
-      </div>
+      <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
     </div>
   }
 

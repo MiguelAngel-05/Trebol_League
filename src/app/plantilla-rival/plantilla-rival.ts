@@ -58,7 +58,7 @@ export class PlantillaRival implements OnInit {
     if (token) {
       try { this.user = jwtDecode(token); } catch {}
     }
-// para mostrar tu dinero en el header
+    // para mostrar tu dinero en el header
     this.cargarDatosMios();
     this.cargarJugadoresRival();
   }
@@ -177,12 +177,12 @@ export class PlantillaRival implements OnInit {
   }
 
   normalizarPosicion(pos: string): 'DL' | 'MC' | 'DF' | 'PT' {
-    const p = pos.toLowerCase();
-    if (p.includes('del')) return 'DL';
-    if (p.includes('med') || p.includes('cen')) return 'MC';
-    if (p.includes('def')) return 'DF';
-    if (p.includes('por') || p.includes('pt')) return 'PT';
-    return 'MC';
+    if (!pos) return 'MC';
+    const p = pos.trim().toUpperCase();
+    if (p === 'DL' || p.includes('DEL')) return 'DL';
+    if (p === 'DF' || p.includes('DEF')) return 'DF';
+    if (p === 'PT' || p.includes('POR')) return 'PT';
+    return 'MC'; 
   }
 
   formatearDinero(valor: number): string {

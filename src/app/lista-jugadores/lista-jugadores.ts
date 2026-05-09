@@ -41,18 +41,14 @@ export class ListaJugadores implements OnInit {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
-  // api
   private apiBase = 'https://api-trebol-league.vercel.app';
 
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
     const token = localStorage.getItem('token');
-
     if (token) {
       try { this.user = jwtDecode(token); } catch {}
     }
-
     this.cargarDatosUsuario();
     this.cargarMisJugadores();
   }
@@ -72,22 +68,14 @@ export class ListaJugadores implements OnInit {
     this.jugadorSeleccionado = null;
   }
 
-  abrirHabilidad() {
-    this.mostrarModalHabilidad = true;
-  }
+  abrirHabilidad() { this.mostrarModalHabilidad = true; }
+  cerrarHabilidad() { this.mostrarModalHabilidad = false; }
 
-  cerrarHabilidad() {
-    this.mostrarModalHabilidad = false;
-  }
-
-  getInfoHabilidad(codigo: string) {
-    return obtenerInfoHabilidad(codigo);
-  }
+  getInfoHabilidad(codigo: string) { return obtenerInfoHabilidad(codigo); }
 
   cargarDatosUsuario() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/datos-usuario`, { headers })
       .subscribe({
         next: (data) => this.dinero = Number(data.dinero),
@@ -107,7 +95,6 @@ export class ListaJugadores implements OnInit {
             ...j,
             posicion: this.normalizarPosicion(j.posicion)
           }));
-          
           this.calcularEstadisticas();
           this.isLoading = false;
         },
@@ -132,7 +119,6 @@ export class ListaJugadores implements OnInit {
 
   confirmarVenta() {
     if (!this.jugadorAVender) return;
-    
     if (this.precioVentaInput === null || isNaN(this.precioVentaInput) || this.precioVentaInput <= 0) {
       this.mostrarNotificacion('Introduce un precio válido mayor a 0', false);
       return;
@@ -140,10 +126,7 @@ export class ListaJugadores implements OnInit {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    const body = { 
-      id_futbolista: this.jugadorAVender.id_futbolista, 
-      precio_venta: this.precioVentaInput 
-    };
+    const body = { id_futbolista: this.jugadorAVender.id_futbolista, precio_venta: this.precioVentaInput };
 
     this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/vender`, body, { headers })
       .subscribe({
@@ -174,11 +157,9 @@ export class ListaJugadores implements OnInit {
       });
   }
 
-
   calcularEstadisticas() {
     this.totalJugadores = this.misJugadores.length;
     this.valorPlantilla = this.misJugadores.reduce((acc, j) => acc + Number(j.precio), 0);
-    
     if (this.totalJugadores > 0) {
       const sumaMedia = this.misJugadores.reduce((acc, j) => acc + j.media, 0);
       this.mediaPlantilla = Math.round(sumaMedia / this.totalJugadores);
@@ -214,22 +195,19 @@ export class ListaJugadores implements OnInit {
   }
 
   getMediaClass(media: number): string {
-    if (media >= 95) return 'media-galaxy';   // 95 a 99 (Galaxia)
-    if (media >= 90) return 'media-diamond';  // 90 a 94 (Diamante)
-    if (media >= 80) return 'media-gold';     // 80 a 89 (Oro)
-    if (media >= 70) return 'media-silver';   // 70 a 79 (Plata)
-    return 'media-bronze';                    // 60 a 69 (Bronce)
+    if (media >= 95) return 'media-galaxy';
+    if (media >= 90) return 'media-diamond';
+    if (media >= 80) return 'media-gold';
+    if (media >= 70) return 'media-silver';
+    return 'media-bronze';
   }
 
   normalizarPosicion(pos: string): 'DL' | 'MC' | 'DF' | 'PT' {
     if (!pos) return 'MC';
-    
     const p = pos.trim().toUpperCase();
-    
     if (p === 'DL' || p.includes('DEL')) return 'DL';
     if (p === 'DF' || p.includes('DEF')) return 'DF';
     if (p === 'PT' || p.includes('POR')) return 'PT';
-    
     return 'MC'; 
   }
 
@@ -237,13 +215,8 @@ export class ListaJugadores implements OnInit {
     return new Intl.NumberFormat('es-ES').format(valor);
   }
 
-  volverAtras() {
-    this.router.navigate(['/ligas', this.id_liga, 'menu']);
-  }
-
-  irAPerfil() {
-    this.router.navigate(['/perfil']);
-  }
+  volverAtras() { this.router.navigate(['/ligas', this.id_liga, 'menu']); }
+  irAPerfil() { this.router.navigate(['/perfil']); }
 
   mostrarNotificacion(mensaje: string, exito: boolean) {
     this.notificationMsg = mensaje;

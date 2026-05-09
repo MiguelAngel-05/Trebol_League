@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { FormsModule } from '@angular/forms'; // <--- OBLIGATORIO PARA ngModel
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './calendario.html',
   styleUrl: './calendario.css'
 })
@@ -17,11 +18,32 @@ export class Calendario implements OnInit {
   id_liga!: number;
   dinero: number = 0;
   miRol: string = 'user';
+  
+  // --- VARIABLES PARA EL CALENDARIO ---
+  partidos: any[] = [];
+  participantes: any[] = []; // Para mostrar quién está si la liga no ha empezado
+  fechaActual: Date = new Date();
+  diasCalendario: any[] = [];
+  diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+  // --- VARIABLES PARA START/RESET LIGA ---
   mostrarModalGenerar = false;
   isGenerating = false;
+  configInicial = {
+    dinero: 100000000, 
+    darPlantilla: true
+  };
 
-  // para los partidos
+  mostrarModalReset = false;
+  resetOpciones = {
+    borrarPuntos: false,
+    borrarJugadores: false,
+    borrarJornadas: true,
+    borrarDinero: false,
+    borrarMensajes: true
+  };
 
+  // --- VARIABLES PARA EL PARTIDO EN VIVO ---
   mostrarModalPartido = false;
   partidoSeleccionado: any = null;
   eventosPartido: any[] = [];
@@ -30,13 +52,11 @@ export class Calendario implements OnInit {
   golesVisitanteEnVivo = 0;
   minutoActual = 0;
   intervaloEnVivo: any;
-
-  partidos: any[] = [];
   
-  fechaActual: Date = new Date();
-  diasCalendario: any[] = [];
-  diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  tabPartido: 'cronica' | 'alineaciones' = 'cronica';
+  alineacionesListas: any = { local: { titulares: [], banquillo: [] }, visitante: { titulares: [], banquillo: [] } };
 
+  // Notificaciones
   notificationMsg = '';
   isSuccess = false;
 
@@ -77,12 +97,22 @@ export class Calendario implements OnInit {
         next: (data) => {
           this.partidos = data;
           this.generarMes(); 
+          if (this.partidos.length === 0) {
+            this.cargarParticipantes();
+          }
         },
         error: (err) => console.error(err)
       });
   }
 
-  // --- GENERADOR DEL MES (Lógica del Calendario) ---
+  cargarParticipantes() {
+    this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/managers`, this.getHeaders())
+      .subscribe(res => {
+        this.participantes = res;
+      });
+  }
+
+  // --- GENERADOR DEL MES ---
   generarMes() {
     const year = this.fechaActual.getFullYear();
     const month = this.fechaActual.getMonth();
@@ -90,25 +120,21 @@ export class Calendario implements OnInit {
     const primerDiaMes = new Date(year, month, 1);
     const ultimoDiaMes = new Date(year, month + 1, 0);
     
-    // Ajuste para que empiece en Lunes (0 = Lunes, 6 = Domingo)
     let diaSemanaInicio = primerDiaMes.getDay() - 1;
     if (diaSemanaInicio === -1) diaSemanaInicio = 6; 
 
     this.diasCalendario = [];
 
-    // Días del mes anterior (para rellenar huecos grises)
     for (let i = diaSemanaInicio; i > 0; i--) {
       const d = new Date(year, month, 1 - i);
       this.diasCalendario.push({ fecha: d, esOtroMes: true });
     }
 
-    // Días del mes actual
     for (let i = 1; i <= ultimoDiaMes.getDate(); i++) {
       const d = new Date(year, month, i);
       this.diasCalendario.push({ fecha: d, esOtroMes: false });
     }
 
-    // Días del mes siguiente (para completar la última fila)
     const diasRestantes = 42 - this.diasCalendario.length; 
     for (let i = 1; i <= diasRestantes; i++) {
       const d = new Date(year, month + 1, i);
@@ -116,7 +142,6 @@ export class Calendario implements OnInit {
     }
   }
 
-  // Filtrar partidos de un día específico
   getPartidosDelDia(fecha: Date) {
     return this.partidos.filter(p => {
       const fPartido = new Date(p.fecha_partido);
@@ -126,124 +151,108 @@ export class Calendario implements OnInit {
     });
   }
 
-  // --- NAVEGACIÓN ---
-  mesAnterior() {
-    this.fechaActual = new Date(this.fechaActual.getFullYear(), this.fechaActual.getMonth() - 1, 1);
-    this.generarMes();
-  }
+  // --- NAVEGACIÓN CALENDARIO ---
+  mesAnterior() { this.fechaActual = new Date(this.fechaActual.getFullYear(), this.fechaActual.getMonth() - 1, 1); this.generarMes(); }
+  mesSiguiente() { this.fechaActual = new Date(this.fechaActual.getFullYear(), this.fechaActual.getMonth() + 1, 1); this.generarMes(); }
+  irAHoy() { this.fechaActual = new Date(); this.generarMes(); }
 
-  mesSiguiente() {
-    this.fechaActual = new Date(this.fechaActual.getFullYear(), this.fechaActual.getMonth() + 1, 1);
-    this.generarMes();
-  }
+  get mesActualTexto(): string { return this.fechaActual.toLocaleString('es-ES', { month: 'long', year: 'numeric' }); }
+  esHoy(fecha: Date): boolean { const hoy = new Date(); return fecha.getDate() === hoy.getDate() && fecha.getMonth() === hoy.getMonth() && fecha.getFullYear() === hoy.getFullYear(); }
 
-  irAHoy() {
-    this.fechaActual = new Date();
-    this.generarMes();
-  }
-
-  get mesActualTexto(): string {
-    return this.fechaActual.toLocaleString('es-ES', { month: 'long', year: 'numeric' });
-  }
-
-  esHoy(fecha: Date): boolean {
-    const hoy = new Date();
-    return fecha.getDate() === hoy.getDate() && fecha.getMonth() === hoy.getMonth() && fecha.getFullYear() === hoy.getFullYear();
-  }
-
-  // --- CREAR CALENDARIO ---
-  abrirModalGenerar() {
-    this.mostrarModalGenerar = true;
-  }
-
-  cerrarModalGenerar() {
-    this.mostrarModalGenerar = false;
-  }
-
+  // --- START / RESET LIGA ---
+  abrirModalGenerar() { this.mostrarModalGenerar = true; }
+  
   confirmarGenerarCalendario() {
     this.isGenerating = true;
+    const body = {
+      dineroInicial: this.configInicial.dinero,
+      darPlantilla: this.configInicial.darPlantilla
+    };
 
-    this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/generar-calendario`, {}, this.getHeaders())
+    this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/generar-calendario`, body, this.getHeaders())
       .subscribe({
         next: (res: any) => {
           this.isGenerating = false;
           this.mostrarNotificacion(res.message, true);
           this.cargarPartidos(); 
-          this.cerrarModalGenerar();
+          this.cargarDatosUsuario(); // Actualizamos el dinero en pantalla
+          this.mostrarModalGenerar = false;
         },
         error: (err) => {
           this.isGenerating = false;
           this.mostrarNotificacion(err.error?.message || 'Error al generar', false);
-          this.cerrarModalGenerar();
         }
       });
   }
 
-  volverAtras() { this.router.navigate(['/ligas', this.id_liga, 'menu']); }
-  irAPerfil() { this.router.navigate(['/perfil']); }
-
-  mostrarNotificacion(mensaje: string, exito: boolean) {
-    this.notificationMsg = mensaje;
-    this.isSuccess = exito;
-    setTimeout(() => this.notificationMsg = '', 3500);
+  confirmarResetLiga() {
+    this.http.post(`${this.apiBase}/api/ligas/${this.id_liga}/reset`, this.resetOpciones, this.getHeaders())
+      .subscribe({
+        next: (res: any) => {
+          this.mostrarNotificacion(res.message, true);
+          this.mostrarModalReset = false;
+          this.cargarPartidos(); // Volverá a 0
+          this.cargarDatosUsuario(); // Refresca el dinero si se borró
+        },
+        error: () => this.mostrarNotificacion('Error al reiniciar', false)
+      });
   }
 
-  // --- esto es para los partidos su logica ---
-  
-  // Devuelve 'pendiente', 'en_curso' o 'finalizado' calculando el tiempo real
-  // Devuelve 'pendiente', 'en_curso' o 'finalizado'
-  // Devuelve 'pendiente', 'en_curso' o 'finalizado' calculando el tiempo real (ViewModel)
+  // --- LÓGICA DE PARTIDOS EN VIVO Y DETALLES ---
   getEstadoVisual(p: any): string {
     if (!p || !p.fecha_partido) return 'pendiente';
-    
     const ahora = new Date().getTime();
     const inicio = new Date(p.fecha_partido).getTime();
-    const fin = inicio + (60 * 60 * 1000); // El partido dura exactamente 60 minutos
+    const fin = inicio + (70 * 60 * 1000); // 70 MINUTOS (60 juego + 10 descanso)
 
-    // 1. El reloj dice que aún no es la hora
     if (ahora < inicio) return 'pendiente';
-
-    // 2. MAGIA MVVM: Si estamos dentro de los 60 minutos de juego,
-    // forzamos el estado a 'en_curso' (EN VIVO), ignorando si el backend ya simuló el final.
     if (ahora >= inicio && ahora <= fin) return 'en_curso';
-
-    // 3. Si ya pasó más de 1 hora, entonces sí mostramos que ha finalizado
     return 'finalizado';
   }
 
   abrirPartido(p: any) {
     this.partidoSeleccionado = p;
     this.mostrarModalPartido = true;
-    
+    this.tabPartido = 'cronica'; 
     const estado = this.getEstadoVisual(p);
 
-    // Si aún no empieza, no cargamos eventos
     if (estado === 'pendiente') {
        this.eventosVisibles = [];
        this.golesLocalEnVivo = 0;
        this.golesVisitanteEnVivo = 0;
+       this.alineacionesListas = { local: { titulares: [], banquillo: [] }, visitante: { titulares: [], banquillo: [] } };
        return;
     }
 
-    // Pedimos los datos y la línea de tiempo al backend
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/partido/${p.id_partido}`, this.getHeaders())
       .subscribe(res => {
          this.eventosPartido = res.eventos;
+         this.procesarAlineaciones(res.partido.alineaciones, res.jugadores);
          this.actualizarMarcadorEnVivo();
          
-         // Si se está jugando AHORA, activamos un reloj que refresca el minuto cada 10 segundos
          if (estado === 'en_curso') {
             this.intervaloEnVivo = setInterval(() => this.actualizarMarcadorEnVivo(), 10000);
          }
       });
   }
 
+  procesarAlineaciones(alineacionesJson: any, infoJugadores: any[]) {
+    if (!alineacionesJson || !infoJugadores) return;
+    const mapearJugadores = (ids: number[]) => ids.map(id => infoJugadores.find(j => j.id_futbolista === id)).filter(j => !!j);
+    this.alineacionesListas = {
+      local: { titulares: mapearJugadores(alineacionesJson.local.titulares), banquillo: mapearJugadores(alineacionesJson.local.banquillo) },
+      visitante: { titulares: mapearJugadores(alineacionesJson.visitante.titulares), banquillo: mapearJugadores(alineacionesJson.visitante.banquillo) }
+    };
+  }
+
+  cambiarTabPartido(tab: 'cronica' | 'alineaciones') { this.tabPartido = tab; }
+
   actualizarMarcadorEnVivo() {
      if (!this.partidoSeleccionado) return;
      const estado = this.getEstadoVisual(this.partidoSeleccionado);
      
      if (estado === 'finalizado') {
-        this.minutoActual = 60;
+        this.minutoActual = 70; 
         this.eventosVisibles = this.eventosPartido;
         this.golesLocalEnVivo = this.partidoSeleccionado.goles_local;
         this.golesVisitanteEnVivo = this.partidoSeleccionado.goles_visitante;
@@ -255,14 +264,14 @@ export class Calendario implements OnInit {
         const ahora = new Date().getTime();
         const inicio = new Date(this.partidoSeleccionado.fecha_partido).getTime();
         
-        // Calculamos en qué minuto estamos (1 minuto en la vida real = 1 minuto de juego)
         this.minutoActual = Math.floor((ahora - inicio) / 60000);
         if (this.minutoActual < 1) this.minutoActual = 1;
 
-        // Revelamos solo los eventos que ya han pasado hasta este minuto
-        this.eventosVisibles = this.eventosPartido.filter(e => e.minuto <= this.minutoActual);
+        this.eventosVisibles = this.eventosPartido.filter(e => {
+            if (e.minuto === 'HT') return this.minutoActual >= 30;
+            return e.minuto <= this.minutoActual;
+        });
         
-        // Sumamos los goles dinámicamente viendo quién los ha marcado
         this.golesLocalEnVivo = this.eventosVisibles.filter(e => e.tipo_evento === 'gol' && e.equipo_jugador === this.partidoSeleccionado.equipo_local).length;
         this.golesVisitanteEnVivo = this.eventosVisibles.filter(e => e.tipo_evento === 'gol' && e.equipo_jugador === this.partidoSeleccionado.equipo_visitante).length;
      }
@@ -274,5 +283,12 @@ export class Calendario implements OnInit {
     if (this.intervaloEnVivo) clearInterval(this.intervaloEnVivo);
   }
 
-
+  // --- UTILIDADES ---
+  volverAtras() { this.router.navigate(['/ligas', this.id_liga, 'menu']); }
+  irAPerfil() { this.router.navigate(['/perfil']); }
+  formatearDinero(valor: number): string { return new Intl.NumberFormat('es-ES').format(valor); }
+  mostrarNotificacion(mensaje: string, exito: boolean) {
+    this.notificationMsg = mensaje; this.isSuccess = exito;
+    setTimeout(() => this.notificationMsg = '', 3500);
+  }
 }

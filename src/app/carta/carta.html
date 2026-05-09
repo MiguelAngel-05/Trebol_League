@@ -1,4 +1,4 @@
-<div class="card" *ngIf="jugador" [style.background-image]="fondoCarta">
+<div class="card" *ngIf="jugador" [style.background-image]="fondoCarta" [ngClass]="jugador.tipo_carta || 'normal'">
   
   <div class="grl-box">
     <span class="grl-label">GRL</span>

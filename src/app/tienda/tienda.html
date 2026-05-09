@@ -104,13 +104,17 @@
   </section>
   
   } @else if (vistaActual === 'animacion') {
-    <div class="pack-opening-arena" [ngClass]="{'arena-especial': jugadorObtenido?.tipo_carta === 'especial'}">
+    <div class="pack-opening-arena" 
+         [ngClass]="{
+           'arena-especial': jugadorObtenido?.tipo_carta === 'especial',
+           'arena-ultra': jugadorObtenido?.tipo_carta === 'ultra'
+         }">
   
       <div class="flash-bang" [class.active]="flashActivo"></div>
 
       @if (alertaEspecialActiva) {
-        <div class="alerta-especial-container">
-          <h1 class="alerta-titulo">¡ANOMALÍA DETECTADA!</h1>
+        <div class="alerta-especial-container" [ngClass]="jugadorObtenido?.tipo_carta === 'ultra' ? 'alerta-morada' : ''">
+          <h1 class="alerta-titulo">{{ jugadorObtenido?.tipo_carta === 'ultra' ? '¡DIOS DETECTADO!' : '¡ANOMALÍA DETECTADA!' }}</h1>
           <p class="alerta-sub">Sincronizando Habilidad Única...</p>
         </div>
       }
@@ -131,7 +135,11 @@
 
           @if (mostrarMedia) {
             <div class="reveal-item reveal-text" 
-                 [ngClass]="jugadorObtenido?.tipo_carta === 'especial' ? 'glow-orange' : 'glow-gold'" 
+                 [ngClass]="{
+                   'glow-orange': jugadorObtenido?.tipo_carta === 'especial',
+                   'glow-purple': jugadorObtenido?.tipo_carta === 'ultra',
+                   'glow-gold': jugadorObtenido?.tipo_carta === 'normal'
+                 }" 
                  style="animation-delay: 0s;">
               {{ jugadorObtenido.media }}
             </div>
@@ -141,12 +149,14 @@
 
       @if (mostrarCarta) {
         <div class="final-card-container">
-          <div class="confetti">✨ ¡NUEVO JUGADOR! ✨</div>
+          <div class="confetti" [ngClass]="{'ultra-text': jugadorObtenido?.tipo_carta === 'ultra'}">
+            {{ jugadorObtenido?.tipo_carta === 'ultra' ? '👑 ¡LEYENDA DEL TRÉBOL!' : '✨ ¡NUEVO JUGADOR!' }}
+          </div>
           
-          <app-carta [jugador]="jugadorObtenido"></app-carta>
+          <app-carta [jugador]="jugadorObtenido" [class]="jugadorObtenido.tipo_carta"></app-carta>
           
-          @if (jugadorObtenido.tipo_carta === 'especial' && jugadorObtenido.codigo_habilidad) {
-            <div class="habilidad-panel">
+          @if ((jugadorObtenido.tipo_carta === 'especial' || jugadorObtenido.tipo_carta === 'ultra') && jugadorObtenido.codigo_habilidad) {
+            <div class="habilidad-panel" [ngClass]="jugadorObtenido.tipo_carta === 'ultra' ? 'panel-ultra' : ''">
               <h4>✨ {{ getInfoHabilidad(jugadorObtenido.codigo_habilidad)?.nombre }}</h4>
               <p>{{ getInfoHabilidad(jugadorObtenido.codigo_habilidad)?.descripcion }}</p>
             </div>

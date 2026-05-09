@@ -8,7 +8,7 @@
       </div>
       <span class="separator-header">/</span>
       <div class="option-group">
-        <p>{{ dinero | number:'1.0-0':'es-ES' }}</p>
+        <p>{{ formatearDinero(dinero) }}</p>
         <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
       </div>
     </div>
@@ -31,8 +31,12 @@
         </div>
 
         <div class="toolbar-right">
+          <button class="btn-generar" style="background: linear-gradient(135deg, #ff4757, #ff6b81); box-shadow: 0 0 15px rgba(255, 71, 87, 0.4);" *ngIf="miRol === 'owner' && partidos.length > 0" (click)="mostrarModalReset = true">
+            🏁 TERMINAR LIGA
+          </button>
+          
           <button class="btn-generar" *ngIf="miRol === 'owner' && partidos.length === 0" (click)="abrirModalGenerar()">
-            🚀 EMPEZAR LIGA
+            🚀 CONFIGURAR Y EMPEZAR
           </button>
 
           <div class="nav-group">
@@ -43,11 +47,17 @@
         </div>
       </div>
 
-      <div class="no-partidos" *ngIf="partidos.length === 0 && miRol !== 'owner'">
-        El administrador aún no ha generado el calendario de la liga.
+      <div class="no-partidos" *ngIf="partidos.length === 0">
+        <p style="font-size: 1.5rem; color: white;">La liga aún no ha comenzado.</p>
+        <p style="color: #aaa; margin-bottom: 20px;">Participantes actuales en la sala de espera:</p>
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <div *ngFor="let m of participantes" style="background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: #2ed573; font-weight: bold;">
+                @{{ m.username }}
+            </div>
+        </div>
       </div>
 
-      <div class="calendar-wrapper" *ngIf="partidos.length > 0 || miRol === 'owner'">
+      <div class="calendar-wrapper" *ngIf="partidos.length > 0">
         
         <div class="grid-header">
           <div class="day-name" *ngFor="let dia of diasSemana">{{ dia }}</div>
@@ -95,26 +105,78 @@
     <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
   </div>
 
-  <div class="modal-overlay" *ngIf="mostrarModalGenerar" (click)="cerrarModalGenerar()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
+  <div class="modal-overlay" *ngIf="mostrarModalGenerar">
+    <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" style="color: #2ed573;">🚀 Generar Calendario</h2>
-        <span class="close-btn" (click)="cerrarModalGenerar()">&times;</span>
+        <h2 class="modal-title" style="color: #2ed573;">🚀 Configuración Inicial</h2>
       </div>
       
-      <div class="modal-body">
-        <p style="color: #ccc; font-size: 1rem; text-align: center; margin: 10px 0;">
-          ¿Estás seguro? Esto emparejará a todos los equipos y creará la liga completa (Ida y Vuelta).
-          <br><br>
-          <b style="color: #ff4757;">⚠️ Esta acción solo se puede hacer una vez.</b>
+      <div class="modal-body" style="color: white; margin-top: 15px;">
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; color: #aaa; margin-bottom: 5px; font-weight: bold;">Dinero Inicial para Mánagers (Tc)</label>
+          <input type="number" [(ngModel)]="configInicial.dinero" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2ed573; background: rgba(0,0,0,0.5); color: white; font-family: monospace; font-size: 1.1rem; outline: none; box-sizing: border-box;">
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+          <input type="checkbox" id="checkPlantilla" [(ngModel)]="configInicial.darPlantilla" style="width: 20px; height: 20px; cursor: pointer;">
+          <label for="checkPlantilla" style="cursor: pointer; font-weight: bold; flex: 1;">Empezar con Plantilla de 11 jugadores</label>
+        </div>
+        <p style="color: #aaa; font-size: 0.85rem; margin-top: 10px; line-height: 1.4;">
+          El sistema repartirá al azar una alineación equilibrada a todos los mánagers actuales para que no empiecen de cero.
         </p>
       </div>
 
       <div class="modal-footer">
-        <button class="btn-cancelar" (click)="cerrarModalGenerar()">Cancelar</button>
+        <button class="btn-cancelar" (click)="mostrarModalGenerar = false">Cerrar</button>
         <button class="btn-confirmar" (click)="confirmarGenerarCalendario()" [disabled]="isGenerating">
-          <span *ngIf="!isGenerating">Sí, Empezar Liga</span>
-          <span *ngIf="isGenerating">⚽ Generando 38 Jornadas...</span>
+          <span *ngIf="!isGenerating">¡Empezar Liga!</span>
+          <span *ngIf="isGenerating">Generando Temporada...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalReset">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color:#ff4757">🏁 Terminar Temporada</h2>
+      </div>
+      
+      <div class="modal-body" style="color: white; margin-top: 15px;">
+        <p style="margin-bottom: 20px; color: #ccc;">Selecciona qué datos quieres borrar para reiniciar la liga:</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+            <input type="checkbox" id="resCal" [(ngModel)]="resetOpciones.borrarJornadas" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="resCal" style="cursor: pointer; flex: 1;">Borrar Calendario y Resultados</label>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+            <input type="checkbox" id="resPts" [(ngModel)]="resetOpciones.borrarPuntos" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="resPts" style="cursor: pointer; flex: 1;">Resetear Puntos a 0</label>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+            <input type="checkbox" id="resJug" [(ngModel)]="resetOpciones.borrarJugadores" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="resJug" style="cursor: pointer; flex: 1;">Vaciar Plantillas (Jugadores)</label>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+            <input type="checkbox" id="resDin" [(ngModel)]="resetOpciones.borrarDinero" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="resDin" style="cursor: pointer; flex: 1;">Resetear Dinero a 0</label>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+            <input type="checkbox" id="resMsg" [(ngModel)]="resetOpciones.borrarMensajes" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="resMsg" style="cursor: pointer; flex: 1;">Limpiar Chat y Centro de Mensajes</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="mostrarModalReset = false">Cancelar</button>
+        <button class="btn-confirmar" style="background: linear-gradient(135deg, #ff4757, #ff6b81); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);" (click)="confirmarResetLiga()">
+          Ejecutar Reset
         </button>
       </div>
     </div>
@@ -124,7 +186,6 @@
     <div class="modal-content-partido" (click)="$event.stopPropagation()">
       
       <div class="modal-header-partido">
-        
         <div class="team local">{{ partidoSeleccionado.equipo_local }}</div>
         
         <div class="score-board">
@@ -137,7 +198,8 @@
             </div>
             
             <div class="time-status live-status" *ngIf="getEstadoVisual(partidoSeleccionado) === 'en_curso'">
-                Min {{ minutoActual }}' <span class="pulsing-dot-small"></span>
+                <ng-container *ngIf="minutoActual > 30 && minutoActual <= 40">DESCANSO ⏱️</ng-container>
+                <ng-container *ngIf="minutoActual <= 30 || minutoActual > 40">Min {{ minutoActual > 40 ? minutoActual - 10 : minutoActual }}' <span class="pulsing-dot-small"></span></ng-container>
             </div>
             
             <div class="time-status final-status" *ngIf="getEstadoVisual(partidoSeleccionado) === 'finalizado'">
@@ -146,8 +208,12 @@
         </div>
         
         <div class="team visit">{{ partidoSeleccionado.equipo_visitante }}</div>
-        
         <span class="close-btn-partido" (click)="cerrarModalPartido()">&times;</span>
+      </div>
+
+      <div class="modal-tabs" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente'">
+        <button class="tab-btn" [class.active]="tabPartido === 'cronica'" (click)="cambiarTabPartido('cronica')">Crónica</button>
+        <button class="tab-btn" [class.active]="tabPartido === 'alineaciones'" (click)="cambiarTabPartido('alineaciones')">Alineaciones</button>
       </div>
 
       <div class="modal-body-partido">
@@ -156,15 +222,18 @@
             <p>El balón aún no echa a rodar. <br>¡Prepara tus alineaciones y diseña tu estrategia!</p>
          </div>
          
-         <div class="timeline" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente'">
-            <div class="timeline-event" *ngFor="let ev of eventosVisibles" [ngClass]="ev.equipo_jugador === partidoSeleccionado.equipo_local ? 'left' : 'right'">
-               <div class="event-box">
-                  <div class="event-min">{{ ev.minuto }}'</div>
+         <div class="timeline" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente' && tabPartido === 'cronica'">
+            <div class="timeline-event" *ngFor="let ev of eventosVisibles" [ngClass]="ev.equipo_jugador === partidoSeleccionado.equipo_local ? 'left' : (ev.equipo_jugador === partidoSeleccionado.equipo_visitante ? 'right' : 'center')">
+               <div class="event-box" [ngClass]="{'info-box': ev.tipo_evento === 'info'}">
+                  <div class="event-min">{{ ev.minuto === 'HT' ? '45' : ev.minuto }}'</div>
                   <div class="event-details">
                      <div class="event-title">
                         <span *ngIf="ev.tipo_evento === 'gol'">⚽ ¡GOL!</span>
                         <span *ngIf="ev.tipo_evento === 'amarilla'">🟨 Amarilla</span>
                         <span *ngIf="ev.tipo_evento === 'roja'">🟥 Roja</span>
+                        <span *ngIf="ev.tipo_evento === 'lesion'">🚑 Lesión</span>
+                        <span *ngIf="ev.tipo_evento === 'cambio'">🔄 Cambio</span>
+                        <span *ngIf="ev.tipo_evento === 'info'">📢 Info</span>
                      </div>
                      <div class="event-desc">{{ ev.descripcion }}</div>
                   </div>
@@ -174,8 +243,42 @@
                Paseo de la pelota en el centro del campo. Sin eventos destacados por ahora...
             </div>
          </div>
+
+         <div class="alineaciones-container" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente' && tabPartido === 'alineaciones'">
+            
+            <div class="alineacion-col">
+              <h4 class="alineacion-title">Titulares</h4>
+              <div class="jugador-linea" *ngFor="let j of alineacionesListas.local.titulares">
+                <span class="pos-mini" [ngClass]="j.posicion.toLowerCase()">{{ j.posicion }}</span>
+                <span class="jug-nombre" [ngClass]="j.tipo_carta">{{ j.nombre }}</span>
+                <span class="jug-media">{{ j.media }}</span>
+              </div>
+              <h4 class="alineacion-title banq">Banquillo</h4>
+              <div class="jugador-linea suplente" *ngFor="let j of alineacionesListas.local.banquillo">
+                <span class="pos-mini" [ngClass]="j.posicion.toLowerCase()">{{ j.posicion }}</span>
+                <span class="jug-nombre">{{ j.nombre }}</span>
+              </div>
+            </div>
+
+            <div class="alineacion-divider"></div>
+
+            <div class="alineacion-col right-align">
+              <h4 class="alineacion-title">Titulares</h4>
+              <div class="jugador-linea rev" *ngFor="let j of alineacionesListas.visitante.titulares">
+                <span class="jug-media">{{ j.media }}</span>
+                <span class="jug-nombre" [ngClass]="j.tipo_carta">{{ j.nombre }}</span>
+                <span class="pos-mini" [ngClass]="j.posicion.toLowerCase()">{{ j.posicion }}</span>
+              </div>
+              <h4 class="alineacion-title banq">Banquillo</h4>
+              <div class="jugador-linea suplente rev" *ngFor="let j of alineacionesListas.visitante.banquillo">
+                <span class="jug-nombre">{{ j.nombre }}</span>
+                <span class="pos-mini" [ngClass]="j.posicion.toLowerCase()">{{ j.posicion }}</span>
+              </div>
+            </div>
+
+         </div>
+
       </div>
-      
     </div>
   </div>
 

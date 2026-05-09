@@ -21,7 +21,7 @@
         </div>
         <div class="stat-row">
           <span>Media global:</span>
-          <div class="stat-box med">{{ mediaGlobal }}</div>
+          <div class="stat-box med" [ngClass]="{'media-alta': mediaGlobal >= 80}">{{ mediaGlobal }}</div>
         </div>
       </div>
 
@@ -38,7 +38,40 @@
     </aside>
 
     <div class="campo-container">
-      <div class="estadio-bg">
+      <div class="estadio-bg" style="position: relative;">
+        
+        <div class="jugador-12-wrapper">
+          <div class="zona-drop"
+               cdkDropList
+               id="hueco-12"
+               [cdkDropListData]="jugador12"
+               [cdkDropListConnectedTo]="obtenerIdsConectados()"
+               (cdkDropListDropped)="drop($event, 'ANY')">
+            
+            <div class="recuadro-fondo totem-fondo">
+              <span class="etiqueta-pos totem-label">JUGADOR 12</span>
+            </div>
+
+            <div class="carta-titular" *ngFor="let jugador of jugador12" 
+                 cdkDrag [cdkDragData]="jugador"
+                 (contextmenu)="mandarAlBanquillo(jugador, jugador12, $event)"
+                 (dblclick)="mandarAlBanquillo(jugador, jugador12, $event)">
+              
+              <div class="carta-escala-campo">
+                <app-carta [jugador]="jugador" [class]="jugador.tipo_carta"></app-carta>
+              </div>
+              
+              <div *cdkDragPreview>
+                <div class="preview-escala-drag">
+                  <app-carta [jugador]="jugador" [class]="jugador.tipo_carta"></app-carta>
+                </div>
+              </div>
+              
+              <div *cdkDragPlaceholder class="drag-placeholder"></div>
+            </div>
+
+          </div>
+        </div>
         <div class="fila-campo" *ngFor="let fila of filasCampo">
           <div class="hueco-wrapper" *ngFor="let hueco of fila">
             
@@ -57,8 +90,8 @@
 
               <div class="carta-titular" *ngFor="let jugador of hueco.jugadores" 
                    cdkDrag [cdkDragData]="jugador"
-                   (contextmenu)="mandarAlBanquillo(jugador, hueco, $event)"
-                   (dblclick)="mandarAlBanquillo(jugador, hueco, $event)">
+                   (contextmenu)="mandarAlBanquillo(jugador, hueco.jugadores, $event)"
+                   (dblclick)="mandarAlBanquillo(jugador, hueco.jugadores, $event)">
                 
                 <div class="carta-escala-campo">
                   <app-carta [jugador]="jugador" [class]="jugador.tipo_carta"></app-carta>
@@ -76,6 +109,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -85,12 +119,12 @@
       </div>
       
       <div class="banquillo-scroll"
-            cdkDropList
-            id="banquilloList"
-            cdkDropListOrientation="vertical"
-            [cdkDropListData]="banquillo"
-            [cdkDropListConnectedTo]="obtenerIdsConectados()"
-            (cdkDropListDropped)="drop($event)">
+           cdkDropList
+           id="banquilloList"
+           cdkDropListOrientation="vertical"
+           [cdkDropListData]="banquillo"
+           [cdkDropListConnectedTo]="obtenerIdsConectados()"
+           (cdkDropListDropped)="drop($event)">
         
         <div class="carta-reserva" *ngFor="let suplente of banquillo" cdkDrag [cdkDragData]="suplente">
           <div class="carta-escala-banquillo">
@@ -107,7 +141,7 @@
         </div>
 
         <div class="empty-banquillo" *ngIf="banquillo.length === 0">
-          No quedan efectivos en reserva
+          Vacío
         </div>
       </div>
     </aside>
@@ -116,8 +150,8 @@
 
   <div class="modal-overlay" *ngIf="mostrarModalSalir" (click)="cerrarModalSalir()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>⚠️ Cambios pendientes</h2>
-      <p>La estrategia actual no ha sido enviada a la oficina. Si abandonas ahora, se perderán las modificaciones.</p>
+      <h2>⚠️ Cambios sin guardar</h2>
+      <p>Has modificado tu alineación pero no has guardado. Si sales ahora, perderás los cambios.</p>
       <div class="modal-botones">
         <button class="btn-cancelar" (click)="salirSinGuardar()">Salir sin guardar</button>
         <button class="btn-confirmar" (click)="guardarYSalir()">Guardar y Salir</button>
@@ -125,13 +159,9 @@
     </div>
   </div>
 
-  @if (notificationMsg) {
-    <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
-      <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
-      <div class="toast-content">
-        <p class="toast-message">{{ notificationMsg }}</p>
-      </div>
-    </div>
-  }
+  <div class="toast-notification" *ngIf="notificationMsg" [class.success]="isSuccess" [class.error]="!isSuccess">
+    <div class="toast-icon">{{ isSuccess ? '✔' : 'i' }}</div>
+    <div class="toast-content"><p class="toast-message">{{ notificationMsg }}</p></div>
+  </div>
 
 </main>

@@ -12,13 +12,11 @@
         <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
       </div>
     </div>
-
     <div class="header-optionsB bottom-row">
       <div class="option-group icon-hover">
         <img class="pinchar" src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" (click)="volverAtras()">
       </div>
     </div>
-
     <div class="div-img-user" (click)="irAPerfil()">
       <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario" title="Editar Perfil"> 
     </div>
@@ -69,7 +67,6 @@
               </div>
             </div>
           </div>
-
           <div class="card-balance">
             <div class="icon-circle-thick">⏱</div>
             <div class="balance-text">
@@ -133,6 +130,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -141,7 +139,6 @@
       <div class="history-list">
         <div class="history-item" *ngFor="let item of historial">
           <div class="h-icon">{{ !item.comprador ? '🤖' : '🔄' }}</div>
-          
           <div class="h-info">
             <p>
               @if (!item.comprador) {
@@ -149,13 +146,11 @@
               } @else {
                 <strong>{{ item.comprador }}</strong>
               }
-              
               fichó a <strong>{{ item.jugador }}</strong>
             </p>
             <span class="h-price">{{ formatearDinero(item.monto) }} Tc</span>
           </div>
         </div>
-        
         <div *ngIf="historial.length === 0" class="empty-history">
           Sin registros en el libro de cuentas
         </div>
@@ -171,7 +166,7 @@
         <span class="close-btn" (click)="cerrarModales()">&times;</span>
       </div>
       <div class="modal-body">
-        <div class="player-summary">
+        <div class="player-summary" style="margin-bottom: 15px;">
           <div class="team-token large">
             <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="team-img">
           </div>
@@ -183,6 +178,15 @@
             <span class="rating-num">{{ jugadorSeleccionado.media }}</span>
           </div>
         </div>
+        
+        @if (jugadorSeleccionado.tipo_carta === 'especial' || jugadorSeleccionado.tipo_carta === 'ultra') {
+          <button class="btn-habilidad-info" 
+                  [ngClass]="{'btn-ultra': jugadorSeleccionado.tipo_carta === 'ultra'}"
+                  (click)="abrirHabilidad()">
+            VER HABILIDAD ✨
+          </button>
+        }
+
         <div class="input-group">
           <label>Monto de la oferta (Mín: {{ formatearDinero(jugadorSeleccionado.precio) }} Tc)</label>
           <input type="number" [(ngModel)]="ofertaPuja" class="input-puja" placeholder="Tc..." autofocus>
@@ -205,6 +209,27 @@
         <span class="close-btn" (click)="cerrarModales()">&times;</span>
       </div>
       <div class="modal-body">
+        <div class="player-summary" style="margin-bottom: 15px;">
+          <div class="team-token large">
+            <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="team-img">
+          </div>
+          <div class="info-block">
+            <span class="player-name-modal">{{ jugadorSeleccionado.nombre }}</span>
+            <span class="player-team-modal">{{ jugadorSeleccionado.equipo }}</span>
+          </div>
+          <div class="rating-box" [ngClass]="getMediaClass(jugadorSeleccionado.media)">
+            <span class="rating-num">{{ jugadorSeleccionado.media }}</span>
+          </div>
+        </div>
+
+        @if (jugadorSeleccionado.tipo_carta === 'especial' || jugadorSeleccionado.tipo_carta === 'ultra') {
+          <button class="btn-habilidad-info" 
+                  [ngClass]="{'btn-ultra': jugadorSeleccionado.tipo_carta === 'ultra'}"
+                  (click)="abrirHabilidad()">
+            VER HABILIDAD ✨
+          </button>
+        }
+
         <p class="compra-text">¿Confirmas el traspaso de <strong>{{ jugadorSeleccionado.nombre }}</strong> por <strong>{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</strong>?</p>
       </div>
       <div class="modal-footer">
@@ -212,6 +237,20 @@
         <button class="btn-confirmar" (click)="confirmarCompraDirecta()" [disabled]="jugadorSeleccionado.precio > dinero">
           Confirmar Fichaje
         </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay skill-overlay" *ngIf="mostrarModalHabilidad" (click)="cerrarHabilidad()">
+    <div class="modal-content-habilidad" 
+         [ngClass]="{'panel-ultra': jugadorSeleccionado?.tipo_carta === 'ultra'}"
+         (click)="$event.stopPropagation()">
+      <div class="habilidad-header">
+        <h3>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.nombre }}</h3>
+        <span class="close-small" (click)="cerrarHabilidad()">✕</span>
+      </div>
+      <div class="habilidad-body">
+        <p>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.descripcion }}</p>
       </div>
     </div>
   </div>

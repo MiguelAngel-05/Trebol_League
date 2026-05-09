@@ -35,13 +35,10 @@ export function obtenerRutaEscudoGlobal(nombreEquipo: string): string {
 
 export function obtenerImagenJugadorGlobal(nombreJugador: string): string {
   const nombre = nombreJugador || 'Jugador';
-  
   const nombreSeguro = encodeURIComponent(nombre);
-  
   return `https://api.dicebear.com/9.x/micah/svg?seed=${nombreSeguro}&backgroundColor=transparent`;
 }
 
-// el componente carta
 @Component({
   selector: 'app-carta',
   standalone: true, 
@@ -60,7 +57,11 @@ export class CartaComponent {
     return obtenerImagenJugadorGlobal(this.jugador?.nombre); 
   }
 
+  // AQUÍ AÑADIMOS EL FONDO ULTRA
   get fondoCarta() {
+    if (this.jugador?.tipo_carta === 'ultra') {
+      return "url('/Utensilios/Cartas/CartaTL_ultra.webp')"; 
+    }
     if (this.jugador?.tipo_carta === 'especial') {
       return "url('/Utensilios/Cartas/CartaTL_especial.webp')";
     }

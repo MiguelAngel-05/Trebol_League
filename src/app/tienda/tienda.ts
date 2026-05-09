@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { FormsModule } from '@angular/forms';
 import { CartaComponent, obtenerRutaEscudoGlobal } from '../carta/carta';
 import { obtenerInfoHabilidad } from '../models/Habilidades';
 
@@ -20,7 +21,7 @@ interface Sobre {
 @Component({
   selector: 'app-tienda',
   standalone: true,
-  imports: [CommonModule, CartaComponent],
+  imports: [CommonModule, FormsModule, CartaComponent],
   templateUrl: './tienda.html',
   styleUrl: './tienda.css',
 })
@@ -45,54 +46,56 @@ export class Tienda implements OnInit {
 
   alertaEspecialActiva = false; 
 
-  // Control de pestañas de la tienda
   tabActiva: 'normales' | 'posiciones' = 'normales';
-  
-  // El sobre que el usuario tiene pinchado para ver la info a la derecha
   sobreSeleccionado: Sobre | null = null;
 
   getInfoHabilidad(codigo: string) {
     return obtenerInfoHabilidad(codigo);
   }
 
-  // Catálogo de Sobres Normales
+  // --- CATÁLOGOS ---
   sobresNormales: Sobre[] = [
     {
-      id: 'norm_1', nombre: 'Sobre Normal', precio: 10000000,
+      id: 'norm_1', nombre: 'Sobre Normal', precio: 5000000,
       descripcion: 'El sobre clásico de la Trébol League. Contiene 1 jugador aleatorio de cualquier posición y media.',
       contenidoInfo: '1 Jugador Aleatorio', colorBorde: '#2ed573',
       imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     },
     {
-      id: 'norm_2', nombre: 'Sobre Especial', precio: 25000000,
-      descripcion: 'Para los mánagers más exigentes. Más posibilidades de conseguir a las estrellas de la liga.',
-      contenidoInfo: '1 Jugador Aleatorio (Alta Probabilidad)', colorBorde: '#ff9100',
+      id: 'norm_2', nombre: 'Sobre Especial', precio: 20000000,
+      descripcion: 'Para los mánagers más exigentes. Alta probabilidad de conseguir a las estrellas de la liga.',
+      contenidoInfo: '1 Jugador Aleatorio (Especial Posible)', colorBorde: '#ff9100',
       imagen: 'Utensilios/Sobres/SobreTL_especial.webp'
+    },
+    {
+      id: 'norm_3', nombre: 'Sobre ULTRA', precio: 30000000,
+      descripcion: 'El Grial de Isla Trébol. Única forma de conseguir a los 11 Dioses del Real Trébol FC.',
+      contenidoInfo: '1 Jugador TOP (Prob. Ultra: 5%)', colorBorde: '#b145e9',
+      imagen: 'Utensilios/Sobres/SobreTL_ultra.webp'
     }
   ];
 
-  // Catálogo de Sobres por Posición
   sobresPosiciones: Sobre[] = [
     {
-      id: 'pos_dl', nombre: 'Sobre Delantero', precio: 15000000,
+      id: 'pos_dl', nombre: 'Sobre Delantero', precio: 10000000,
       descripcion: '¿Te falta gol? Este sobre garantiza un jugador atacante (DL) para perforar la red rival.',
       contenidoInfo: '1 Jugador (Posición: DL)', colorBorde: '#ff4757', posicion: 'DL',
       imagen: 'Utensilios/Sobres/SobreTL_normal.webp' 
     },
     {
-      id: 'pos_mc', nombre: 'Sobre Medio', precio: 15000000,
+      id: 'pos_mc', nombre: 'Sobre Medio', precio: 10000000,
       descripcion: 'Controla el ritmo del partido. Garantiza un mediocentro (MC) creador o destructor.',
       contenidoInfo: '1 Jugador (Posición: MC)', colorBorde: '#2ed573', posicion: 'MC',
       imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     },
     {
-      id: 'pos_df', nombre: 'Sobre Defensa', precio: 15000000,
+      id: 'pos_df', nombre: 'Sobre Defensa', precio: 10000000,
       descripcion: 'Construye un muro infranqueable. Garantiza un defensa (DF) puro y duro.',
       contenidoInfo: '1 Jugador (Posición: DF)', colorBorde: '#1e90ff', posicion: 'DF',
       imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
     },
     {
-      id: 'pos_pt', nombre: 'Sobre Portero', precio: 15000000,
+      id: 'pos_pt', nombre: 'Sobre Portero', precio: 10000000,
       descripcion: 'Asegura tu portería a cero. Garantiza un guardameta (PT) bajo palos.',
       contenidoInfo: '1 Jugador (Posición: PT)', colorBorde: '#ffa502', posicion: 'PT',
       imagen: 'Utensilios/Sobres/SobreTL_normal.webp'
@@ -106,28 +109,19 @@ export class Tienda implements OnInit {
     }
 
     this.route.paramMap.subscribe(params => {
-      // intentamos como siempre leer el ID de la liga desde la URL
       let id = params.get('id_liga') || params.get('id');
-
       if (!id && this.route.parent) {
         id = this.route.parent.snapshot.paramMap.get('id_liga') || this.route.parent.snapshot.paramMap.get('id');
       }
-
-      // leemos la url
       if (!id) {
         const urlPura = this.router.url.split('/');
         const idEncontrado = urlPura.find(fragmento => fragmento !== '' && !isNaN(Number(fragmento)));
-        if (idEncontrado) {
-          id = idEncontrado;
-        }
+        if (idEncontrado) id = idEncontrado;
       }
 
-      // pedimos el dinero
       if (id) {
         this.id_liga = Number(id);
         this.cargarDatosMios(); 
-      } else {
-        console.error("No pudimos sacar el ID de esta URL:", this.router.url);
       }
     });
 
@@ -150,21 +144,14 @@ export class Tienda implements OnInit {
     else this.seleccionarSobre(this.sobresPosiciones[0]);
   }
 
-  seleccionarSobre(sobre: Sobre) {
-    this.sobreSeleccionado = sobre;
-  }
+  seleccionarSobre(sobre: Sobre) { this.sobreSeleccionado = sobre; }
 
   formatearDinero(valor: number): string {
     return new Intl.NumberFormat('es-ES').format(valor);
   }
 
-  volverAtras() {
-    this.router.navigate(['/ligas', this.id_liga, 'menu']);
-  }
-
-  irAPerfil() {
-    this.router.navigate(['/perfil']);
-  }
+  volverAtras() { this.router.navigate(['/ligas', this.id_liga, 'menu']); }
+  irAPerfil() { this.router.navigate(['/perfil']); }
 
   comprarSobre() {
     if (!this.sobreSeleccionado) return;
@@ -173,7 +160,6 @@ export class Tienda implements OnInit {
       return;
     }
 
-    // desabilitamos la tienda y preparamos la animación
     this.vistaActual = 'animacion'; 
     this.mostrarPosicion = false;
     this.mostrarEscudo = false;
@@ -184,28 +170,19 @@ export class Tienda implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    // depende el sobre una ruta u otra
     let urlEndpoint = '';
     let bodyData = {};
 
     if (this.sobreSeleccionado.id === 'norm_1') {
-      // Es un sobre normal (10 Millones)
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-normal`;
-      
     } else if (this.sobreSeleccionado.id === 'norm_2') {
-      // ¡EL NUEVO SOBRE ESPECIAL! (25 Millones)
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-especial`;
-
+    } else if (this.sobreSeleccionado.id === 'norm_3') {
+      // Endpoint del Sobre Ultra
+      urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-ultra`;
     } else if (this.sobreSeleccionado.posicion) {
-      // es un sobre posicional (15 Millones) y mandamos la posición al backend
       urlEndpoint = `${this.apiBase}/api/ligas/${this.id_liga}/tienda/abrir-posicion`;
       bodyData = { posicion: this.sobreSeleccionado.posicion };
-      
-    } else {
-      // El sobre elite u otro
-      alert('La animación de este sobre llegará en el futuro.');
-      this.vistaActual = 'tienda';
-      return;
     }
 
     this.http.post<any>(urlEndpoint, bodyData, { headers })
@@ -221,20 +198,19 @@ export class Tienda implements OnInit {
       });
   }
 
-  // pasamos el jugador a la bbdd al arrancar
   iniciarAnimacionSobre(jugadorReal: any) {
     this.jugadorObtenido = jugadorReal;
     
+    // Verificamos el tipo para añadir drama
     const esEspecial = this.jugadorObtenido.tipo_carta === 'especial';
+    const esUltra = this.jugadorObtenido.tipo_carta === 'ultra';
+    
     let delayExtra = 0;
 
-    if (esEspecial) {
+    if (esEspecial || esUltra) {
       this.alertaEspecialActiva = true; 
       delayExtra = 3500; 
-      
-      setTimeout(() => { 
-        this.alertaEspecialActiva = false; 
-      }, delayExtra);
+      setTimeout(() => { this.alertaEspecialActiva = false; }, delayExtra);
     }
 
     setTimeout(() => { this.mostrarPosicion = true; }, 2000 + delayExtra);
@@ -254,7 +230,6 @@ export class Tienda implements OnInit {
     }, 9000 + delayExtra);
   }
 
-  // pedimos el escudo a la carta
   getRutaEscudo(equipo: string): string {
     return obtenerRutaEscudoGlobal(equipo);
   }

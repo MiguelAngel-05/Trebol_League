@@ -450,6 +450,32 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
     margin: 0;
 }
 
+/* Botón de habilidad versión Ultra */
+.btn-habilidad-info.btn-ultra {
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    box-shadow: 0 0 15px rgba(177, 69, 233, 0.4);
+}
+.btn-habilidad-info.btn-ultra:hover {
+    box-shadow: 0 0 25px rgba(177, 69, 233, 0.6);
+}
+
+/* Modal de habilidad versión Ultra */
+.modal-content-habilidad.panel-ultra {
+    border-color: #b145e9;
+    box-shadow: 0 0 50px rgba(177, 69, 233, 0.3);
+}
+.modal-content-habilidad.panel-ultra .habilidad-header h3 {
+    color: #d68bff;
+    text-shadow: 0 2px 4px rgba(177, 69, 233, 0.8);
+}
+
+/* Animación del Trébol del loading */
+@keyframes pulseClover {
+    0% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(46, 213, 115, 0.4)); }
+    50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 20px rgba(46, 213, 115, 0.8)); }
+    100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(46, 213, 115, 0.4)); }
+}
+
 @media (max-width: 850px) {
     .detalle-layout { flex-direction: column; text-align: center; }
     .detalle-header { justify-content: center; flex-direction: column; }

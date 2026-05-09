@@ -476,6 +476,38 @@ body {
     filter: drop-shadow(0 0 5px #2ed573);
 }
 
+/* --- BOTÓN Y MODAL DE HABILIDAD --- */
+.btn-habilidad-info {
+    background: linear-gradient(135deg, #ff4500, #ff8c00);
+    border: none; color: white; padding: 12px 20px; border-radius: 10px;
+    font-weight: 800; cursor: pointer; box-shadow: 0 0 15px rgba(255, 69, 0, 0.4); 
+    transition: 0.3s;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+    display: block;
+}
+.btn-habilidad-info:hover { transform: scale(1.02); box-shadow: 0 0 25px rgba(255, 69, 0, 0.6); }
+
+.btn-habilidad-info.btn-ultra {
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    box-shadow: 0 0 15px rgba(177, 69, 233, 0.4);
+}
+.btn-habilidad-info.btn-ultra:hover {
+    box-shadow: 0 0 25px rgba(177, 69, 233, 0.6);
+}
+
+.skill-overlay { background: rgba(0,0,0,0.7) !important; z-index: 100000; }
+.modal-content-habilidad { background: #1a1a1a; border: 2px solid #ff4500; border-radius: 16px; padding: 25px; width: 350px; box-shadow: 0 0 50px rgba(255, 69, 0, 0.3); animation: slideInUp 0.3s ease; }
+.modal-content-habilidad.panel-ultra { border-color: #b145e9; box-shadow: 0 0 50px rgba(177, 69, 233, 0.3); }
+
+.habilidad-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.habilidad-header h3 { color: #ff9100; margin: 0; text-transform: uppercase; font-size: 1.1rem; }
+.modal-content-habilidad.panel-ultra .habilidad-header h3 { color: #d68bff; text-shadow: 0 2px 4px rgba(177, 69, 233, 0.8); }
+
+.close-small { color: #666; cursor: pointer; }
+.habilidad-body p { color: #eee; font-size: 0.95rem; line-height: 1.5; margin: 0; }
+
 @keyframes shineSweep {
     0% { left: -100%; }
     20% { left: 150%; }

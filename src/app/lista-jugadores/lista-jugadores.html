@@ -12,13 +12,11 @@
         <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
       </div>
     </div>
-
     <div class="header-optionsB bottom-row">
       <div class="option-group icon-hover">
         <img class="pinchar" src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" (click)="volverAtras()">
       </div>
     </div>
-    
     <div class="div-img-user" (click)="irAPerfil()">
       <img class="img-user" src="{{user?.avatar}}" alt="imagen de usuario" title="Editar Perfil"> 
     </div>
@@ -32,14 +30,12 @@
           <span class="stat-label">Valor Plantilla</span>
           <span class="stat-value text-green">{{ formatearDinero(valorPlantilla) }} Tc</span>
         </div>
-        
         <div class="stat-card">
           <span class="stat-label">Media Global</span>
           <div class="rating-box-mini" [ngClass]="getMediaClass(mediaPlantilla)">
             {{ mediaPlantilla }}
           </div>
         </div>
-
         <div class="stat-card">
           <span class="stat-label">Jugadores</span>
           <span class="stat-value">{{ totalJugadores }}</span>
@@ -51,7 +47,10 @@
       <div class="list-scroll">
         
         @if (isLoading) {
-          <div class="loading-msg">Cargando la élite de Isla Trébol...</div>
+          <div class="loading-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px; background: rgba(255, 255, 255, 0.03); border-radius: 20px; border: 1px solid rgba(46, 213, 115, 0.1); backdrop-filter: blur(10px); margin-top: 50px;">
+            <div style="font-size: 4rem; margin-bottom: 20px; animation: pulseClover 1.5s infinite;">🍀</div>
+            <h3 style="font-family: 'Arial Black'; color: #2ed573; text-transform: uppercase; letter-spacing: 4px;">Sincronizando...</h3>
+          </div>
         } @else {
           
           <div
@@ -116,7 +115,7 @@
       
       <div class="detalle-layout">
         <div class="detalle-left">
-          <app-carta [jugador]="jugadorSeleccionado"></app-carta>
+          <app-carta [jugador]="jugadorSeleccionado" [class]="jugadorSeleccionado.tipo_carta"></app-carta>
         </div>
 
         <div class="detalle-right">
@@ -129,7 +128,7 @@
           </div>
 
           <div class="detalle-lore">
-            <p>"{{ jugadorSeleccionado.descripcion || 'Este jugador prefiere que sus botas hablen por él. No hay registros de su pasado en la oficina central.' }}"</p>
+            <p>"{{ jugadorSeleccionado.descripcion || 'Este jugador prefiere que sus botas hablen por él.' }}"</p>
           </div>
 
           <div class="detalle-stats-footer">
@@ -138,8 +137,10 @@
               <span class="value">{{ formatearDinero(jugadorSeleccionado.precio) }} Tc</span>
             </div>
 
-            @if (jugadorSeleccionado.tipo_carta === 'especial') {
-              <button class="btn-habilidad-info" (click)="abrirHabilidad()">
+            @if (jugadorSeleccionado.tipo_carta === 'especial' || jugadorSeleccionado.tipo_carta === 'ultra') {
+              <button class="btn-habilidad-info" 
+                      [ngClass]="{'btn-ultra': jugadorSeleccionado.tipo_carta === 'ultra'}"
+                      (click)="abrirHabilidad()">
                 VER HABILIDAD ✨
               </button>
             }
@@ -150,7 +151,9 @@
   </div>
 
   <div class="modal-overlay skill-overlay" *ngIf="mostrarModalHabilidad" (click)="cerrarHabilidad()">
-    <div class="modal-content-habilidad" (click)="$event.stopPropagation()">
+    <div class="modal-content-habilidad" 
+         [ngClass]="{'panel-ultra': jugadorSeleccionado?.tipo_carta === 'ultra'}"
+         (click)="$event.stopPropagation()">
       <div class="habilidad-header">
         <h3>{{ getInfoHabilidad(jugadorSeleccionado?.codigo_habilidad)?.nombre }}</h3>
         <span class="close-small" (click)="cerrarHabilidad()">✕</span>

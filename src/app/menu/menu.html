@@ -37,7 +37,10 @@
         
         <div class="home-card plantilla glass-panel" (click)="irAPlantilla()">
             <div class="panel-header">
-                <h2 class="plantilla-title">Mi Plantilla</h2>
+                <div class="text-block">
+                    <h2 class="plantilla-title">Mi Plantilla</h2>
+                    <p class="card-subtitle">Gestiona tu 11 titular y tácticas</p>
+                </div>
                 <div class="badge-plantilla">11 Titulares</div>
             </div>
             <div class="campo-futbol">
@@ -47,27 +50,34 @@
 
         <div class="home-card mercado" (click)="irAMercado()">
             <div class="card-overlay"></div>
-            <p class="p-card">MERCADO</p> 
+            <div class="card-content">
+                <p class="p-card">MERCADO</p> 
+                <p class="card-desc">Fichajes y ventas</p>
+            </div>
         </div>
         
         <div class="home-card calendario" (click)="irACalendario()">
             <div class="card-overlay"></div>
-            <p class="p-card">CALENDARIO</p> 
+            <div class="card-content">
+                <p class="p-card">CALENDARIO</p> 
+                <p class="card-desc">Próximos partidos</p>
+            </div>
         </div>
         
         <div class="home-card clasificacion" (click)="irAClasificacion()">
             <div class="card-overlay"></div>
-            <p class="p-card">CLASIFICACIÓN</p>
+            <div class="card-content">
+                <p class="p-card">DATOS</p>
+                <p class="card-desc">Ranking y Estadísticas</p>
+            </div>
         </div>
         
         <div class="home-card jugadores" (click)="irAListaJugadores()">
             <div class="card-overlay"></div>
-            <p class="p-card">JUGADORES</p>
-        </div>
-
-        <div class="home-card puntos" (click)="irAPuntos()">
-            <div class="card-overlay"></div>
-            <p class="p-card">PUNTOS</p>
+            <div class="card-content">
+                <p class="p-card">CARTAS</p>
+                <p class="card-desc">Directorio de liga</p>
+            </div>
         </div>
 
     </section>
@@ -75,7 +85,7 @@
     @if (notificationMsg) {
         <div class="toast-notification" [class.success]="isSuccess" [class.error]="!isSuccess">
             <div class="toast-icon">
-                {{ isSuccess ? '✔' : 'i' }}
+                {{ isSuccess ? '✔' : '⚠️' }}
             </div>
             <div class="toast-content">
                 <p class="toast-title">{{ isSuccess ? '¡Vamos!' : 'Ups...' }}</p>

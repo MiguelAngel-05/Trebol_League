@@ -1,4 +1,8 @@
 export const DICCIONARIO_HABILIDADES: { [key: string]: { nombre: string, descripcion: string } } = {
+  // ============================
+  // 🔥 HABILIDADES ESPECIALES
+  // ============================
+
   // Ofensivas
   'HabEspecial_Francotirador': { nombre: 'Francotirador', descripcion: 'Cada gol que marque este jugador le otorga el doble de puntos de lo normal. Pura pólvora.' },
   'HabEspecial_Egoista': { nombre: 'Egoísta', descripcion: 'Si es el único que marca goles para su equipo en ese partido, se lleva un bonus bestial de +10 puntos.' },
@@ -27,8 +31,58 @@ export const DICCIONARIO_HABILIDADES: { [key: string]: { nombre: string, descrip
   'HabEspecial_Matagigantes': { nombre: 'Matagigantes', descripcion: 'Si el equipo rival tiene más media, recibe +5 puntos extra si logran empatar o ganar.' },
   'HabEspecial_EfectoSombra': { nombre: 'Efecto Sombra', descripcion: 'Si el mejor jugador del equipo contrario no marca gol, este jugador suma +4 puntos.' },
   
-  // Habilidades Únicas
-  'HabEspecial_MotoChacon': { nombre: 'Moto Chacón', descripcion: 'Si llegan al descanso empatando o perdiendo, su ataque sube x1.5. El gol de la remontada le da +10 puntos.' }
+  // Habilidades Únicas (Ejemplo Chacón)
+  'HabEspecial_MotoChacon': { nombre: 'Moto Chacón', descripcion: 'Si llegan al descanso empatando o perdiendo, su ataque sube x1.5. El gol de la remontada le da +10 puntos.' },
+
+
+  // ============================
+  // 👑 HABILIDADES ULTRA (El Jugador 12 / Bufos Globales)
+  // ============================
+
+  'HabUltra_Trebolin': { 
+    nombre: 'Muro de la Cumbre', 
+    descripcion: 'El Guardián bendice tu área. Aumenta las estadísticas de tus DF y PT en un 20%. Tu equipo es inmune a la resta de puntos por goles encajados.' 
+  },
+  'HabUltra_Wade': { 
+    nombre: 'Aura del Capitán', 
+    descripcion: 'Yeremy impone su ley desde el banquillo. Otorga un +10% a TODAS las estadísticas. Además, anula la primera tarjeta roja que reciba tu equipo.' 
+  },
+  'HabUltra_Cuestarriba': { 
+    nombre: 'Pulmones de Piedra', 
+    descripcion: 'En los últimos 30 minutos de partido, tu equipo recibe un +25% extra en Defensa y Medio, evitando esos temidos goles en contra al final.' 
+  },
+  'HabUltra_Evil': { 
+    nombre: 'Furia Desatada', 
+    descripcion: 'El Caos. Reduce las estadísticas del equipo contrario en un 10%. Si vas perdiendo al descanso, tus Delanteros reciben un modo "Berserker" (+30% Ataque).' 
+  },
+  'HabUltra_Forti': { 
+    nombre: 'Táctica Omnisciente', 
+    descripcion: 'La Mente Maestra dirige. Los pases de tus MC no fallan. Si juegas contra Carlos Chacón, el salseo multiplica tus stats globales un +15%.' 
+  },
+  'HabUltra_Modric': { 
+    nombre: 'Pausa Zen', 
+    descripcion: 'Reduce la posesión del equipo contrario a la mitad, limitando sus ocasiones. Tus centrocampistas (MC) ganan un +20% en Pase y Ataque.' 
+  },
+  'HabUltra_Chemin': { 
+    nombre: 'Alquimia Pura', 
+    descripcion: 'Convierte el 50% de los tiros fallados por tus Delanteros en "Segundas Oportunidades" letales. +15% a todas las stats ofensivas.' 
+  },
+  'HabUltra_BlueBird': { 
+    nombre: 'Viento del Norte', 
+    descripcion: 'Invalida el fuera de juego rival. Tus Medios y Delanteros son inalcanzables al contraataque, asegurando al menos 2 goles por partido.' 
+  },
+  'HabUltra_Falcao': { 
+    nombre: 'Instinto Depredador', 
+    descripcion: 'Dominio absoluto de los cielos. Ganas el 100% de los duelos aéreos. Cada córner a tu favor tiene un 80% de probabilidades de ser gol.' 
+  },
+  'HabUltra_Esnaiper': { 
+    nombre: 'Puntería Divina', 
+    descripcion: 'Aumenta el Ataque de tus Delanteros en un 35%. Si un delantero tuyo tira a puerta, es gol automático sin importar el portero rival.' 
+  },
+  'HabUltra_Churumbel': { 
+    nombre: 'Magia Callejera', 
+    descripcion: 'La Defensa del equipo contrario se reduce un 25% por humillación de regates. Otorga un bonus de +5 Puntos Fantasy por "Espectáculo".' 
+  }
 };
 
 export function obtenerInfoHabilidad(codigo: string) {

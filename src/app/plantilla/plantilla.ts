@@ -32,6 +32,7 @@ export class Plantilla implements OnInit {
   
   filasCampo: { posicion: string, idDrop: string, jugadores: any[] }[][] = [];
   banquillo: any[] = [];
+  jugador12: any[] = []; // <--- EL HUECO DEL TÓTEM (JUGADOR 12)
   todosMisJugadores: any[] = [];
 
   valorTotal: number = 0;
@@ -64,7 +65,6 @@ export class Plantilla implements OnInit {
 
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/datos-usuario`, { headers })
       .subscribe(userData => {
-        // leemos de la bbdd
         if (userData.formacion && this.opcionesFormacion.includes(userData.formacion)) {
           this.formacionSeleccionada = userData.formacion;
         }
@@ -83,17 +83,25 @@ export class Plantilla implements OnInit {
     const molde = MAPA_FORMACIONES[this.formacionSeleccionada];
     this.filasCampo = [];
     this.banquillo = [];
+    this.jugador12 = [];
 
     let jugadoresDisponibles = [...this.todosMisJugadores];
-    let contadorHueco = 0;
 
+    // 1. ASIGNAR EL JUGADOR 12 PRIMERO
+    const indexJ12 = jugadoresDisponibles.findIndex(j => j.es_titular && j.hueco_plantilla === 'hueco-12');
+    if (indexJ12 !== -1) {
+      this.jugador12.push(jugadoresDisponibles[indexJ12]);
+      jugadoresDisponibles.splice(indexJ12, 1);
+    }
+
+    // 2. ASIGNAR EL RESTO AL CAMPO
+    let contadorHueco = 0;
     for (const fila of molde) {
       let filaGenerada = [];
       for (const pos of fila) {
         contadorHueco++;
         const idDropActual = `hueco-${contadorHueco}`;
         
-        // buscamos el hueco en la bbdd
         const indexTitular = jugadoresDisponibles.findIndex(j => j.es_titular && j.hueco_plantilla === idDropActual);
         
         let ocupante = [];
@@ -116,7 +124,13 @@ export class Plantilla implements OnInit {
 
   cambiarFormacion(nuevaFormacion: string) {
     this.formacionSeleccionada = nuevaFormacion;
-    this.todosMisJugadores.forEach(j => { j.es_titular = false; j.hueco_plantilla = null; });
+    this.todosMisJugadores.forEach(j => { 
+      // Si el jugador es el J12, NO lo reseteamos al cambiar de formación
+      if (j.hueco_plantilla !== 'hueco-12') {
+        j.es_titular = false; 
+        j.hueco_plantilla = null; 
+      }
+    });
     this.generarCampo();
     this.cambiosSinGuardar = true;
   }
@@ -127,22 +141,31 @@ export class Plantilla implements OnInit {
     } else {
       const jugadorArrastrado = event.item.data;
 
-      if (posicionHueco) {
+      // 1. RESTRICCIÓN PARA EL JUGADOR 12 (Solo ULTRAS)
+      if (posicionHueco === 'ANY') {
+        if (jugadorArrastrado.tipo_carta !== 'ultra') {
+          this.mostrarNotificacion('¡Solo las leyendas ULTRA pueden ocupar el pedestal del Jugador 12!', false);
+          return;
+        }
+      } 
+      // 2. RESTRICCIÓN PARA EL CAMPO NORMAL
+      else if (posicionHueco) {
         if (jugadorArrastrado.posicion !== posicionHueco) {
           this.mostrarNotificacion(`¡Ese jugador es ${jugadorArrastrado.posicion}, no puede jugar de ${posicionHueco}!`, false);
           return;
         }
+      }
+
+      // Lógica de Swap si el hueco ya está ocupado
+      if (event.container.data.length >= 1) {
+        const jugadorDesplazado = event.container.data[0];
+        event.previousContainer.data.splice(event.previousIndex, 1);
+        event.container.data.splice(0, 1, jugadorArrastrado);
+        event.previousContainer.data.splice(event.previousIndex, 0, jugadorDesplazado);
         
-        if (event.container.data.length >= 1) {
-          const jugadorDesplazado = event.container.data[0];
-          event.previousContainer.data.splice(event.previousIndex, 1);
-          event.container.data.splice(0, 1, jugadorArrastrado);
-          event.previousContainer.data.splice(event.previousIndex, 0, jugadorDesplazado);
-          
-          this.cambiosSinGuardar = true;
-          this.calcularEstadisticas();
-          return; 
-        }
+        this.cambiosSinGuardar = true;
+        this.calcularEstadisticas();
+        return; 
       }
 
       transferArrayItem(
@@ -157,11 +180,11 @@ export class Plantilla implements OnInit {
     }
   }
 
-  mandarAlBanquillo(jugador: any, hueco: any, event: Event) {
+  mandarAlBanquillo(jugador: any, arrayOrigen: any[], event: Event) {
     event.preventDefault(); 
-    const index = hueco.jugadores.indexOf(jugador);
+    const index = arrayOrigen.indexOf(jugador);
     if (index > -1) {
-      hueco.jugadores.splice(index, 1); 
+      arrayOrigen.splice(index, 1); 
       this.banquillo.unshift(jugador);  
       this.cambiosSinGuardar = true;
       this.calcularEstadisticas();
@@ -170,7 +193,7 @@ export class Plantilla implements OnInit {
   }
 
   obtenerIdsConectados(): string[] {
-    let ids = ['banquilloList'];
+    let ids = ['banquilloList', 'hueco-12']; // <--- Añadimos el hueco 12 a la conexión
     for (const fila of this.filasCampo) {
       for (const hueco of fila) {
         ids.push(hueco.idDrop);
@@ -180,8 +203,9 @@ export class Plantilla implements OnInit {
   }
 
   guardarPlantilla() {
-    // recogemis el id del jugador y en que hueco exacto esta
     const titularesData: any[] = [];
+    
+    // 1. Guardar Jugadores de campo
     for (const fila of this.filasCampo) {
       for (const hueco of fila) {
         if (hueco.jugadores.length > 0) {
@@ -191,6 +215,14 @@ export class Plantilla implements OnInit {
           });
         }
       }
+    }
+
+    // 2. Guardar al Jugador 12
+    if (this.jugador12.length > 0) {
+      titularesData.push({
+        id: this.jugador12[0].id_futbolista,
+        hueco: 'hueco-12'
+      });
     }
 
     if (titularesData.length < 11 && this.banquillo.length > 0) {
@@ -257,6 +289,14 @@ export class Plantilla implements OnInit {
         }
       }
     }
+
+    // El Jugador 12 suma valor de plantilla y media global al equipo
+    if (this.jugador12.length > 0) {
+      sumaMedias += this.jugador12[0].media;
+      sumaPrecio += Number(this.jugador12[0].precio);
+      totalTitulares++;
+    }
+
     this.valorTotal = sumaPrecio;
     this.mediaGlobal = totalTitulares > 0 ? Math.round(sumaMedias / totalTitulares) : 0;
   }
