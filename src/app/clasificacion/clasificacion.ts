@@ -60,6 +60,10 @@ export class Clasificacion implements OnInit {
   private http = inject(HttpClient);
   private apiBase = 'https://api-trebol-league.vercel.app';
 
+  tabClubActiva: 'plantilla' | 'noticias' | 'partido' = 'plantilla';
+  clubNoticias: any[] = [];
+  clubUltimoPartido: any = null;
+
   ngOnInit() {
     this.id_liga = Number(this.route.snapshot.paramMap.get('idLiga'));
     const token = localStorage.getItem('token');
@@ -163,36 +167,40 @@ export class Clasificacion implements OnInit {
   abrirModalClub(club: any) {
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/club/${club.equipo}`, this.getHeaders())
       .subscribe(res => {
-        
-        // Diccionario completo con el lore de los 20 equipos
-        const lores: { [key: string]: string } = {
-          'Real Pinar FC': 'Los reyes del bosque. Su fútbol es elegante, preciso y letal como la naturaleza misma.',
-          'Athletic Hullera': 'Mineros incansables. Su defensa es un muro de piedra inquebrantable forjado en las profundidades.',
-          'Club Náutico Brisamar': 'Dominan las mareas del partido. Un equipo fresco, táctico y con una afición incondicional.',
-          'Racing Vaguadas': 'Pura garra y resistencia. Especialistas en remontadas imposibles cuando el barro llega a las rodillas.',
-          'Motor Club Chacón': 'Velocidad, gasolina y rock n roll. Sus contraataques son un rugido de motores inalcanzables.',
-          'Unión Fortaleza': 'Disciplina militar y orden táctico. La pesadilla de cualquier delantero centro.',
-          'CD Frontera': 'El equipo de los exiliados. Juegan cada partido como si fuera una batalla por la supervivencia.',
-          'Sporting Lechuza': 'Sigilosos y nocturnos. Golpean cuando el rival menos se lo espera, amos de la posesión.',
-          'CF Átomo': 'Fútbol científico y calculador. Sus jugadas parecen de laboratorio, pura precisión.',
-          'Deportivo Relámpago': 'El equipo del pueblo. Famosos por su juego eléctrico que levanta a las gradas en segundos.',
-          'CD Refugio': 'Un bastión infranqueable en casa. Ningún visitante ha logrado ganarles fácilmente en su feudo.',
-          'Dragones de Oriente': 'Fuego y pasión. Su estilo agresivo e intimidante los hace temibles desde el primer minuto.',
-          'UD Recreo': 'Talento puro y descaro juvenil. Juegan al fútbol divirtiéndose y eso destroza las tácticas rivales.',
-          'Alianza Metropolitana': 'Los señoritos de la ciudad. Tienen un presupuesto modesto pero juegan como gigantes.',
-          'Neón City FC': 'El futuro del fútbol. Su estadio brilla tanto como su estilo de juego moderno y vertical.',
-          'Pixel United': 'Fútbol arcade y nostálgico. Un equipo impredecible que siempre guarda un truco bajo la manga.',
-          'Gourmet FC': 'Sibaritas del balón. Solo entienden el fútbol si es con pases exquisitos y jugadas de salón.',
-          'Titanes CF': 'Colosos físicamente. Dominan el juego aéreo y el contacto cuerpo a cuerpo sin piedad.',
-          'Pangea FC': 'Una plantilla unida como un solo continente. Solidaridad defensiva y espíritu inquebrantable.',
-          'Cosmos United': 'Galácticos por naturaleza. Siempre intentan jugadas de otra dimensión que desafían la gravedad.',
-          'Real Trébol FC': 'Los Dioses fundadores de la liga. La leyenda cuenta que son invencibles bajo su propio cielo.'
-        };
-
-        const loreAsignado = lores[club.equipo] || 'Un club histórico de Isla Trébol con una afición muy fiel y pasional.';
-
-        this.clubSeleccionado = { ...club, lore: loreAsignado, plantilla: res.plantilla };
+        this.clubSeleccionado = { ...res, lore: res.lore };
         this.calcularEstadisticas(res.plantilla);
+        
+        this.tabClubActiva = 'plantilla';
+        this.clubNoticias = res.noticias || [];
+        this.clubUltimoPartido = null;
+
+        if (res.ultimo_partido) {
+            const isLocal = res.ultimo_partido.equipo_local === club.equipo;
+            const alineacionObj = isLocal ? res.ultimo_partido.alineaciones?.local : res.ultimo_partido.alineaciones?.visitante;
+            
+            // TITULARES: Todos juegan, les ponemos su nota.
+            const titulares = (alineacionObj?.titulares || []).map((id: number) => {
+               const j = res.plantilla.find((x:any) => x.id_futbolista === id);
+               return j ? { ...j, nota_partido: j.forma_actual } : null;
+            }).filter((x:any)=>x);
+
+            // BANQUILLO: Miramos si entraron al campo buscando un evento 'cambio' con su ID.
+            const banquillo = (alineacionObj?.banquillo || []).map((id: number) => {
+               const j = res.plantilla.find((x:any) => x.id_futbolista === id);
+               if (!j) return null;
+               
+               // ¿Entró en el partido?
+               const jugo = res.ultimo_partido.eventos.some((e:any) => e.tipo_evento === 'cambio' && e.id_futbolista === id);
+               return { ...j, nota_partido: jugo ? j.forma_actual : '-' }; // Si jugó, nota. Si no, "-"
+            }).filter((x:any)=>x);
+
+            this.clubUltimoPartido = {
+                ...res.ultimo_partido,
+                titulares: titulares,
+                banquillo: banquillo
+            };
+        }
+
         this.mostrarModalClub = true;
       });
   }
@@ -272,6 +280,12 @@ export class Clasificacion implements OnInit {
       'Pangea FC': 'pangea_fc.webp', 'Cosmos United': 'cosmos_united.webp', 'Real Trébol FC': 'real_trebol.webp'
     };
     return mapeo[nombreEquipo] ? `/Utensilios/Escudos/${mapeo[nombreEquipo]}` : '/Utensilios/Escudos/escudo_default.webp';
+  }
+
+  get bajasActuales(): any[] {
+    if (!this.clubSeleccionado || !this.clubSeleccionado.plantilla) return [];
+    // Filtramos los que tengan más de 0 partidos de sanción o lesión
+    return this.clubSeleccionado.plantilla.filter((j: any) => j.partidos_lesion > 0 || j.partidos_sancion > 0);
   }
 
   formatearDinero(valor: number): string { return new Intl.NumberFormat('es-ES').format(valor); }
