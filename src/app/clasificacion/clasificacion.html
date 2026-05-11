@@ -38,7 +38,7 @@
         <button class="m-tab" [class.active]="tabActiva === 'general'" (click)="cambiarTab('general')">Clasificación</button>
         <button class="m-tab" [class.active]="tabActiva === 'jornada_ranking'" (click)="cambiarTab('jornada_ranking')">Ranking Jornada</button>
         <button class="m-tab" [class.active]="tabActiva === 'mis_puntos'" (click)="cambiarTab('mis_puntos')">Alineaciones</button>
-        <button class="m-tab" [class.active]="tabActiva === 'clubes'" (click)="cambiarTab('clubes')">Clubes (IA)</button>
+        <button class="m-tab" [class.active]="tabActiva === 'clubes'" (click)="cambiarTab('clubes')">Clasificación Clubes</button>
       </nav>
 
       <div class="m-content fade-in" *ngIf="tabActiva === 'general'">
@@ -81,6 +81,7 @@
       </div>
 
       <div class="m-content fade-in" *ngIf="tabActiva === 'jornada_ranking'">
+        
         <div class="jornada-dashboard">
           <div class="filters-group">
             <div class="custom-select-wrapper">
@@ -89,28 +90,49 @@
               </select>
             </div>
           </div>
-          <div class="score-display">
-            <span class="score-label">PREMIOS EN JUEGO</span>
-            <span class="score-value" style="font-size: 1.5rem; color:#ffd700;">Próximamente...</span>
+          <div class="score-display" *ngIf="!jornadaNoEmpezada">
+            <span class="score-label">BOTE TOTAL REPARTIDO</span>
+            <span class="score-value" style="font-size: 2rem; color:#ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.3);">
+              {{ formatearDinero(totalPremiosJornada) }} <span style="font-size: 1rem; color: #ccc;">Tc</span>
+            </span>
           </div>
         </div>
 
         <div class="modern-list-container">
-            @for (jugador of clasificacionJornada; track jugador.id; let i = $index) {
-              <div class="user-row" [style.animation-delay]="i * 0.1 + 's'" [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
-                <div class="rank-badge">{{ i + 1 }}</div>
-                <div class="user-info">
-                  <div class="avatar-container"><img [src]="jugador.avatar" class="user-avatar"></div>
-                  <span class="username">{{ jugador.username }}</span>
-                </div>
-                <div class="points-section">
-                  <div class="points-box">
-                    <span class="pts-value">{{ jugador.puntos_jornada }}</span>
-                    <span class="pts-label">PTS (J{{ jornadaSeleccionada }})</span>
+            
+            <div class="empty-state" *ngIf="jornadaNoEmpezada" style="padding: 60px 20px; text-align: center; background: rgba(0,0,0,0.3); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.05); margin-top: 10px;">
+              <span class="empty-icon" style="font-size: 4rem; filter: grayscale(0.5); display: block; margin-bottom: 20px;">⏱️</span>
+              <h3 style="color: white; font-size: 1.5rem; margin: 0 0 10px 0;">Calentando motores...</h3>
+              <p style="color: #aaa; font-size: 1rem; margin: 0;">La Jornada {{ jornadaSeleccionada }} aún no ha comenzado.</p>
+              <p style="color: #7a8c82; font-size: 0.9rem; margin-top: 10px;">Los puntos y los premios aparecerán aquí en cuanto pite el árbitro.</p>
+            </div>
+
+            <ng-container *ngIf="!jornadaNoEmpezada">
+              @for (jugador of clasificacionJornada; track jugador.id; let i = $index) {
+                <div class="user-row" [style.animation-delay]="i * 0.1 + 's'" [ngClass]="{'top-1': i === 0, 'top-2': i === 1, 'top-3': i === 2}">
+                  <div class="rank-badge">{{ i + 1 }}</div>
+                  
+                  <div class="user-info">
+                    <div class="avatar-container"><img [src]="jugador.avatar" class="user-avatar"></div>
+                    <span class="username">{{ jugador.username }}</span>
                   </div>
+                  
+                  <div class="points-section" style="display: flex; gap: 20px; align-items: center;">
+                    <div class="money-box">
+                      <span class="money-value" style="color: #2ed573; font-size: 1.2rem; font-weight: 800; text-shadow: 0 0 5px rgba(46,213,115,0.4);">
+                        +{{ formatearDinero(calcularPremioJornada(i, jugador.puntos_jornada)) }} <span class="currency">Tc</span>
+                      </span>
+                    </div>
+                    <div class="points-box">
+                      <span class="pts-value">{{ jugador.puntos_jornada }}</span>
+                      <span class="pts-label">PTS (J{{ jornadaSeleccionada }})</span>
+                    </div>
+                  </div>
+
                 </div>
-              </div>
-            }
+              }
+            </ng-container>
+            
         </div>
       </div>
 

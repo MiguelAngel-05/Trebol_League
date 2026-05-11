@@ -129,6 +129,36 @@ export class Clasificacion implements OnInit {
     this.buscarRankingJornada();
   }
 
+  // Calcula el premio individual replicando la lógica exacta de tu Backend
+  calcularPremioJornada(posicion: number, puntos: number): number {
+    let premio = (Number(puntos) || 0) * 100000; // 100.000 Tc por cada punto
+
+    // Bonus por subir al podio
+    if (posicion === 0) premio += 5000000;      // 1º: +5 Millones
+    else if (posicion === 1) premio += 3000000; // 2º: +3 Millones
+    else if (posicion === 2) premio += 1500000; // 3º: +1.5 Millón
+
+    return premio;
+  }
+
+  // Calcula la suma total de dinero que se va a repartir (o se ha repartido) en toda la jornada
+  get totalPremiosJornada(): number {
+    if (!this.clasificacionJornada || this.clasificacionJornada.length === 0) return 0;
+    
+    return this.clasificacionJornada.reduce((suma, jugador, index) => {
+      return suma + this.calcularPremioJornada(index, jugador.puntos_jornada);
+    }, 0);
+  }
+
+  // Comprueba si la jornada no ha empezado (nadie ha puntuado todavía)
+  get jornadaNoEmpezada(): boolean {
+    if (!this.clasificacionJornada || this.clasificacionJornada.length === 0) return true;
+    
+    // Sumamos los puntos de todos. Si el total es 0, es que no ha empezado.
+    const sumaTotalPuntos = this.clasificacionJornada.reduce((suma, j) => suma + Number(j.puntos_jornada || 0), 0);
+    return sumaTotalPuntos === 0;
+  }
+
   // --- MODAL CLUBES DE LA IA ---
   abrirModalClub(club: any) {
     this.http.get<any>(`${this.apiBase}/api/ligas/${this.id_liga}/club/${club.equipo}`, this.getHeaders())
