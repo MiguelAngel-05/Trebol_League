@@ -272,8 +272,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: clamp(6px, 1vh, 14px);
-  padding: 118px 72px 106px;
+  gap: clamp(5px, 0.8vh, 11px);
+  padding: 104px 50px 94px;
   box-sizing: border-box;
   overflow: hidden;
   background-image:
@@ -301,7 +301,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 1.05vw, 18px);
+  gap: clamp(3px, 0.45vw, 7px);
 }
 
 .hueco-wrapper {
@@ -318,19 +318,19 @@
 
 .zona-drop {
   position: relative;
-  width: 96px;
-  height: 138px;
+  width: 116px;
+  height: 166px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 96px;
+  flex: 0 0 116px;
 }
 
 .recuadro-fondo {
   position: absolute;
   inset: 0;
   border: 2px dashed rgba(255, 255, 255, 0.25);
-  border-radius: 15px;
+  border-radius: 16px;
   background: rgba(0, 0, 0, 0.17);
   box-shadow:
     inset 0 0 16px rgba(0, 0, 0, 0.24),
@@ -385,17 +385,17 @@
 
 /* =========================================================
    PLANTILLA — CARTAS EN CAMPO
-   Cartas más grandes, pero contenidas dentro del hueco
+   Titulares más grandes
    ========================================================= */
 
 .carta-titular {
   position: relative;
   z-index: 4;
-  width: 90px;
-  height: 130px;
+  width: 108px;
+  height: 156px;
   cursor: grab;
   touch-action: none;
-  flex: 0 0 90px;
+  flex: 0 0 108px;
 }
 
 .carta-titular:active {
@@ -408,13 +408,13 @@
   top: 50%;
   width: 360px;
   height: 540px;
-  transform: translate(-50%, -50%) scale(0.238);
+  transform: translate(-50%, -50%) scale(0.295);
   transform-origin: center;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .carta-titular:hover .carta-escala-campo {
-  transform: translate(-50%, -50%) scale(0.255);
+  transform: translate(-50%, -50%) scale(0.315);
   z-index: 30;
 }
 
@@ -424,29 +424,29 @@
 
 .jugador-12-wrapper {
   position: absolute;
-  top: 26px;
-  left: 30px;
+  top: 22px;
+  left: 24px;
   z-index: 15;
 }
 
 .jugador-12-wrapper .zona-drop {
-  width: 82px;
-  height: 118px;
-  flex-basis: 82px;
+  width: 98px;
+  height: 142px;
+  flex-basis: 98px;
 }
 
 .jugador-12-wrapper .carta-titular {
-  width: 76px;
-  height: 110px;
-  flex-basis: 76px;
+  width: 92px;
+  height: 134px;
+  flex-basis: 92px;
 }
 
 .jugador-12-wrapper .carta-escala-campo {
-  transform: translate(-50%, -50%) scale(0.205);
+  transform: translate(-50%, -50%) scale(0.255);
 }
 
 .jugador-12-wrapper .carta-titular:hover .carta-escala-campo {
-  transform: translate(-50%, -50%) scale(0.222);
+  transform: translate(-50%, -50%) scale(0.275);
 }
 
 .totem-fondo {
@@ -517,9 +517,9 @@
 
 .carta-reserva {
   position: relative;
-  width: 76px;
-  height: 112px;
-  flex: 0 0 112px;
+  width: 108px;
+  height: 156px;
+  flex: 0 0 156px;
   cursor: grab;
   touch-action: none;
 }
@@ -534,13 +534,13 @@
   top: 50%;
   width: 360px;
   height: 540px;
-  transform: translate(-50%, -50%) scale(0.207);
+  transform: translate(-50%, -50%) scale(0.295);
   transform-origin: center;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .carta-reserva:hover .carta-escala-banquillo {
-  transform: translate(-50%, -50%) scale(0.225);
+  transform: translate(-50%, -50%) scale(0.315);
 }
 
 .empty-banquillo {
@@ -565,19 +565,19 @@
 }
 
 .drag-placeholder {
-  width: 96px;
-  height: 138px;
+  width: 116px;
+  height: 166px;
 }
 
 .drag-placeholder-banquillo {
-  width: 76px;
-  height: 112px;
+  width: 108px;
+  height: 156px;
 }
 
 .preview-escala-drag {
   width: 360px;
   height: 540px;
-  transform: scale(0.28);
+  transform: scale(0.34);
   transform-origin: center;
 }
 
@@ -693,66 +693,84 @@
   }
 
   .estadio-bg {
-    padding: 108px 52px 98px;
+    padding: 100px 42px 90px;
   }
 
   .fila-campo {
-    gap: clamp(7px, 0.9vw, 14px);
+    gap: clamp(4px, 0.55vw, 8px);
   }
 
   .zona-drop {
-    width: 86px;
-    height: 124px;
-    flex-basis: 86px;
-  }
-
-  .carta-titular {
-    width: 80px;
-    height: 116px;
-    flex-basis: 80px;
-  }
-
-  .carta-escala-campo {
-    transform: translate(-50%, -50%) scale(0.214);
-  }
-
-  .carta-titular:hover .carta-escala-campo {
-    transform: translate(-50%, -50%) scale(0.232);
-  }
-
-  .jugador-12-wrapper {
-    top: 24px;
-    left: 24px;
-  }
-
-  .jugador-12-wrapper .zona-drop {
-    width: 74px;
-    height: 108px;
-    flex-basis: 74px;
-  }
-
-  .jugador-12-wrapper .carta-titular {
-    width: 68px;
-    height: 100px;
-    flex-basis: 68px;
-  }
-
-  .jugador-12-wrapper .carta-escala-campo {
-    transform: translate(-50%, -50%) scale(0.185);
-  }
-
-  .carta-reserva {
-    width: 68px;
-    height: 104px;
+    width: 104px;
+    height: 150px;
     flex-basis: 104px;
   }
 
+  .carta-titular {
+    width: 96px;
+    height: 140px;
+    flex-basis: 96px;
+  }
+
+  .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.262);
+  }
+
+  .carta-titular:hover .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.28);
+  }
+
+  .drag-placeholder {
+    width: 104px;
+    height: 150px;
+  }
+
+  .jugador-12-wrapper {
+    top: 22px;
+    left: 22px;
+  }
+
+  .jugador-12-wrapper .zona-drop {
+    width: 88px;
+    height: 128px;
+    flex-basis: 88px;
+  }
+
+  .jugador-12-wrapper .carta-titular {
+    width: 82px;
+    height: 120px;
+    flex-basis: 82px;
+  }
+
+  .jugador-12-wrapper .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.228);
+  }
+
+  .jugador-12-wrapper .carta-titular:hover .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.245);
+  }
+
+  .carta-reserva {
+    width: 94px;
+    height: 138px;
+    flex-basis: 138px;
+  }
+
   .carta-escala-banquillo {
-    transform: translate(-50%, -50%) scale(0.19);
+    transform: translate(-50%, -50%) scale(0.258);
   }
 
   .carta-reserva:hover .carta-escala-banquillo {
-    transform: translate(-50%, -50%) scale(0.207);
+    transform: translate(-50%, -50%) scale(0.276);
+  }
+
+  .drag-placeholder-banquillo {
+    width: 94px;
+    height: 138px;
+  }
+
+  .preview-escala-drag {
+    transform: scale(0.32);
   }
 }
 
@@ -777,7 +795,7 @@
 
   .campo-container {
     width: 540px;
-}
+  }
 
   .sidebar-izq,
   .sidebar-der {
@@ -819,31 +837,36 @@
   }
 
   .estadio-bg {
-    padding: 96px 34px 88px;
+    padding: 90px 24px 82px;
   }
 
   .fila-campo {
-    gap: clamp(5px, 0.8vw, 10px);
+    gap: clamp(3px, 0.45vw, 6px);
   }
 
   .zona-drop {
-    width: 68px;
-    height: 100px;
-    flex-basis: 68px;
+    width: 82px;
+    height: 120px;
+    flex-basis: 82px;
   }
 
   .carta-titular {
-    width: 62px;
-    height: 92px;
-    flex-basis: 62px;
+    width: 76px;
+    height: 112px;
+    flex-basis: 76px;
   }
 
   .carta-escala-campo {
-    transform: translate(-50%, -50%) scale(0.168);
+    transform: translate(-50%, -50%) scale(0.208);
   }
 
   .carta-titular:hover .carta-escala-campo {
-    transform: translate(-50%, -50%) scale(0.184);
+    transform: translate(-50%, -50%) scale(0.224);
+  }
+
+  .drag-placeholder {
+    width: 82px;
+    height: 120px;
   }
 
   .etiqueta-pos {
@@ -853,24 +876,24 @@
   }
 
   .jugador-12-wrapper {
-    top: 20px;
-    left: 18px;
+    top: 18px;
+    left: 16px;
   }
 
   .jugador-12-wrapper .zona-drop {
-    width: 58px;
-    height: 86px;
-    flex-basis: 58px;
+    width: 64px;
+    height: 94px;
+    flex-basis: 64px;
   }
 
   .jugador-12-wrapper .carta-titular {
-    width: 54px;
-    height: 82px;
-    flex-basis: 54px;
+    width: 60px;
+    height: 88px;
+    flex-basis: 60px;
   }
 
   .jugador-12-wrapper .carta-escala-campo {
-    transform: translate(-50%, -50%) scale(0.148);
+    transform: translate(-50%, -50%) scale(0.165);
   }
 
   .totem-label {
@@ -882,23 +905,32 @@
   }
 
   .carta-reserva {
-    width: 58px;
-    height: 88px;
-    flex-basis: 88px;
+    width: 72px;
+    height: 106px;
+    flex-basis: 106px;
   }
 
   .carta-escala-banquillo {
-    transform: translate(-50%, -50%) scale(0.162);
+    transform: translate(-50%, -50%) scale(0.198);
   }
 
   .carta-reserva:hover .carta-escala-banquillo {
-    transform: translate(-50%, -50%) scale(0.178);
+    transform: translate(-50%, -50%) scale(0.214);
+  }
+
+  .drag-placeholder-banquillo {
+    width: 72px;
+    height: 106px;
+  }
+
+  .preview-escala-drag {
+    transform: scale(0.28);
   }
 }
 
 /* =========================================================
    PLANTILLA — MOBILE
-   Cartas más pequeñas
+   Mantengo el mobile casi igual
    ========================================================= */
 
 @media (max-width: 768px) {
@@ -914,6 +946,9 @@
     flex-direction: column;
     padding: 0;
     gap: 16px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 
   .sidebar-izq,

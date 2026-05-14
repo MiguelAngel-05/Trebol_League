@@ -179,10 +179,9 @@
 .banner-image-placeholder {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 25% 20%, rgba(46, 213, 115, 0.28), transparent 30%),
-    radial-gradient(circle at 80% 30%, rgba(30, 144, 255, 0.18), transparent 28%),
-    linear-gradient(135deg, rgba(31, 143, 95, 0.45), rgba(0, 0, 0, 0.4));
+  background-image: url('/Utensilios/estadio-banner.webp');
+  background-size: cover;
+  background-position: center;
 }
 
 .banner-overlay {
