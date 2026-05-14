@@ -1,520 +1,1094 @@
-body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
+/* =========================================================
+   LISTA JUGADORES — BASE DE PANTALLA
+   ========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+}
 
 .main-container {
-  width: 100%; height: 100vh;
-  background-image: url("/Fondos/FondoEstandar.webp");
-  background-color: rgba(10, 20, 15, 0.85); background-blend-mode: overlay;
-  background-size: cover; background-position: center; 
-  display: flex; flex-direction: column; overflow: hidden; position: relative;
-}
-
-.main-header {
-  background: transparent;
-  width: 50%; height: 120px;
-  position: absolute; top: 40px; right: 80px;
-  display: flex; flex-direction: column; align-items: flex-start;
-  z-index: 20; animation: slideDown 0.8s ease-out forwards;
-}
-.header-options.top-row { width: 100%; height: 50%; background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%); border-top-right-radius: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 160px 0 80px; box-sizing: border-box; }
-.header-optionsB.bottom-row { width: 100%; height: 50%; background: linear-gradient(90deg, #1f3327 0%, #15221b 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-around; padding: 0 160px 0 80px; box-sizing: border-box; }
-.separator-header { font-size: 2rem; color: #3b614b; font-weight: 300; margin: 0 10px; transform: skew(-20deg); }
-.option-group { display: flex; align-items: center; gap: 10px; color: white; font-weight: 600; }
-.icon { height: 22px; width: auto; }
-.pinchar { height: 26px; width: auto; cursor: pointer; transition: 0.2s; }
-.div-img-user {
-    background: linear-gradient(to bottom, #1f8f5f, #156942);
-    width: 140px; height: 100%; position: absolute; top: 0; right: 0; 
-    display: flex; align-items: center; justify-content: center; 
-    border-top-right-radius: 20px; border-bottom-left-radius: 20px;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 5;
-    cursor: pointer; 
-} 
-
-.img-user { 
-    width: 80px; height: 80px; 
-    border-radius: 15px; 
-    border: 3px solid rgba(255,255,255,0.2); 
-    object-fit: cover; 
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.div-img-user:hover .img-user {
-    transform: scale(1.15); 
-    border-color: #2ed573; 
-    box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); 
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .content-area {
-  margin-top: 180px; 
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0 50px 30px 50px;
-  overflow: hidden; 
   min-height: 0;
+  overflow: hidden;
 }
+
+/* =========================================================
+   LISTA JUGADORES — CABECERA DE ESTADÍSTICAS
+   ========================================================= */
 
 .team-header {
   display: flex;
-  justify-content: right;
-  align-items: right;
+  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 30px;
-  animation: slideInLeft 0.8s ease forwards;
+  animation: slideInUp 0.6s ease forwards;
+  flex-shrink: 0;
 }
 
-.page-title {
-  font-size: 3rem; color: white; margin: 0;
-  text-shadow: 0 0 20px rgba(46, 213, 115, 0.4);
-}
-
-/* stats */
 .stats-row {
-  display: flex; gap: 20px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .stat-card {
   background: rgba(20, 30, 25, 0.8);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--tl-border-soft);
   padding: 10px 20px;
-  border-radius: 12px;
-  display: flex; flex-direction: column; align-items: center;
+  border-radius: var(--tl-radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-width: 120px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
-.stat-label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; margin-bottom: 5px; }
-.stat-value { font-size: 1.2rem; font-weight: 700; color: white; }
-.text-green { color: #2ed573; }
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--tl-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  white-space: nowrap;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--tl-white);
+  white-space: nowrap;
+}
+
+.text-green {
+  color: var(--tl-green);
+}
 
 .rating-box-mini {
-  padding: 2px 10px; border-radius: 4px; font-weight: 800; color: white;
-  background: rgba(0,0,0,0.5); border: 1px solid #ccc;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-weight: 800;
+  color: var(--tl-white);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #ccc;
 }
 
-/* lista */
+/* =========================================================
+   LISTA JUGADORES — CONTENEDOR Y SCROLL
+   ========================================================= */
+
 .scrollable-content {
-  flex: 1; overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 10px;
 }
-.scrollable-content::-webkit-scrollbar { width: 6px; }
-.scrollable-content::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
 
-/* filas de jugadores */
+.list-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+/* =========================================================
+   LISTA JUGADORES — FILAS
+   ========================================================= */
+
 .player-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px; margin-bottom: 10px;
-  background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px; cursor: default;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-width: 0;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   animation: slideInUp 0.5s ease forwards;
 }
+
 .player-row:hover {
-  background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-  border-color: rgba(46, 213, 115, 0.4); transform: translateX(5px);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(46, 213, 115, 0.4);
+  box-shadow: inset 4px 0 0 rgba(46, 213, 115, 0.7);
 }
 
-/* izquierda */
-.player-left-section { display: flex; align-items: center; gap: 15px; flex: 1; }
-.team-token { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); overflow: hidden; }
-.team-img { width: 85%; height: 85%; object-fit: contain; }
-.player-info { display: flex; flex-direction: column; }
-.name-text { color: white; font-size: 1.1rem; font-weight: 700; }
-.team-subtext { color: #889990; font-size: 0.8rem; font-weight: 500; }
-
-/* derecha */
-.player-right-section { display: flex; align-items: center; gap: 20px; }
-
-/* posicion */
-.pos-badge { width: 35px; height: 28px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border-radius: 6px; }
-.dl { background: linear-gradient(135deg, #ff4757, #ff6b81); } 
-.mc { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #1a2b22; } 
-.df { background: linear-gradient(135deg, #1e90ff, #70a1ff); } 
-.pt { background: linear-gradient(135deg, #ffa502, #eccc68); color: #1a2b22; }
-
-/* media */
-.rating-box { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 40px; height: 38px; border-radius: 6px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); margin-right: 15px; }
-.rating-num { font-size: 1.1rem; font-weight: 800; color: white; line-height: 1; }
-.rating-label { font-size: 0.5rem; font-weight: 600; color: #ccc; margin-top: 2px; }
-
-/* media */
-.media-bronze { 
-  border-color: #cd7f32; 
-  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(160, 82, 45, 0.15)); 
-}
-.media-bronze .rating-num, .media-bronze.rating-box-mini { color: #cd7f32; }
-
-.media-silver { 
-  border-color: #c0c0c0; 
-  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(169, 169, 169, 0.15)); 
-}
-.media-silver .rating-num, .media-silver.rating-box-mini { color: #e0e0e0; }
-
-.media-gold { 
-  border-color: #ffd700; 
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(212, 175, 55, 0.15)); 
-}
-.media-gold .rating-num, .media-gold.rating-box-mini { 
-  color: #ffd700; 
-  text-shadow: 0 0 5px rgba(255,215,0,0.5); 
+/* Izquierda */
+.player-left-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+  min-width: 0;
 }
 
-.media-diamond { 
-  border-color: #00d2ff; 
-  background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.2)); 
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); 
-}
-.media-diamond .rating-num, .media-diamond.rating-box-mini { 
-  color: #00d2ff; 
-  text-shadow: 0 0 8px rgba(0,210,255,0.6); 
+.team-token {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  flex: 0 0 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
 }
 
-.media-galaxy { 
-  border-color: #b145e9; 
-  background: linear-gradient(45deg, rgba(255, 0, 128, 0.4), rgba(106, 13, 173, 0.4), rgba(0, 210, 255, 0.4)); 
+.team-img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name-text {
+  color: var(--tl-white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-subtext {
+  color: #889990;
+  font-size: 0.8rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Derecha */
+.player-right-section {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   LISTA JUGADORES — RATING, POSICIÓN Y PRECIO
+   ========================================================= */
+
+/* =========================================================
+   LISTA JUGADORES — MEDIA / RATING
+   ========================================================= */
+
+.rating-box {
+  width: 54px;
+  min-width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--tl-border-soft);
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--tl-white);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.rating-num {
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.rating-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+/* Bronce */
+.media-bronze {
+  border-color: #cd7f32;
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.16), rgba(160, 82, 45, 0.1));
+}
+
+.media-bronze .rating-num,
+.media-bronze.rating-box-mini {
+  color: #cd7f32;
+}
+
+/* Plata */
+.media-silver {
+  border-color: #c0c0c0;
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.16), rgba(169, 169, 169, 0.1));
+}
+
+.media-silver .rating-num,
+.media-silver.rating-box-mini {
+  color: #e0e0e0;
+}
+
+/* Oro */
+.media-gold {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.16), rgba(212, 175, 55, 0.1));
+}
+
+.media-gold .rating-num,
+.media-gold.rating-box-mini {
+  color: #ffd700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Diamante */
+.media-diamond {
+  border-color: #00d2ff;
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.12));
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.28);
+}
+
+.media-diamond .rating-num,
+.media-diamond.rating-box-mini {
+  color: #00d2ff;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.6);
+}
+
+/* Galaxy */
+.media-galaxy {
+  border-color: #b145e9;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 0, 128, 0.38),
+    rgba(106, 13, 173, 0.38),
+    rgba(0, 210, 255, 0.35)
+  );
   background-size: 200% 200%;
   animation: galaxyAnim 3s ease infinite;
-  box-shadow: 0 0 15px rgba(177, 69, 233, 0.6);
+  box-shadow: 0 0 15px rgba(177, 69, 233, 0.55);
 }
-.media-galaxy .rating-num, .media-galaxy.rating-box-mini { 
-  color: #ffffff; 
-  text-shadow: 0 0 10px #ff0080, 0 0 20px #6a0dad; 
+
+.media-galaxy .rating-num,
+.media-galaxy.rating-box-mini {
+  color: #ffffff;
+  text-shadow: 0 0 10px #ff0080, 0 0 20px #6a0dad;
   font-weight: 900;
 }
 
+@keyframes galaxyAnim {
+  0% {
+    background-position: 0% 50%;
+  }
 
-/* precio */
-.price-tag { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: white; min-width: 100px; text-align: right; }
-.currency { font-size: 0.8rem; color: #2ed573; margin-left: 2px; }
+  50% {
+    background-position: 100% 50%;
+  }
 
-.empty-msg { text-align: center; color: #aaa; margin-top: 40px; font-style: italic; }
-.loading-msg { text-align: center; color: white; margin-top: 40px; font-size: 1.2rem; }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.pos-badge {
+  min-width: 42px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--tl-white);
+}
+
+.pos-badge.dl {
+  background: var(--tl-red);
+}
+
+.pos-badge.mc {
+  background: var(--tl-green);
+  color: #06110a;
+}
+
+.pos-badge.df {
+  background: var(--tl-blue);
+}
+
+.pos-badge.pt {
+  background: var(--tl-orange);
+  color: #111;
+}
+
+.price-tag {
+  min-width: 150px;
+  color: var(--tl-white);
+  font-weight: 800;
+  font-family: monospace;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.currency {
+  color: var(--tl-green);
+  font-size: 0.8rem;
+}
+
+/* =========================================================
+   LISTA JUGADORES — ACCIONES
+   ========================================================= */
 
 .action-zone {
-  min-width: 90px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  margin-left: 10px;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 116px;
 }
 
 .btn-vender {
-  background: linear-gradient(135deg, #ffa502, #ff7f50);
+  background: linear-gradient(135deg, var(--tl-green-dark), var(--tl-green));
+  color: #06110a;
   border: none;
-  color: #1a2b22;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-weight: 800;
-  font-size: 0.75rem;
-  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-weight: 900;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: 0.2s;
+  box-shadow: var(--tl-shadow-green);
 }
 
 .btn-vender:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 15px rgba(255, 165, 2, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(46, 213, 115, 0.55);
 }
-
-.tag-label {
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 6px 10px;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.tag-label.venta {
-  background: rgba(255, 165, 2, 0.15);
-  color: #ffa502;
-  border: 1px solid rgba(255, 165, 2, 0.4);
-}
-
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 99999; animation: fadeIn 0.3s ease;
-}
-
-.modal-content {
-    background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%);
-    border: 1px solid rgba(255,165,2,0.4); /* Borde naranjita porque es de venta */
-    border-radius: 20px; padding: 30px; width: 90%; max-width: 450px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(255, 165, 2, 0.1);
-    display: flex; flex-direction: column; gap: 20px;
-    animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-.modal-title { color: white; font-size: 1.5rem; margin: 0; font-weight: 700; }
-.close-btn { color: #888; font-size: 2rem; cursor: pointer; line-height: 1; transition: 0.2s; }
-.close-btn:hover { color: #ff4757; transform: rotate(90deg); }
 
 .btn-cancelar-venta {
-  background: rgba(255, 71, 87, 0.15);
-  border: 1px solid rgba(255, 71, 87, 0.4);
-  color: #ff4757;
-  width: 32px; 
-  height: 32px;
-  border-radius: 8px; 
-  margin-left: 8px;
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  cursor: pointer; 
-  font-weight: bold; 
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 71, 87, 0.16);
+  color: var(--tl-red);
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .btn-cancelar-venta:hover {
-  background: #ff4757; 
-  color: white; 
-  transform: scale(1.1);
-  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+  background: var(--tl-red);
+  color: var(--tl-white);
 }
 
-.player-summary { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
-.team-token.large { width: 60px; height: 60px; flex-shrink: 0;}
-.info-block { flex: 1; display: flex; flex-direction: column; }
-.player-name-modal { font-size: 1.2rem; font-weight: 700; color: white; display: block; }
-.player-team-modal { color: #aaa; font-size: 0.85rem; }
+.tag-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
 
-.input-group label { display: block; color: #ffa502; margin-bottom: 10px; font-weight: 600; }
-.input-puja { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid #ffa502; border-radius: 10px; color: white; font-size: 1.2rem; font-weight: 700; text-align: center; outline: none; box-sizing: border-box; transition: 0.3s; }
-.input-puja:focus { background: rgba(255, 165, 2, 0.1); box-shadow: 0 0 15px rgba(255, 165, 2, 0.3); }
+.tag-label.venta {
+  background: rgba(255, 165, 2, 0.16);
+  color: var(--tl-orange);
+  border: 1px solid rgba(255, 165, 2, 0.35);
+}
 
-.modal-footer { display: flex; gap: 15px; margin-top: 10px; }
-.btn-cancelar, .btn-confirmar { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-family: 'Poppins', sans-serif;}
-.btn-cancelar { background: rgba(255,255,255,0.1); color: #ccc; }
-.btn-cancelar:hover { background: rgba(255,255,255,0.2); color: white; }
-.btn-confirmar { background: linear-gradient(135deg, #ffa502, #ff7f50); color: #1a2b22; box-shadow: 0 5px 15px rgba(255, 165, 2, 0.3); }
-.btn-confirmar:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 165, 2, 0.5); }
-.btn-confirmar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; background: #444; color: #888; }
+/* =========================================================
+   LISTA JUGADORES — ESTADO VACÍO
+   ========================================================= */
 
-.toast-notification { position: fixed; bottom: 30px; right: 30px; z-index: 100000; background: #000; border-left: 5px solid #2ed573; padding: 15px 25px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); animation: slideInRight 0.4s ease-out; }
-.toast-notification.error { border-left-color: #ff4757; }
-.toast-icon { font-size: 1.5rem; }
-.toast-message { margin: 0; font-size: 0.9rem;}
+.empty-msg {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--tl-text-muted);
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed var(--tl-border-medium);
+  border-radius: 18px;
+}
 
-/* --- MODAL DETALLE JUGADOR --- */
+/* =========================================================
+   LISTA JUGADORES — MODAL DETALLE
+   ========================================================= */
+
 .modal-content-detalle {
-    background: linear-gradient(145deg, #15221b 0%, #0a100c 100%);
-    border: 1px solid rgba(46, 213, 115, 0.3);
-    border-radius: 24px;
-    padding: 40px;
-    width: 90%;
-    max-width: 850px;
-    position: relative;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-    animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.detalle-layout {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-}
-
-.detalle-left {
-    flex-shrink: 0;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-    transform: scale(1.05);
-}
-
-.detalle-right {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.detalle-header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 15px;
-}
-
-.escudo-detalle {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-}
-
-.detalle-nombre {
-    color: white;
-    font-size: 2.2rem;
-    margin: 0;
-    font-family: 'Arial Black', sans-serif;
-    text-transform: uppercase;
-}
-
-.detalle-equipo {
-    color: #2ed573;
-    margin: 0;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-.detalle-lore {
-    background: rgba(0,0,0,0.4);
-    padding: 20px;
-    border-radius: 12px;
-    border-left: 4px solid #3b614b;
-    min-height: 100px;
-}
-
-.detalle-lore p {
-    color: #ccc;
-    font-style: italic;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.detalle-stats-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.stat-mini {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-mini .label { color: #889990; font-size: 0.75rem; text-transform: uppercase; }
-.stat-mini .value { color: white; font-size: 1.4rem; font-weight: 800; }
-
-.btn-habilidad-info {
-    background: linear-gradient(135deg, #ff4500, #ff8c00);
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
-    transition: 0.3s;
-}
-
-.btn-habilidad-info:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 69, 0, 0.6);
+  background: linear-gradient(145deg, #15221b 0%, #0a100c 100%);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  border-radius: 24px;
+  padding: 40px;
+  width: 90%;
+  max-width: 850px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9);
+  animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .close-btn-top {
-    position: absolute; top: 20px; right: 25px;
-    color: #555; font-size: 2rem; cursor: pointer; transition: 0.2s;
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  color: #888;
+  font-size: 2.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: 0.2s;
+  z-index: 3;
 }
-.close-btn-top:hover { color: white; }
+
+.close-btn-top:hover {
+  color: var(--tl-red);
+  transform: scale(1.08) rotate(90deg);
+}
+
+.detalle-layout {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.detalle-left {
+  flex-shrink: 0;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+  transform: scale(1.05);
+}
+
+.detalle-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid var(--tl-border-soft);
+  padding-bottom: 15px;
+}
+
+.escudo-detalle {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.detalle-title-group {
+  min-width: 0;
+}
+
+.detalle-nombre {
+  color: var(--tl-white);
+  font-size: 2.2rem;
+  margin: 0;
+  font-family: 'Arial Black', sans-serif;
+  text-transform: uppercase;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.detalle-equipo {
+  color: var(--tl-green);
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.detalle-lore {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: var(--tl-radius-md);
+  border-left: 4px solid #3b614b;
+  min-height: 100px;
+}
+
+.detalle-lore p {
+  color: var(--tl-text-soft);
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.detalle-stats-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.stat-mini {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-mini .label {
+  color: #889990;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.stat-mini .value {
+  color: var(--tl-white);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.btn-habilidad-info {
+  background: linear-gradient(135deg, #ff4500, #ff8c00);
+  border: none;
+  color: var(--tl-white);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.btn-habilidad-info:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 69, 0, 0.6);
+}
+
+.btn-habilidad-info.btn-ultra {
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  box-shadow: 0 0 15px rgba(177, 69, 233, 0.4);
+}
+
+.btn-habilidad-info.btn-ultra:hover {
+  box-shadow: 0 0 25px rgba(177, 69, 233, 0.6);
+}
+
+/* =========================================================
+   LISTA JUGADORES — MODAL HABILIDAD
+   ========================================================= */
 
 .skill-overlay {
-    background: rgba(0,0,0,0.7) !important;
-    z-index: 100000;
+  background: rgba(0, 0, 0, 0.7) !important;
+  z-index: 100000;
 }
 
 .modal-content-habilidad {
-    background: #1a1a1a;
-    border: 2px solid #ff4500;
-    border-radius: 16px;
-    padding: 25px;
-    width: 350px;
-    box-shadow: 0 0 50px rgba(255, 69, 0, 0.3);
-    animation: slideInUp 0.3s ease;
+  background: #1a1a1a;
+  border: 2px solid #ff4500;
+  border-radius: 16px;
+  padding: 25px;
+  width: min(350px, calc(100vw - 32px));
+  box-shadow: 0 0 50px rgba(255, 69, 0, 0.3);
+  animation: slideInUp 0.3s ease;
+}
+
+.modal-content-habilidad.panel-ultra {
+  border-color: var(--tl-purple);
+  box-shadow: 0 0 50px rgba(177, 69, 233, 0.3);
 }
 
 .habilidad-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
 .habilidad-header h3 {
-    color: #ff9100;
-    margin: 0;
-    text-transform: uppercase;
-    font-size: 1.1rem;
+  color: #ff9100;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.1rem;
 }
 
-.close-small { color: #666; cursor: pointer; }
+.modal-content-habilidad.panel-ultra .habilidad-header h3 {
+  color: #d68bff;
+  text-shadow: 0 2px 4px rgba(177, 69, 233, 0.8);
+}
+
+.close-small {
+  color: #888;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.close-small:hover {
+  color: var(--tl-white);
+}
 
 .habilidad-body p {
-    color: #eee;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin: 0;
+  color: #eee;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
-/* Botón de habilidad versión Ultra */
-.btn-habilidad-info.btn-ultra {
-    background: linear-gradient(135deg, #8e2de2, #4a00e0);
-    box-shadow: 0 0 15px rgba(177, 69, 233, 0.4);
-}
-.btn-habilidad-info.btn-ultra:hover {
-    box-shadow: 0 0 25px rgba(177, 69, 233, 0.6);
+/* =========================================================
+   LISTA JUGADORES — MODAL VENTA
+   ========================================================= */
+
+.modal-content .modal-title {
+  color: var(--tl-white);
 }
 
-/* Modal de habilidad versión Ultra */
-.modal-content-habilidad.panel-ultra {
-    border-color: #b145e9;
-    box-shadow: 0 0 50px rgba(177, 69, 233, 0.3);
-}
-.modal-content-habilidad.panel-ultra .habilidad-header h3 {
-    color: #d68bff;
-    text-shadow: 0 2px 4px rgba(177, 69, 233, 0.8);
-}
-
-/* Animación del Trébol del loading */
-@keyframes pulseClover {
-    0% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(46, 213, 115, 0.4)); }
-    50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 20px rgba(46, 213, 115, 0.8)); }
-    100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(46, 213, 115, 0.4)); }
+.player-summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--tl-border-soft);
+  margin-bottom: 18px;
 }
 
-@media (max-width: 850px) {
-    .detalle-layout { flex-direction: column; text-align: center; }
-    .detalle-header { justify-content: center; flex-direction: column; }
-    .detalle-stats-footer { flex-direction: column; gap: 20px; }
+.team-token.large {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes galaxyAnim {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.info-block {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
+
+.player-name-modal {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--tl-white);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-team-modal {
+  color: var(--tl-text-muted);
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-summary .rating-box {
+  width: 56px;
+  min-width: 56px;
+  height: 56px;
+}
+
+.input-group {
+  margin-top: 18px;
+}
+
+.input-group label {
+  display: block;
+  color: var(--tl-orange);
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.input-puja {
+  width: 100%;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--tl-orange);
+  border-radius: 14px;
+  color: var(--tl-white);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s;
+  font-family: monospace;
+}
+
+.input-puja:focus {
+  background: rgba(255, 165, 2, 0.1);
+  box-shadow: 0 0 15px rgba(255, 165, 2, 0.3);
+}
+
+.input-puja::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.modal-content .btn-confirmar {
+  background: linear-gradient(135deg, var(--tl-orange), #ff7f50);
+  color: #1a2b22;
+  box-shadow: 0 5px 15px rgba(255, 165, 2, 0.3);
+}
+
+.modal-content .btn-confirmar:hover:not(:disabled) {
+  box-shadow: 0 10px 25px rgba(255, 165, 2, 0.5);
+}
+
+.modal-content .btn-confirmar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  background: #444;
+  color: #888;
+}
+
+/* =========================================================
+   LISTA JUGADORES — ESTADO DE CARGA
+   ========================================================= */
+
+.loading-state {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  color: var(--tl-white);
+  background: rgba(20, 30, 25, 0.45);
+  border: 1px solid var(--tl-border-soft);
+  border-radius: 24px;
+  box-shadow: var(--tl-shadow-panel);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.loading-orb {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.25), transparent 34%),
+    linear-gradient(135deg, rgba(31, 143, 95, 0.9), rgba(46, 213, 115, 0.95));
+  box-shadow:
+    0 0 25px rgba(46, 213, 115, 0.4),
+    inset 0 0 18px rgba(255, 255, 255, 0.15);
+  animation: loadingPulse 1.6s ease-in-out infinite;
+}
+
+.loading-orb span {
+  font-size: 2.4rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+}
+
+.loading-copy h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.loading-copy p {
+  margin: 6px 0 0;
+  color: var(--tl-text-muted);
+  font-size: 0.9rem;
+}
+
+@keyframes loadingPulse {
+  0% {
+    transform: scale(1);
+    box-shadow:
+      0 0 20px rgba(46, 213, 115, 0.3),
+      inset 0 0 18px rgba(255, 255, 255, 0.15);
+  }
+
+  50% {
+    transform: scale(1.07);
+    box-shadow:
+      0 0 36px rgba(46, 213, 115, 0.55),
+      inset 0 0 18px rgba(255, 255, 255, 0.22);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 20px rgba(46, 213, 115, 0.3),
+      inset 0 0 18px rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* =========================================================
+   LISTA JUGADORES — RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .player-right-section {
+    gap: 12px;
+  }
+
+  .price-tag {
+    min-width: 120px;
+  }
+
+  .action-zone {
+    min-width: 104px;
+  }
+}
+
+@media (max-width: 992px) {
+  .main-container {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .content-area {
+    overflow: visible;
+  }
+
+  .team-header {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .stats-row {
+    justify-content: center;
+  }
+
+  .scrollable-content {
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .player-row {
+    align-items: stretch;
+  }
+
+  .detalle-layout {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .detalle-header {
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .detalle-stats-footer {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .detalle-left {
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   LISTA JUGADORES — RESPONSIVE MOBILE
+   ========================================================= */
 
 @media (max-width: 768px) {
-    .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-top: 10px; }
-    .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
-    .div-img-user { display: none; }
+  .main-container {
+    display: flex;
+    min-height: 100dvh;
+    padding: 10px;
+  }
 
-    .content-area { margin-top: 10px; padding: 0 15px 15px 15px; }
+  .content-area {
+    padding: 0;
+    margin-top: 0;
+  }
 
-    .team-header { justify-content: center; margin-bottom: 20px; }
-    .stats-row { flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .stat-card { min-width: 45%; padding: 10px; }
+  .team-header {
+    margin-bottom: 14px;
+  }
 
-    .player-row { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
-    .player-left-section { justify-content: center; text-align: center; flex-direction: column; gap: 5px; }
-    .team-token { width: 55px; height: 55px; }
-    .player-right-section { justify-content: space-between; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+  .stats-row {
+    width: 100%;
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
-    .action-zone { width: 100%; justify-content: center; margin-left: 0; margin-top: 5px; }
-    .btn-vender { width: 100%; padding: 12px; font-size: 0.9rem; }
+  .stat-card {
+    min-width: 0;
+    padding: 10px 8px;
+  }
 
-    .modal-content { width: 95%; padding: 20px; }
-    .modal-footer { flex-direction: column; }
-    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+  .stat-label {
+    font-size: 0.64rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 0.86rem;
+    text-align: center;
+  }
+
+  .rating-box-mini {
+    font-size: 0.9rem;
+  }
+
+  .list-scroll {
+    gap: 12px;
+  }
+
+  .player-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .player-left-section {
+    width: 100%;
+  }
+
+  .team-token {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .name-text {
+    font-size: 1rem;
+  }
+
+  .player-right-section {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .rating-box {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+  }
+
+  .price-tag {
+    min-width: 0;
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  .action-zone {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+    min-width: 0;
+  }
+
+  .btn-vender {
+    width: 100%;
+  }
+
+  .tag-label.venta {
+    flex: 1;
+  }
+
+  .btn-cancelar-venta {
+    width: 42px;
+    height: 42px;
+  }
+
+  .modal-content-detalle {
+    width: 100%;
+    max-width: none;
+    max-height: 92dvh;
+    padding: 24px 18px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .detalle-nombre {
+    font-size: 1.55rem;
+  }
+
+  .detalle-equipo {
+    font-size: 0.9rem;
+  }
+
+  .detalle-lore {
+    padding: 16px;
+    min-height: auto;
+  }
+
+  .stat-mini .value {
+    font-size: 1.1rem;
+  }
+
+  .btn-habilidad-info {
+    width: 100%;
+  }
+
+  .player-summary {
+    align-items: flex-start;
+  }
+
+  .player-summary .rating-box {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+  }
+
+  .player-name-modal {
+    white-space: normal;
+  }
+}
+
+/* =========================================================
+   LISTA JUGADORES — MOBILE PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .stat-label,
+  .stat-value {
+    text-align: left;
+  }
+
+  .player-right-section {
+    grid-template-columns: auto auto;
+  }
+
+  .price-tag {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .detalle-left app-carta {
+    transform: scale(0.88);
+    transform-origin: center;
+    display: block;
+    margin: -28px 0;
+  }
+
+  .detalle-header {
+    gap: 12px;
+  }
+
+  .escudo-detalle {
+    width: 52px;
+    height: 52px;
+  }
 }

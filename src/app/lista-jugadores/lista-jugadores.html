@@ -47,9 +47,15 @@
       <div class="list-scroll">
         
         @if (isLoading) {
-          <div class="loading-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px; background: rgba(255, 255, 255, 0.03); border-radius: 20px; border: 1px solid rgba(46, 213, 115, 0.1); backdrop-filter: blur(10px); margin-top: 50px;">
-            <div style="font-size: 4rem; margin-bottom: 20px; animation: pulseClover 1.5s infinite;">🍀</div>
-            <h3 style="font-family: 'Arial Black'; color: #2ed573; text-transform: uppercase; letter-spacing: 4px;">Sincronizando...</h3>
+          <div class="loading-state">
+            <div class="loading-orb">
+              <span>🍀</span>
+            </div>
+
+            <div class="loading-copy">
+              <h3>Sincronizando plantilla</h3>
+              <p>Estamos cargando tus jugadores, medias y estado de mercado</p>
+            </div>
           </div>
         } @else {
           
@@ -85,13 +91,13 @@
               </div>
 
               <div class="action-zone">
-                <button *ngIf="!jugador.en_venta" class="btn-vender" (click)="abrirModalVender(jugador)">
+                <button *ngIf="!jugador.en_venta" class="btn-vender" (click)="abrirModalVender(jugador); $event.stopPropagation()" >
                   VENDER
                 </button>
                 
                 <ng-container *ngIf="jugador.en_venta">
                   <div class="tag-label venta">EN VENTA</div>
-                  <button class="btn-cancelar-venta" (click)="cancelarVenta(jugador)" title="Cancelar Venta">
+                  <button class="btn-cancelar-venta" (click)="cancelarVenta(jugador); $event.stopPropagation()" title="Cancelar Venta">
                     ✖
                   </button>
                 </ng-container>

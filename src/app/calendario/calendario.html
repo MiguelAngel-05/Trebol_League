@@ -64,9 +64,13 @@
         </div>
 
         <div class="grid-body">
-          <div class="day-cell" 
-               *ngFor="let dia of diasCalendario" 
-               [ngClass]="{'other-month': dia.esOtroMes, 'is-today': esHoy(dia.fecha)}">
+          <div class="day-cell"
+              *ngFor="let dia of diasCalendario"
+              [ngClass]="{
+                'other-month': dia.esOtroMes,
+                'is-today': esHoy(dia.fecha),
+                'has-matches': getPartidosDelDia(dia.fecha).length > 0
+              }">
             
             <span class="day-number">{{ dia.fecha | date:'d' }}</span>
             
@@ -246,7 +250,11 @@
 
          <div class="alineaciones-container" *ngIf="getEstadoVisual(partidoSeleccionado) !== 'pendiente' && tabPartido === 'alineaciones'">
             
-            <div class="alineacion-col">
+            <div class="alineacion-col alineacion-local">
+              <div class="alineacion-team-label local-label">
+                {{ partidoSeleccionado.equipo_local }}
+              </div>
+
               <h4 class="alineacion-title">Titulares</h4>
               <div class="jugador-linea" *ngFor="let j of alineacionesListas.local.titulares">
                 <span class="pos-mini" [ngClass]="j.posicion.toLowerCase()">{{ j.posicion }}</span>
@@ -262,7 +270,11 @@
 
             <div class="alineacion-divider"></div>
 
-            <div class="alineacion-col right-align">
+            <div class="alineacion-col right-align alineacion-visitante">
+              <div class="alineacion-team-label visit-label">
+                {{ partidoSeleccionado.equipo_visitante }}
+              </div>
+
               <h4 class="alineacion-title">Titulares</h4>
               <div class="jugador-linea rev" *ngFor="let j of alineacionesListas.visitante.titulares">
                 <span class="jug-media">{{ j.media }}</span>

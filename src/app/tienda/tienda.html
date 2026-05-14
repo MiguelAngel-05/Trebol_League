@@ -40,7 +40,14 @@
         
         @if (tabActiva === 'normales') {
           @for (sobre of sobresNormales; track sobre.id) {
-            <div class="pack-item" [class.selected]="sobreSeleccionado?.id === sobre.id" (click)="seleccionarSobre(sobre)" [style.--glow-color]="sobre.colorBorde">
+            <div
+              class="pack-item"
+              [class.selected]="sobreSeleccionado?.id === sobre.id"
+              [class.pack-ultra]="sobre.id === 'norm_3'"
+              [class.pack-especial]="sobre.id === 'norm_2'"
+              [class.pack-posicion]="sobre.posicion"
+              (click)="seleccionarSobre(sobre)"
+              [style.--glow-color]="sobre.colorBorde">
               <h3 class="pack-top-title">{{ sobre.nombre }}</h3>
               
               <div class="pack-image-container">
@@ -57,7 +64,14 @@
         
         @else {
           @for (sobre of sobresPosiciones; track sobre.id) {
-            <div class="pack-item" [class.selected]="sobreSeleccionado?.id === sobre.id" (click)="seleccionarSobre(sobre)" [style.--glow-color]="sobre.colorBorde">
+            <div
+              class="pack-item"
+              [class.selected]="sobreSeleccionado?.id === sobre.id"
+              [class.pack-ultra]="sobre.id === 'norm_3'"
+              [class.pack-especial]="sobre.id === 'norm_2'"
+              [class.pack-posicion]="sobre.posicion"
+              (click)="seleccionarSobre(sobre)"
+              [style.--glow-color]="sobre.colorBorde">
               <h3 class="pack-top-title">{{ sobre.nombre }}</h3>
               
               <div class="pack-image-container">
@@ -77,7 +91,13 @@
 
     <div class="store-right">
       @if (sobreSeleccionado) {
-        <div class="info-panel" [style.border-top-color]="sobreSeleccionado.colorBorde">
+        <div
+          class="info-panel"
+          [style.--pack-color]="sobreSeleccionado.colorBorde"
+          [ngClass]="{
+            'info-panel-ultra': sobreSeleccionado.id === 'norm_3',
+            'info-panel-especial': sobreSeleccionado.id === 'norm_2'
+          }">
           <h2 class="info-title">{{ sobreSeleccionado.nombre | uppercase }}</h2>
           
           <p class="info-desc">{{ sobreSeleccionado.descripcion }}</p>
@@ -120,27 +140,48 @@
       }
 
       @if (!mostrarCarta && !alertaEspecialActiva) {
-        <div class="reveal-container">
+      <div
+        class="reveal-container"
+        [ngClass]="{
+          'reveal-especial': jugadorObtenido?.tipo_carta === 'especial',
+          'reveal-ultra': jugadorObtenido?.tipo_carta === 'ultra'
+        }"
+        >
           @if (mostrarPosicion) {
-            <div class="reveal-item reveal-text" style="animation-delay: 0s;">
+            <div
+              class="reveal-item reveal-text reveal-position"
+              [ngClass]="{
+                'reveal-special-item': jugadorObtenido?.tipo_carta === 'especial',
+                'reveal-ultra-item': jugadorObtenido?.tipo_carta === 'ultra'
+              }"
+            >
               {{ jugadorObtenido.posicion }}
             </div>
           }
-          
+
           @if (mostrarEscudo) {
-            <div class="reveal-item" style="animation-delay: 0s;">
+            <div
+              class="reveal-item reveal-shield-wrap"
+              [ngClass]="{
+                'reveal-special-item': jugadorObtenido?.tipo_carta === 'especial',
+                'reveal-ultra-item': jugadorObtenido?.tipo_carta === 'ultra'
+              }"
+            >
               <img [src]="getRutaEscudo(jugadorObtenido.equipo)" class="reveal-shield" alt="Escudo">
             </div>
           }
 
           @if (mostrarMedia) {
-            <div class="reveal-item reveal-text" 
-                 [ngClass]="{
-                   'glow-orange': jugadorObtenido?.tipo_carta === 'especial',
-                   'glow-purple': jugadorObtenido?.tipo_carta === 'ultra',
-                   'glow-gold': jugadorObtenido?.tipo_carta === 'normal'
-                 }" 
-                 style="animation-delay: 0s;">
+            <div
+              class="reveal-item reveal-text reveal-rating"
+              [ngClass]="{
+                'glow-orange': jugadorObtenido?.tipo_carta === 'especial',
+                'glow-purple': jugadorObtenido?.tipo_carta === 'ultra',
+                'glow-gold': jugadorObtenido?.tipo_carta === 'normal',
+                'reveal-special-item': jugadorObtenido?.tipo_carta === 'especial',
+                'reveal-ultra-item': jugadorObtenido?.tipo_carta === 'ultra'
+              }"
+            >
               {{ jugadorObtenido.media }}
             </div>
           }

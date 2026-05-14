@@ -4,13 +4,13 @@
       <div class="header-options top-row">          
           <div class="option-group">
               <img class="icon" src="Utensilios/Emojis/icono-usuario.webp" alt="Usuario">
-              <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
+              <p class="header-text-strong">
                 {{ user?.username || 'Cargando...' }}
               </p>
           </div>
           <span class="separator-header">/</span>
           <div class="option-group">
-              <p style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2rem;">
+              <p class="header-text-money">
                 {{ formatearDinero(dinero) }}
               </p>
               <img class="icon" src="Utensilios/Emojis/moneda-tc.webp" alt="Moneda TC">
@@ -19,7 +19,7 @@
       
       <div class="header-optionsB bottom-row">
           <div class="option-group icon-hover" (click)="volverAtras()">
-              <img src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" class="pinchar" style="height: 26px; width: auto;">
+              <img src="Utensilios/Emojis/home-blanco.webp" alt="Inicio" class="pinchar">
           </div>
       </div>
 
@@ -69,7 +69,7 @@
                     <span class="pts-label">PTS</span>
                   </div>
                   @if (jugador.id !== user?.id) {
-                    <div class="btn-opciones" (click)="abrirModalOpciones(jugador)">
+                    <div class="btn-opciones" (click)="abrirModalOpciones(jugador); $event.stopPropagation()">
                       <img src="Utensilios/Emojis/tres-puntos.webp" alt="Opciones" class="icon-small-btn">
                     </div>
                   }
@@ -89,8 +89,30 @@
               </select>
             </div>
           </div>
+
+          <div class="score-display" *ngIf="jornadaEnCurso">
+            <span class="score-label">JORNADA EN CURSO</span>
+            <span class="score-value score-value--running">
+              {{ estadoJornada?.partidos_visibles }}/{{ estadoJornada?.total_partidos }} partidos visibles
+            </span>
+          </div>
+
+          <div class="score-display" *ngIf="jornadaFinalizada && !estadoJornada?.premios_pagados">
+            <span class="score-label">JORNADA FINALIZADA</span>
+            <span class="score-value score-value--pending">
+              Premios pendientes
+            </span>
+          </div>
+
+          <div class="score-display" *ngIf="jornadaFinalizada && estadoJornada?.premios_pagados">
+            <span class="score-label">JORNADA FINALIZADA</span>
+            <span class="score-value score-value--paid">
+              Premios repartidos
+            </span>
+          </div>
+
           <div class="score-display" *ngIf="!jornadaNoEmpezada">
-            <span class="score-label">BOTE TOTAL REPARTIDO</span>
+            <span class="score-label">BOTE TOTAL</span>
             <span class="score-value" style="font-size: 2rem; color:#ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.3);">
               {{ formatearDinero(totalPremiosJornada) }} <span style="font-size: 1rem; color: #ccc;">Tc</span>
             </span>
@@ -136,7 +158,7 @@
         <div class="jornada-dashboard">
           <div class="filters-group">
             <div class="custom-select-wrapper">
-              <select [(ngModel)]="managerSeleccionado" (change)="buscarPuntosJornada()" class="m-select">
+              <select [(ngModel)]="managerSeleccionado" (change)="alCambiarManager()" class="m-select">
                 <option *ngFor="let m of managers" [value]="m.id">{{ m.username }}</option>
               </select>
             </div>
@@ -154,22 +176,98 @@
 
         <div class="modern-list-container">
           <div class="list-header">
-            <div class="col-player">Jugador</div><div class="col-pos">Pos</div>
-            <div class="col-val">Valor</div><div class="col-stats">Stats</div><div class="col-pts">Pts</div>
+            <div class="col-player">Alineación bloqueada</div>
+            <div class="col-pos">Pos</div>
+            <div class="col-val">Carta</div>
+            <div class="col-stats">Estado</div>
+            <div class="col-pts">Pts</div>
           </div>
+
           <div class="list-body">
-            <div class="list-row" *ngFor="let j of jugadoresJornada">
-              <div class="col-player"><span class="player-name">{{ j.nombre }}</span></div>
-              <div class="col-pos"><span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span></div>
-              <div class="col-val"><span class="price-tag">{{ formatearDinero(j.valor) }} <span class="currency">Tc</span></span></div>
-              <div class="col-stats">
-                <div class="stat-pill" title="Goles"><span class="stat-icon">⚽</span> {{ j.goles }}</div>
-                <div class="stat-pill" title="Asistencias"><span class="stat-icon">🤝</span> {{ j.asistencias }}</div>
+            <div 
+              class="list-row" 
+              *ngFor="let j of jugadoresJornada"
+              [ngClass]="{
+                'row-empty-slot': j.estado_puntuacion === 'hueco_vacio',
+                'row-special-card': j.tipo_carta_snapshot === 'especial',
+                'row-ultra-card': j.tipo_carta_snapshot === 'ultra',
+                'row-pending-player': j.estado_puntuacion === 'pendiente',
+                'row-no-played': j.estado_puntuacion === 'no_jugo'
+              }"
+            >
+              <div class="col-player">
+                <span class="player-name">
+                  {{ j.nombre }}
+                </span>
+
+                <span 
+                  *ngIf="j.hueco_plantilla === 'hueco-12'" 
+                  style="margin-left: 8px; font-size: 0.75rem; color: #b145e9; font-weight: 800;"
+                >
+                  DIOS
+                </span>
               </div>
-              <div class="col-pts"><span class="pts-number">{{ j.puntos }}</span></div>
+
+              <div class="col-pos">
+                <span 
+                  class="badge"
+                  [ngClass]="j.posicion && j.posicion !== '-' ? 'pos-' + (j.posicion | lowercase) : ''"
+                >
+                  {{ j.posicion }}
+                </span>
+              </div>
+
+              <div class="col-val">
+                <span class="price-tag">
+                  <ng-container [ngSwitch]="j.estado_puntuacion">
+                    <span *ngSwitchCase="'hueco_vacio'">Vacío</span>
+                    <span *ngSwitchCase="'habilidad'">Ultra</span>
+                    <span *ngSwitchDefault>{{ j.tipo_carta_snapshot || 'normal' }}</span>
+                  </ng-container>
+                </span>
+              </div>
+
+              <div class="col-stats">
+                <ng-container [ngSwitch]="j.estado_puntuacion">
+                  <div class="stat-pill" *ngSwitchCase="'puntuado'" title="Goles">
+                    <span class="stat-icon">⚽</span> {{ j.goles }}
+                  </div>
+
+                  <div class="stat-pill" *ngSwitchCase="'puntuado'" title="Asistencias">
+                    <span class="stat-icon">🤝</span> {{ j.asistencias }}
+                  </div>
+
+                  <div class="stat-pill" *ngSwitchCase="'pendiente'">
+                    Pendiente
+                  </div>
+
+                  <div class="stat-pill" *ngSwitchCase="'no_jugo'">
+                    No jugó
+                  </div>
+
+                  <div class="stat-pill" *ngSwitchCase="'hueco_vacio'">
+                    Penalización
+                  </div>
+
+                  <div class="stat-pill" *ngSwitchCase="'habilidad'">
+                    Habilidad activa
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="col-pts">
+                <span class="pts-number">
+                  {{ mostrarPuntosJugador(j) }}
+                </span>
+              </div>
             </div>
+
             <div class="empty-state" *ngIf="jugadoresJornada.length === 0">
-              <span class="empty-icon">📉</span><p>No ha puntuado en esta jornada.</p>
+              <span class="empty-icon">🔒</span>
+              <p>La alineación de esta jornada aún no está bloqueada.</p>
+              <p class="empty-help">
+                Aparecerá cuando empiece el primer partido de la jornada.
+              </p>
             </div>
           </div>
         </div>
@@ -208,181 +306,248 @@
 
   <div class="modal-overlay" *ngIf="mostrarModalClub && clubSeleccionado" (click)="cerrarModalClub()">
     <div class="modal-content club-modal" (click)="$event.stopPropagation()">
-      
-      <div class="hero-section">
-        <span class="close-btn" style="position: absolute; right: 20px; top: 20px;" (click)="cerrarModalClub()">&times;</span>
-        <img [src]="getEscudoUrl(clubSeleccionado.equipo)" class="big-shield" [alt]="clubSeleccionado.equipo">
+
+      <button class="club-close-btn" type="button" (click)="cerrarModalClub()">
+        &times;
+      </button>
+
+      <div class="club-hero-section">
+        <div class="club-shield-frame">
+          <img
+            [src]="getEscudoUrl(clubSeleccionado.equipo)"
+            class="big-shield"
+            [alt]="clubSeleccionado.equipo"
+          >
+        </div>
+
         <div class="club-info">
-            <h1 class="club-title">{{ clubSeleccionado.equipo }}</h1>
-            <div class="lore-box">
-                <p class="club-lore">{{ clubSeleccionado.lore }}</p>
-            </div>
+          <span class="club-kicker">Club IA</span>
+          <h1 class="club-title">{{ clubSeleccionado.equipo }}</h1>
+
+          <div class="lore-box">
+            <span class="quote-icon">“</span>
+            <p class="club-lore">{{ clubSeleccionado.lore }}</p>
+          </div>
         </div>
       </div>
 
-      <div class="modal-body layout-modal-body">
-        
+      <div class="layout-modal-body">
+
         <div class="club-tabs-container">
-            <button class="club-tab" [class.active]="tabClubActiva === 'plantilla'" (click)="tabClubActiva = 'plantilla'">Plantilla</button>
-            <button class="club-tab" [class.active]="tabClubActiva === 'noticias'" (click)="tabClubActiva = 'noticias'">Noticias</button>
-            <button class="club-tab" [class.active]="tabClubActiva === 'partido'" (click)="tabClubActiva = 'partido'">Último Partido</button>
+          <button
+            class="club-tab"
+            [class.active]="tabClubActiva === 'plantilla'"
+            (click)="tabClubActiva = 'plantilla'"
+          >
+            Plantilla
+          </button>
+
+          <button
+            class="club-tab"
+            [class.active]="tabClubActiva === 'noticias'"
+            (click)="tabClubActiva = 'noticias'"
+          >
+            Noticias
+          </button>
+
+          <button
+            class="club-tab"
+            [class.active]="tabClubActiva === 'partido'"
+            (click)="tabClubActiva = 'partido'"
+          >
+            Último Partido
+          </button>
         </div>
 
         <ng-container *ngIf="tabClubActiva === 'plantilla'">
-            <div class="stats-bento">
-                <div class="stat-card" *ngIf="pichichi">
-                    <div class="stat-data">
-                        <span class="stat-label">Pichichi</span>
-                        <span class="stat-player">{{ pichichi.nombre }}</span>
-                        <span class="stat-number">⚽ {{ pichichi.goles }} goles</span>
-                    </div>
-                </div>
-                <div class="stat-card" *ngIf="masTarjetas">
-                    <div class="stat-data">
-                        <span class="stat-label">Agresivo</span>
-                        <span class="stat-player">{{ masTarjetas.nombre }}</span>
-                        <span class="stat-number">🟨 {{ masTarjetas.amarillas }} | 🟥 {{ masTarjetas.rojas }}</span>
-                    </div>
-                </div>
+          <div class="stats-bento">
+            <div class="club-stat-card" *ngIf="pichichi">
+              <div class="stat-icon">⚽</div>
+              <div class="stat-data">
+                <span class="stat-label">Pichichi</span>
+                <span class="stat-player">{{ pichichi.nombre }}</span>
+                <span class="stat-number">{{ pichichi.goles }} goles</span>
+              </div>
             </div>
 
-            <div class="roster-list">
-                <div class="player-row" *ngFor="let j of clubSeleccionado.plantilla" [class.opaco]="j.partidos_lesion > 0 || j.partidos_sancion > 0">
-                    <div class="pr-left">
-                        <span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span>
-                    </div>
-                    <div class="pr-center">
-                        <span class="player-name">{{ j.nombre }}</span>
-                        <span class="estado-baja baja-roja" *ngIf="j.partidos_sancion > 0">
-                            🟥 Sanción: {{ j.partidos_sancion }} partido(s)
-                        </span>
-                        <span class="estado-baja baja-lesion" *ngIf="j.partidos_lesion > 0">
-                            🚑 {{ j.estado_lesion }} ({{ j.partidos_lesion }} p)
-                        </span>
-                    </div>
-                    <div class="pr-right">
-                        <div class="mini-stat" title="Goles">⚽ {{ j.goles }}</div>
-                        <div class="mini-stat" title="Asistencias">🤝 {{ j.asistencias }}</div>
-                    </div>
-                </div>
+            <div class="club-stat-card" *ngIf="maxAsistente">
+              <div class="stat-icon">🤝</div>
+              <div class="stat-data">
+                <span class="stat-label">Asistente</span>
+                <span class="stat-player">{{ maxAsistente.nombre }}</span>
+                <span class="stat-number">{{ maxAsistente.asistencias }} asistencias</span>
+              </div>
             </div>
+
+            <div class="club-stat-card" *ngIf="masTarjetas">
+              <div class="stat-icon">🟨</div>
+              <div class="stat-data">
+                <span class="stat-label">Agresivo</span>
+                <span class="stat-player">{{ masTarjetas.nombre }}</span>
+                <span class="stat-number">
+                  {{ masTarjetas.amarillas }} amarillas · {{ masTarjetas.rojas }} rojas
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roster-header-container">
+            <h3 class="roster-title">Plantilla</h3>
+            <span class="roster-count">{{ clubSeleccionado.plantilla?.length || 0 }} jugadores</span>
+          </div>
+
+          <div class="roster-list">
+            <div
+              class="club-player-row"
+              *ngFor="let j of clubSeleccionado.plantilla"
+              [class.opaco]="j.partidos_lesion > 0 || j.partidos_sancion > 0"
+            >
+              <div class="pr-left">
+                <span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span>
+              </div>
+
+              <div class="pr-center">
+                <span class="player-name">{{ j.nombre }}</span>
+
+                <span class="estado-baja baja-roja" *ngIf="j.partidos_sancion > 0">
+                  🟥 Sanción: {{ j.partidos_sancion }} partido(s)
+                </span>
+
+                <span class="estado-baja baja-lesion" *ngIf="j.partidos_lesion > 0">
+                  🚑 {{ j.estado_lesion }} ({{ j.partidos_lesion }} p)
+                </span>
+              </div>
+
+              <div class="pr-right">
+                <div class="mini-stat" title="Media">{{ j.media }}</div>
+                <div class="mini-stat" title="Goles">⚽ {{ j.goles }}</div>
+                <div class="mini-stat" title="Asistencias">🤝 {{ j.asistencias }}</div>
+                <div class="mini-stat" title="Amarillas">🟨 {{ j.amarillas }}</div>
+                <div class="mini-stat" title="Rojas">🟥 {{ j.rojas }}</div>
+              </div>
+            </div>
+          </div>
         </ng-container>
 
         <ng-container *ngIf="tabClubActiva === 'noticias'">
-            <div class="roster-list" style="padding-right: 15px;">
-                
-                <h3 class="alineacion-titulo" style="margin-top: 0; color: #ff9f43; border-bottom-color: rgba(255, 159, 67, 0.3);">Enfermería y Comité</h3>
-                
-                @if (bajasActuales.length > 0) {
-                    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;">
-                        @for (baja of bajasActuales; track $index) {
-                            <div class="player-row" style="background: rgba(0,0,0,0.4); border-left: 4px solid {{ baja.partidos_sancion > 0 ? '#ff4757' : '#ff9f43' }};">
-                                <div class="pr-center">
-                                    <span class="player-name" style="font-size: 1.1rem;">{{ baja.nombre }}</span>
-                                    <div style="color: #ccc; font-size: 0.9rem; margin-top: 5px;">
-                                        
-                                        @if (baja.partidos_sancion > 0) {
-                                            <span style="display: block;">
-                                                🟥 Suspendido por Tarjeta Roja. 
-                                                <span style="color: #ff4757; font-weight: 700;">Le quedan {{ baja.partidos_sancion }} partido(s).</span>
-                                            </span>
-                                        }
-                                        
-                                        @if (baja.partidos_lesion > 0) {
-                                            <span style="display: block;">
-                                                🚑 Lesión: {{ baja.estado_lesion }}. 
-                                                <span style="color: #ff9f43; font-weight: 700;">Estará fuera {{ baja.partidos_lesion }} partido(s).</span>
-                                            </span>
-                                        }
 
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                } @else {
-                    <div style="background: rgba(46, 213, 115, 0.05); padding: 20px; border-radius: 12px; border: 1px dashed rgba(46, 213, 115, 0.3); margin-bottom: 25px; text-align: center;">
-                        <span style="font-size: 1.8rem; display: block; margin-bottom: 5px;">✅</span>
-                        <span style="color: #2ed573; font-weight: 600;">Plantilla al 100%. No hay lesionados ni sancionados.</span>
-                    </div>
-                }
+          <div class="club-news-layout">
 
-                <h3 class="alineacion-titulo">Historial de Sucesos</h3>
-                @if (clubNoticias.length > 0) {
-                    <div class="timeline-container">
-                        @for (noticia of clubNoticias; track $index) {
-                            <div class="timeline-event" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #1e90ff;">
-                                <div style="display: flex; flex-direction: column; gap: 5px;">
-                                    <span style="color: #889990; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
-                                        Jornada {{ noticia.jornada }} | Minuto {{ noticia.minuto }}'
-                                    </span>
-                                    <span style="color: white; font-size: 1rem; line-height: 1.4;">
-                                        @if (noticia.tipo_evento === 'lesion') { <span>🚑</span> }
-                                        @if (noticia.tipo_evento === 'roja') { <span>🟥</span> }
-                                        @if (noticia.tipo_evento === 'amarilla') { <span>🟨</span> }
-                                        {{ noticia.descripcion }}
-                                    </span>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                } @else {
-                    <div class="empty-state">
-                        <span class="empty-icon">📰</span>
-                        <p>No hay sucesos médicos ni disciplinarios recientes.</p>
-                    </div>
-                }
+            <!-- Enfermería y Comité -->
+            <section class="club-news-section">
+              <div class="section-header-simple">
+                <div>
+                  <h3 class="roster-title">Enfermería y Comité</h3>
+                  <p class="section-subtitle">Jugadores lesionados o sancionados actualmente</p>
+                </div>
 
-            </div>
+                <span class="roster-count">
+                  {{ bajasActuales.length }} bajas
+                </span>
+              </div>
+
+              <div class="bajas-list" *ngIf="bajasActuales.length > 0">
+                <div
+                  class="baja-card"
+                  *ngFor="let j of bajasActuales"
+                  [class.baja-card-lesion]="j.partidos_lesion > 0"
+                  [class.baja-card-sancion]="j.partidos_sancion > 0"
+                >
+                  <div class="baja-main">
+                    <span class="badge pos-{{ j.posicion | lowercase }}">{{ j.posicion }}</span>
+
+                    <div class="baja-player">
+                      <span class="player-name">{{ j.nombre }}</span>
+
+                      <span class="baja-desc" *ngIf="j.partidos_lesion > 0">
+                        🚑 {{ j.estado_lesion || 'Lesionado' }}
+                      </span>
+
+                      <span class="baja-desc" *ngIf="j.partidos_sancion > 0">
+                        🟥 Sancionado por comité
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="baja-meta">
+                    <span class="baja-pill baja-pill-lesion" *ngIf="j.partidos_lesion > 0">
+                      {{ j.partidos_lesion }} partido(s)
+                    </span>
+
+                    <span class="baja-pill baja-pill-sancion" *ngIf="j.partidos_sancion > 0">
+                      {{ j.partidos_sancion }} partido(s)
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="empty-state compact-empty" *ngIf="bajasActuales.length === 0">
+                <span class="empty-icon">✅</span>
+                <p>No hay jugadores lesionados ni sancionados actualmente.</p>
+              </div>
+            </section>
+
+            <!-- Historial de sucesos -->
+            <section class="club-news-section">
+              <div class="section-header-simple">
+                <div>
+                  <h3 class="roster-title">Historial de sucesos</h3>
+                  <p class="section-subtitle">Últimas noticias relevantes del club</p>
+                </div>
+              </div>
+
+              <div class="news-list" *ngIf="clubNoticias.length > 0">
+                <div class="news-item" *ngFor="let n of clubNoticias">
+                  <span class="news-dot"></span>
+                  <p>{{ n.texto || n.descripcion || n }}</p>
+                </div>
+              </div>
+
+              <div class="empty-state compact-empty" *ngIf="clubNoticias.length === 0">
+                <span class="empty-icon">📰</span>
+                <p>No hay noticias recientes de este club.</p>
+              </div>
+            </section>
+
+          </div>
+
         </ng-container>
 
         <ng-container *ngIf="tabClubActiva === 'partido'">
-            <div class="roster-list" style="padding-right: 15px;">
-                @if (clubUltimoPartido) {
-                    <div class="match-scoreboard">
-                        <div class="team-score">
-                            <img [src]="getEscudoUrl(clubUltimoPartido.equipo_local)" alt="Local">
-                            <span style="color:#aaa; font-weight:600; font-size:0.8rem;">{{ clubUltimoPartido.equipo_local }}</span>
-                        </div>
-                        <div class="score-numbers">
-                            {{ clubUltimoPartido.goles_local }} - {{ clubUltimoPartido.goles_visitante }}
-                        </div>
-                        <div class="team-score">
-                            <img [src]="getEscudoUrl(clubUltimoPartido.equipo_visitante)" alt="Visitante">
-                            <span style="color:#aaa; font-weight:600; font-size:0.8rem;">{{ clubUltimoPartido.equipo_visitante }}</span>
-                        </div>
-                    </div>
+          <div class="section-header-simple">
+            <h3 class="roster-title">Último partido</h3>
+          </div>
 
-                    <h3 class="alineacion-titulo">XI Titular</h3>
-                    @for (titular of clubUltimoPartido.titulares; track $index) {
-                        <div class="player-row" style="padding: 10px 15px; margin-bottom: 5px;">
-                            <div class="pr-left"><span class="badge pos-{{ titular.posicion | lowercase }}">{{ titular.posicion }}</span></div>
-                            <div class="pr-center"><span class="player-name">{{ titular.nombre }}</span></div>
-                            <div class="pr-right">
-                                <div class="mini-stat" style="color:#2ed573; min-width: 60px;">{{ titular.nota_partido }}</div>
-                            </div>
-                        </div>
-                    }
-
-                    <h3 class="alineacion-titulo" style="margin-top: 20px;">Banquillo</h3>
-                    @for (suplente of clubUltimoPartido.banquillo; track $index) {
-                        <div class="player-row" style="padding: 10px 15px; margin-bottom: 5px; opacity: 0.8;">
-                            <div class="pr-left"><span class="badge pos-{{ suplente.posicion | lowercase }}">{{ suplente.posicion }}</span></div>
-                            <div class="pr-center"><span class="player-name" [style.color]="suplente.nota_partido !== '-' ? 'white' : '#888'">{{ suplente.nombre }}</span></div>
-                            <div class="pr-right">
-                                <div class="mini-stat" [style.color]="suplente.nota_partido !== '-' ? '#2ed573' : '#555'" style="min-width: 60px;">
-                                    {{ suplente.nota_partido }}
-                                </div>
-                            </div>
-                        </div>
-                    }
-                } @else {
-                    <div class="empty-state">
-                        <span class="empty-icon">⚽</span>
-                        <p>El equipo aún no ha disputado ningún encuentro.</p>
-                    </div>
-                }
+          <div class="last-match-card" *ngIf="clubUltimoPartido">
+            <div class="last-match-score">
+              <span>{{ clubUltimoPartido.equipo_local }}</span>
+              <strong>{{ clubUltimoPartido.goles_local }} - {{ clubUltimoPartido.goles_visitante }}</strong>
+              <span>{{ clubUltimoPartido.equipo_visitante }}</span>
             </div>
+
+            <div class="last-match-columns">
+              <div>
+                <h4>Titulares</h4>
+                <div class="last-match-row" *ngFor="let j of clubUltimoPartido.titulares">
+                  <span class="player-name">{{ j.nombre }}</span>
+                  <span class="mini-stat">{{ j.nota_partido }}</span>
+                </div>
+              </div>
+
+              <div>
+                <h4>Banquillo</h4>
+                <div class="last-match-row" *ngFor="let j of clubUltimoPartido.banquillo">
+                  <span class="player-name">{{ j.nombre }}</span>
+                  <span class="mini-stat">{{ j.nota_partido }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-state" *ngIf="!clubUltimoPartido">
+            <span class="empty-icon">⚽</span>
+            <p>Este club todavía no tiene un último partido disponible.</p>
+          </div>
         </ng-container>
 
       </div>
@@ -393,8 +558,8 @@
     <div class="modal-overlay" (click)="cerrarModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <div style="display: flex; align-items: center; gap: 15px;">
-            <img [src]="usuarioSeleccionado.avatar" class="user-avatar" style="width: 50px; height: 50px;">
+          <div class="modal-user-heading">
+            <img [src]="usuarioSeleccionado.avatar" class="modal-user-avatar">
             <h2 class="modal-title">{{ usuarioSeleccionado.username }}</h2>
           </div>
           <span class="close-btn" (click)="cerrarModal()">&times;</span>
@@ -428,11 +593,22 @@
         <div class="modal-body">
           <div class="input-group">
             <label>Asunto</label>
-            <input type="text" [(ngModel)]="asuntoInput" class="input-puja" placeholder="Ej: Fichaje, Alianza...">
+            <input
+              type="text"
+              [(ngModel)]="asuntoInput"
+              class="input-mensaje"
+              placeholder="Ej: Fichaje, alianza..."
+            >
           </div>
-          <div class="input-group" style="margin-top: 15px;">
+
+          <div class="input-group input-group-spaced">
             <label>Mensaje</label>
-            <textarea [(ngModel)]="contenidoInput" class="input-puja" rows="4" placeholder="Escribe tu mensaje aquí..." style="resize: none;"></textarea>
+            <textarea
+              [(ngModel)]="contenidoInput"
+              class="textarea-mensaje"
+              rows="4"
+              placeholder="Escribe tu mensaje aquí..."
+            ></textarea>
           </div>
         </div>
         <div class="modal-footer">

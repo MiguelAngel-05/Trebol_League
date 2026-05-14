@@ -1,0 +1,111 @@
+/* =========================================================
+   TREBOL LEAGUE — HEADER GLOBAL
+   ========================================================= */
+
+.main-header {
+  background: transparent;
+  width: var(--tl-header-width);
+  height: var(--tl-header-height);
+  position: absolute;
+  top: var(--tl-header-top);
+  right: var(--tl-header-right);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 20;
+  animation: slideDown 0.8s ease-out forwards;
+}
+
+.header-options.top-row {
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%);
+  border-top-right-radius: var(--tl-radius-lg);
+  border-bottom: 2px solid var(--tl-border-soft);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 160px 0 80px;
+}
+
+.header-optionsB.bottom-row {
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(90deg, #1f3327 0%, #15221b 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 160px 0 80px;
+}
+
+.separator-header {
+  font-size: 2rem;
+  color: #3b614b;
+  font-weight: 300;
+  margin: 0 10px;
+  transform: skew(-20deg);
+}
+
+.option-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--tl-white);
+  font-weight: 600;
+  min-width: 0;
+}
+
+.option-group p {
+  margin: 0;
+}
+
+.icon {
+  height: 22px;
+  width: auto;
+}
+
+.pinchar {
+  height: 26px;
+  width: auto;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.icon-hover:hover .pinchar {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 5px white);
+}
+
+.div-img-user {
+  background: linear-gradient(to bottom, var(--tl-green-dark), var(--tl-green-deep));
+  width: 140px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: var(--tl-radius-lg);
+  border-bottom-left-radius: var(--tl-radius-lg);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+  cursor: pointer;
+}
+
+.img-user {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  object-fit: cover;
+  transition: 0.3s;
+}
+
+.div-img-user:hover .img-user {
+  transform: scale(1.15);
+  border-color: var(--tl-green);
+  box-shadow: 0 0 15px rgba(46, 213, 115, 0.5);
+}

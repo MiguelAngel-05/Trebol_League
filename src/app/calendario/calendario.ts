@@ -201,15 +201,26 @@ export class Calendario implements OnInit {
   // --- LÓGICA DE PARTIDOS EN VIVO Y DETALLES ---
   getEstadoVisual(p: any): string {
     if (!p || !p.fecha_partido) return 'pendiente';
+
     const ahora = new Date().getTime();
     const inicio = new Date(p.fecha_partido).getTime();
-    const fin = inicio + (70 * 60 * 1000); // 70 MINUTOS (60 juego + 10 descanso)
+    const fin = inicio + (70 * 60 * 1000);
 
-    if (ahora < inicio) return 'pendiente';
-    if (ahora >= inicio && ahora <= fin) return 'en_curso';
-    return 'finalizado';
+    if (ahora < inicio) {
+      return 'pendiente';
+    }
+
+    if (ahora >= inicio && ahora <= fin) {
+      return 'en_curso';
+    }
+
+    if (p.estado === 'finalizado') {
+      return 'finalizado';
+    }
+
+    return 'pendiente';
   }
-
+  
   abrirPartido(p: any) {
     this.partidoSeleccionado = p;
     this.mostrarModalPartido = true;

@@ -1,0 +1,62 @@
+/* =========================================================
+   TREBOL LEAGUE — VARIABLES GLOBALES
+   ========================================================= */
+
+:root {
+  /* Colores principales */
+  --tl-bg-dark: #0f1a14;
+  --tl-bg-panel: rgba(20, 30, 25, 0.75);
+  --tl-bg-panel-solid: #1f3327;
+
+  --tl-green: #2ed573;
+  --tl-green-dark: #1f8f5f;
+  --tl-green-deep: #156942;
+
+  --tl-red: #ff4757;
+  --tl-red-soft: #ff6b81;
+
+  --tl-blue: #1e90ff;
+  --tl-orange: #ffa502;
+  --tl-purple: #b145e9;
+
+  --tl-white: #ffffff;
+  --tl-text-main: #ffffff;
+  --tl-text-muted: #aaa;
+  --tl-text-soft: #ccc;
+  --tl-text-dark: #1a2b22;
+
+  /* Bordes */
+  --tl-border-soft: rgba(255, 255, 255, 0.1);
+  --tl-border-medium: rgba(255, 255, 255, 0.2);
+  --tl-border-green: rgba(46, 213, 115, 0.4);
+  --tl-border-red: rgba(255, 71, 87, 0.4);
+
+  /* Sombras */
+  --tl-shadow-panel: 0 15px 40px rgba(0, 0, 0, 0.5);
+  --tl-shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.8);
+  --tl-shadow-green: 0 0 15px rgba(46, 213, 115, 0.4);
+  --tl-shadow-red: 0 0 15px rgba(255, 71, 87, 0.4);
+
+  /* Radios */
+  --tl-radius-sm: 8px;
+  --tl-radius-md: 12px;
+  --tl-radius-lg: 20px;
+  --tl-radius-xl: 25px;
+
+  /* Espaciados */
+  --tl-space-xs: 4px;
+  --tl-space-sm: 8px;
+  --tl-space-md: 15px;
+  --tl-space-lg: 20px;
+  --tl-space-xl: 30px;
+  --tl-space-page: 80px;
+
+  /* Layout */
+  --tl-header-width: 50%;
+  --tl-header-height: 120px;
+  --tl-header-top: 40px;
+  --tl-header-right: 80px;
+
+  /* Tipografía */
+  --tl-font-main: 'Poppins', sans-serif;
+}

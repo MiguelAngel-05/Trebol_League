@@ -68,8 +68,10 @@
             class="player-row"
             *ngFor="let jugador of jugadoresRival; let i = index"
             [style.animation-delay]="i * 0.05 + 's'"
-            (click)="abrirDetalle(jugador, $event)"
-          >
+            [class.especial]="jugador.tipo_carta === 'especial'"
+            [class.ultra]="jugador.tipo_carta === 'ultra'"
+            [class.en-venta]="jugador.en_venta"
+            (click)="abrirDetalle(jugador, $event)">
             <div class="player-left-section">
               <div class="team-token">
                 <img [src]="obtenerRutaEscudo(jugador.equipo)" alt="{{ jugador.equipo }}" class="team-img">
@@ -98,10 +100,10 @@
 
               <div class="action-zone">
                 @if (jugador.en_venta) {
-                  <div class="tag-label venta" style="margin-right: 10px;">EN VENTA</div>
+                  <div class="tag-label venta">EN VENTA</div>
                 }
                 
-                <button class="btn-oferta" (click)="abrirModalOferta(jugador)">
+                <button class="btn-oferta" (click)="abrirModalOferta(jugador); $event.stopPropagation()">
                   <span class="icon-oferta">💸</span> HACER OFERTA
                 </button>
               </div>

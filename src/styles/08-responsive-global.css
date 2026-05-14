@@ -1,0 +1,139 @@
+/* =========================================================
+   TREBOL LEAGUE — RESPONSIVE GLOBAL
+   ========================================================= */
+
+/* Laptop pequeño */
+@media (max-width: 1200px) {
+  :root {
+    --tl-space-page: 40px;
+    --tl-header-width: 60%;
+    --tl-header-right: 40px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .main-container {
+    min-height: 100dvh;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .main-header {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    height: auto;
+    padding: 12px 20px 0;
+  }
+
+  .header-options.top-row,
+  .header-optionsB.bottom-row {
+    clip-path: none;
+    border-radius: var(--tl-radius-md);
+    padding: 12px 20px;
+    min-height: 54px;
+  }
+
+  .div-img-user {
+    display: none;
+  }
+
+  .content-area {
+    margin-top: 20px;
+    padding-inline: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  .main-container {
+    display: block;
+    min-height: 100dvh;
+    padding: 10px;
+  }
+
+  .main-header {
+    padding: 0;
+    margin-bottom: 16px;
+  }
+
+  .header-options.top-row,
+  .header-optionsB.bottom-row {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    justify-content: space-between;
+  }
+
+  .option-group {
+    gap: 8px;
+    font-size: 0.9rem;
+    min-width: 0;
+  }
+
+  .option-group p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .separator-header {
+    display: none;
+  }
+
+  .content-area {
+    margin-top: 0;
+    padding: 0;
+    height: auto;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 12px;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: none;
+    max-height: 92dvh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .toast-notification {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    width: auto;
+    min-width: 0;
+  }
+}
+
+/* Mobile pequeño */
+@media (max-width: 480px) {
+  .header-options.top-row,
+  .header-optionsB.bottom-row {
+    padding: 9px 12px;
+  }
+
+  .modal-content {
+    padding: 16px;
+  }
+
+  .btn-cancelar,
+  .btn-confirmar {
+    padding: 11px;
+    font-size: 0.9rem;
+  }
+}

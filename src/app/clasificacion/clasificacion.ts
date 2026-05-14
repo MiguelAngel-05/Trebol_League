@@ -34,6 +34,10 @@ export class Clasificacion implements OnInit {
   jornadaSeleccionada: number = 1;
   jugadoresJornada: any[] = [];
   totalPuntosJornada: number = 0;
+  alineacionBloqueada: any[] = [];
+  alineacionBloqueadaOnce: any[] = [];
+  jugador12Bloqueado: any = null;
+  alineacionBloqueadaCargada: boolean = false;
 
   // Modales Mánagers y Mensajes
   mostrarModalUsuario: boolean = false;
@@ -52,6 +56,8 @@ export class Clasificacion implements OnInit {
   maxAsistente: any = null;
   masTarjetas: any = null;
 
+  estadoJornada: any = null;
+  
   notificationMsg = '';
   isSuccess = false;
 
@@ -93,20 +99,47 @@ export class Clasificacion implements OnInit {
     this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/managers`, this.getHeaders())
       .subscribe(res => {
         this.managers = res;
-        if (this.managers.length > 0) this.managerSeleccionado = this.user?.id || this.managers[0].id;
+
+        if (this.managers.length > 0) {
+          this.managerSeleccionado = this.user?.id || this.managers[0].id;
+
+          this.buscarPuntosJornada();
+          this.buscarAlineacionBloqueada();
+        }
       });
   }
 
   cargarTodo() {
     this.isLoading = true;
-    this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/clasificacion`, this.getHeaders())
-      .subscribe(res => { this.clasificacionGeneral = res; this.isLoading = false; });
-    
-    this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/clasificacion-clubes`, this.getHeaders())
-      .subscribe(res => { this.clasificacionClubes = res; });
-      
-    this.buscarPuntosJornada();
+
+    this.http.get<any[]>(
+      `${this.apiBase}/api/ligas/${this.id_liga}/clasificacion`,
+      this.getHeaders()
+    ).subscribe({
+      next: (res) => {
+        this.clasificacionGeneral = res;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando clasificación general:', err);
+        this.isLoading = false;
+      }
+    });
+
+    this.http.get<any[]>(
+      `${this.apiBase}/api/ligas/${this.id_liga}/clasificacion-clubes`,
+      this.getHeaders()
+    ).subscribe({
+      next: (res) => {
+        this.clasificacionClubes = res;
+      },
+      error: (err) => {
+        console.error('Error cargando clasificación de clubes:', err);
+      }
+    });
+
     this.buscarRankingJornada();
+    this.buscarEstadoJornada();
   }
 
   cambiarTab(tab: 'general' | 'jornada_ranking' | 'mis_puntos' | 'clubes') {
@@ -115,11 +148,28 @@ export class Clasificacion implements OnInit {
 
   buscarPuntosJornada() {
     if (!this.managerSeleccionado || !this.jornadaSeleccionada) return;
-    this.http.get<any[]>(`${this.apiBase}/api/ligas/${this.id_liga}/puntos-jornada?id_manager=${this.managerSeleccionado}&jornada=${this.jornadaSeleccionada}`, this.getHeaders())
-      .subscribe(res => {
-        this.jugadoresJornada = res;
-        this.totalPuntosJornada = this.jugadoresJornada.reduce((sum, j) => sum + Number(j.puntos || 0), 0);
-      });
+
+    this.http.get<any[]>(
+      `${this.apiBase}/api/ligas/${this.id_liga}/puntos-jornada?id_manager=${this.managerSeleccionado}&jornada=${this.jornadaSeleccionada}`,
+      this.getHeaders()
+    ).subscribe({
+      next: (res) => {
+        this.jugadoresJornada = res || [];
+
+        this.totalPuntosJornada = this.jugadoresJornada.reduce((sum, j) => {
+          const puntos = j.puntos !== null && j.puntos !== undefined
+            ? Number(j.puntos)
+            : 0;
+
+          return sum + puntos;
+        }, 0);
+      },
+      error: (err) => {
+        console.error('Error cargando puntos de jornada:', err);
+        this.jugadoresJornada = [];
+        this.totalPuntosJornada = 0;
+      }
+    });
   }
 
   buscarRankingJornada() {
@@ -128,21 +178,86 @@ export class Clasificacion implements OnInit {
       .subscribe(res => { this.clasificacionJornada = res; });
   }
 
+  buscarAlineacionBloqueada() {
+    if (!this.jornadaSeleccionada || !this.managerSeleccionado) return;
+
+    this.alineacionBloqueadaCargada = false;
+
+    this.http.get<any[]>(
+      `${this.apiBase}/api/ligas/${this.id_liga}/alineacion-jornada/${this.jornadaSeleccionada}/${this.managerSeleccionado}`,
+      this.getHeaders()
+    ).subscribe({
+      next: (res) => {
+        this.alineacionBloqueada = res || [];
+
+        this.alineacionBloqueadaOnce = this.alineacionBloqueada.filter(
+          h => h.hueco_plantilla !== 'hueco-12'
+        );
+
+        this.jugador12Bloqueado = this.alineacionBloqueada.find(
+          h => h.hueco_plantilla === 'hueco-12'
+        ) || null;
+
+        this.alineacionBloqueadaCargada = true;
+      },
+      error: () => {
+        this.alineacionBloqueada = [];
+        this.alineacionBloqueadaOnce = [];
+        this.jugador12Bloqueado = null;
+        this.alineacionBloqueadaCargada = true;
+      }
+    });
+  }
+
+  buscarEstadoJornada() {
+    if (!this.jornadaSeleccionada) return;
+
+    this.http.get<any>(
+      `${this.apiBase}/api/ligas/${this.id_liga}/estado-jornada/${this.jornadaSeleccionada}`,
+      this.getHeaders()
+    ).subscribe({
+      next: (res) => {
+        this.estadoJornada = res;
+      },
+      error: () => {
+        this.estadoJornada = null;
+      }
+    });
+  }
+
   alCambiarJornada() {
     this.buscarPuntosJornada();
     this.buscarRankingJornada();
+    this.buscarAlineacionBloqueada();
+    this.buscarEstadoJornada();
+  }
+
+  alCambiarManager() {
+    this.buscarPuntosJornada();
+    this.buscarAlineacionBloqueada();
   }
 
   // Calcula el premio individual replicando la lógica exacta de tu Backend
   calcularPremioJornada(posicion: number, puntos: number): number {
-    let premio = (Number(puntos) || 0) * 100000; // 100.000 Tc por cada punto
+    const puntosNum = Number(puntos) || 0;
 
-    // Bonus por subir al podio
-    if (posicion === 0) premio += 5000000;      // 1º: +5 Millones
-    else if (posicion === 1) premio += 3000000; // 2º: +3 Millones
-    else if (posicion === 2) premio += 1500000; // 3º: +1.5 Millón
+    const bonusPorPuesto = [
+      5000000,
+      3500000,
+      2500000,
+      1500000,
+      1000000,
+      750000,
+      500000,
+      300000,
+      150000,
+      0
+    ];
 
-    return premio;
+    const basePorPuntos = puntosNum > 0 ? puntosNum * 100000 : 0;
+    const bonus = bonusPorPuesto[posicion] || 0;
+
+    return basePorPuntos + bonus;
   }
 
   // Calcula la suma total de dinero que se va a repartir (o se ha repartido) en toda la jornada
@@ -154,13 +269,16 @@ export class Clasificacion implements OnInit {
     }, 0);
   }
 
-  // Comprueba si la jornada no ha empezado (nadie ha puntuado todavía)
   get jornadaNoEmpezada(): boolean {
-    if (!this.clasificacionJornada || this.clasificacionJornada.length === 0) return true;
-    
-    // Sumamos los puntos de todos. Si el total es 0, es que no ha empezado.
-    const sumaTotalPuntos = this.clasificacionJornada.reduce((suma, j) => suma + Number(j.puntos_jornada || 0), 0);
-    return sumaTotalPuntos === 0;
+    return this.estadoJornada?.estado_jornada === 'no_iniciada';
+  }
+
+  get jornadaEnCurso(): boolean {
+    return this.estadoJornada?.estado_jornada === 'en_curso';
+  }
+
+  get jornadaFinalizada(): boolean {
+    return this.estadoJornada?.estado_jornada === 'finalizada';
   }
 
   // --- MODAL CLUBES DE LA IA ---
@@ -286,6 +404,39 @@ export class Clasificacion implements OnInit {
     if (!this.clubSeleccionado || !this.clubSeleccionado.plantilla) return [];
     // Filtramos los que tengan más de 0 partidos de sanción o lesión
     return this.clubSeleccionado.plantilla.filter((j: any) => j.partidos_lesion > 0 || j.partidos_sancion > 0);
+  }
+
+  mostrarPuntosJugador(jugador: any): string {
+    if (!jugador) return '—';
+
+    if (jugador.estado_puntuacion === 'habilidad') {
+      return 'Hab.';
+    }
+
+    if (jugador.puntos === null || jugador.puntos === undefined) {
+      return '—';
+    }
+
+    return String(jugador.puntos);
+  }
+
+  getEstadoPuntuacionTexto(jugador: any): string {
+    if (!jugador) return '';
+
+    switch (jugador.estado_puntuacion) {
+      case 'puntuado':
+        return 'Puntuado';
+      case 'pendiente':
+        return 'Pendiente';
+      case 'no_jugo':
+        return 'No jugó';
+      case 'hueco_vacio':
+        return 'Hueco vacío';
+      case 'habilidad':
+        return 'Habilidad activa';
+      default:
+        return '';
+    }
   }
 
   formatearDinero(valor: number): string { return new Intl.NumberFormat('es-ES').format(valor); }

@@ -1,0 +1,62 @@
+/* =========================================================
+   TREBOL LEAGUE — SCROLLBARS GLOBALES
+   ========================================================= */
+
+.scrollbar-green,
+.calendar-wrapper,
+.matches-list,
+.modal-body-partido,
+.privados-list,
+.chat-messages,
+.modal-content,
+.modal-body,
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 213, 115, 0.6) rgba(0, 0, 0, 0.2);
+}
+
+.scrollbar-green::-webkit-scrollbar,
+.calendar-wrapper::-webkit-scrollbar,
+.matches-list::-webkit-scrollbar,
+.modal-body-partido::-webkit-scrollbar,
+.privados-list::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.panel-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-green::-webkit-scrollbar-track,
+.calendar-wrapper::-webkit-scrollbar-track,
+.matches-list::-webkit-scrollbar-track,
+.modal-body-partido::-webkit-scrollbar-track,
+.privados-list::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.panel-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.scrollbar-green::-webkit-scrollbar-thumb,
+.calendar-wrapper::-webkit-scrollbar-thumb,
+.matches-list::-webkit-scrollbar-thumb,
+.modal-body-partido::-webkit-scrollbar-thumb,
+.privados-list::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(46, 213, 115, 0.6);
+  border-radius: 10px;
+}
+
+.matches-list::-webkit-scrollbar {
+  width: 2px;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 4px;
+}

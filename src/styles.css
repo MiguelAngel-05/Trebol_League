@@ -1,5 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
-html, body { 
-    height: 100%;
-    margin: 0; 
-}
+@import './styles/01-variables.css';
+@import './styles/02-base.css';
+@import './styles/03-layout.css';
+@import './styles/04-header.css';
+@import './styles/05-buttons.css';
+@import './styles/06-modals.css';
+@import './styles/07-toast.css';
+@import './styles/08-responsive-global.css';
+@import './styles/09-animations.css';
+@import './styles/10-scrollbars.css';

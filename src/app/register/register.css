@@ -1,277 +1,465 @@
+/* =========================================================
+   REGISTER — BASE DE PANTALLA
+   ========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+}
+
 main {
-    margin: 0;
-    overflow: hidden; 
-    background: url("/Fondos/FondoLoginRegister.webp");
-    background-color: rgba(0,0,0,0.6); 
-    background-blend-mode: overlay;
-    background-size: cover;
-    background-position: bottom;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
+  width: 100vw;
+  height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  background-image: url("/Fondos/FondoLoginRegister.webp");
+  background-color: rgba(0, 0, 0, 0.58);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: bottom;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-family: var(--tl-font-main);
 }
 
-/* registro */
+/* =========================================================
+   REGISTER — PANEL
+   ========================================================= */
+
 .EspacioLogin {
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px); 
-    -webkit-backdrop-filter: blur(10px);
-    
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    padding: 10px 60px 10px 100px;
-    width: 55%;
-    height: 100%;
-    box-sizing: border-box;
-
-    clip-path: polygon(
-        150px 0, 
-        100% 0,
-        100% 100%,
-        0% 100%
-    );
-    
-    z-index: 1;
-    transform-origin: right; 
-    transform: scaleX(0);
-    animation: expandirRightaLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    
-    overflow-y: auto; 
+  width: 55%;
+  height: 100%;
+  padding: 16px 64px 16px 110px;
+  box-sizing: border-box;
+  color: var(--tl-white);
+  background:
+    radial-gradient(circle at 80% 10%, rgba(46, 213, 115, 0.12), transparent 35%),
+    rgba(0, 0, 0, 0.87);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  clip-path: polygon(150px 0, 100% 0, 100% 100%, 0% 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform-origin: right;
+  transform: scaleX(0);
+  animation: expandirRightaLeft 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  overflow-y: auto;
+  z-index: 1;
 }
 
-.EspacioLogin::-webkit-scrollbar { width: 6px; }
-.EspacioLogin::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-/* logo */
 .logo {
-    text-align: center;
-    margin-bottom: 10px;
-    flex-shrink: 0; 
+  text-align: center;
+  margin-bottom: 18px;
 }
 
 .logo img {
-    width: 90px;
-    margin-bottom: 5px;
-    filter: drop-shadow(0 0 10px rgba(22, 120, 52, 0.5));
-    transition: transform 0.3s ease;
+  width: 92px;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 12px 20px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 16px rgba(46, 213, 115, 0.16));
 }
-
-.logo:hover img { transform: scale(1.05); }
 
 .logo h2 {
-    color: white;
-    font-size: 1.4rem;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  margin: 8px 0 0;
+  color: var(--tl-white);
+  font-size: 1.65rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
 }
 
-.trebolT { color: #167834; }
-.trebolL { color: #3dae8d; }
+.trebolT,
+.trebolL {
+  color: var(--tl-green);
+  text-shadow: 0 0 14px rgba(46, 213, 115, 0.5);
+}
 
-/* formulario */
+/* =========================================================
+   REGISTER — FORMULARIO
+   ========================================================= */
+
 form {
-    width: 100%;
-    max-width: 450px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px; 
+  width: min(100%, 440px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .conjuntoInput {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #ccc;
-    margin-bottom: 2px;
-    margin-left: 2px;
+.conjuntoInput label {
+  color: var(--tl-green);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-input {
-    width: 100%;
-    padding: 8px 12px;
-    height: 38px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2); 
-    background: rgba(255, 255, 255, 0.05); 
-    color: white;
-    font-size: 13px;
-    outline: none;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+.inputUsu,
+.inputContra {
+  width: 100%;
+  min-height: 43px;
+  border: 1px solid rgba(46, 213, 115, 0.32);
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--tl-white);
+  font-family: var(--tl-font-main);
+  font-size: 0.92rem;
+  font-weight: 700;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-input:focus {
-    background: rgba(22, 120, 52, 0.1);
-    border-color: #3dae8d;
-    box-shadow: 0 0 15px rgba(22, 120, 52, 0.4);
+.inputUsu::placeholder,
+.inputContra::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+}
+
+.inputUsu:focus,
+.inputContra:focus {
+  background: rgba(0, 0, 0, 0.64);
+  border-color: var(--tl-green);
+  box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.12);
 }
 
 .errorInput {
-    border-color: #ff4d4d !important;
-    background: rgba(255, 77, 77, 0.05) !important;
-    box-shadow: 0 0 5px rgba(255, 77, 77, 0.2);
+  border-color: var(--tl-red) !important;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.12) !important;
 }
 
 .error {
-    color: #ff6b6b;
-    font-size: 11px;
-    margin-top: 1px;
-    font-weight: 500;
+  color: #ff9aa5;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-/* mensajes de error*/
-.errorNoCoincide {
-    color: #ff6b6b;
-    font-size: 12px;
-    background: rgba(255, 0, 0, 0.1);
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid rgba(255, 0, 0, 0.2);
-    text-align: center;
-    width: 100%;
-    display: block;
-}
+/* =========================================================
+   REGISTER — REGLAS CONTRASEÑA
+   ========================================================= */
 
 .reglas-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2px;
-    margin-top: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 8px;
+  margin-top: 2px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--tl-border-soft);
 }
 
 .ValContra {
-    width: 48%;
-    font-size: 10px;
-    color: #aaa;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
+
+.rule-valid {
+  color: var(--tl-green);
+}
+
+.rule-empty {
+  color: #777;
+}
+
+/* =========================================================
+   REGISTER — CHECKBOX
+   ========================================================= */
 
 .checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 5px;
-    cursor: pointer;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--tl-text-soft);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 2px;
 }
+
+.checkbox p {
+  margin: 0;
+}
+
 .mostrarContraseña {
-    width: 16px; height: 16px;
-    accent-color: #167834;
-    cursor: pointer;
-    margin: 0;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--tl-green);
+  cursor: pointer;
 }
-.checkbox p { color: #bbb; font-size: 13px; margin: 0; }
+
+/* =========================================================
+   REGISTER — ERRORES CRUZADOS
+   ========================================================= */
+
+.errorsNoCoincide {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.errorNoCoincide {
+  display: block;
+  color: #ff9aa5;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.errorNoCoincide-spaced {
+  margin-top: 2px;
+}
+
+/* =========================================================
+   REGISTER — BOTÓN
+   ========================================================= */
 
 .login-btnDIV {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
 }
 
 .login-btn {
-    width: 100%;
-    background: white;
-    color: #1a1a1a;
-    padding: 10px;
-    border-radius: 30px;
-    border: none;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: var(--tl-white);
+  color: #1a1a1a;
+  font-family: var(--tl-font-main);
+  font-size: 0.94rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease, color 0.24s ease, opacity 0.24s ease;
 }
 
 .login-btn:hover:not(:disabled) {
-    background: linear-gradient(90deg, #167834, #3dae8d);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(22, 120, 52, 0.4);
+  background: linear-gradient(90deg, var(--tl-green-dark), var(--tl-green));
+  color: var(--tl-white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(46, 213, 115, 0.36);
 }
 
 .login-btn:disabled {
-    background: #444; color: #777;
-    cursor: not-allowed;
-    opacity: 0.8;
+  background: #444;
+  color: #777;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .spinner {
-    width: 16px; height: 16px;
-    border: 3px solid rgba(0,0,0,0.2);
-    border-radius: 50%;
-    border-top-color: #1a1a1a;
-    animation: spin 1s infinite linear;
-    margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #1a1a1a;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
 }
-.login-btn:hover .spinner { border-top-color: white; }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+.login-btn:hover .spinner {
+  border-top-color: white;
+}
+
+/* =========================================================
+   REGISTER — LINKS
+   ========================================================= */
 
 .links {
-    text-align: center; margin-top: 15px;
-    font-size: 13px; color: #aaa;
+  margin-top: 8px;
+  text-align: center;
+  color: #aaa;
+  font-size: 0.84rem;
+  line-height: 1.45;
 }
+
 .links_registrarse {
-    color: #3dae8d; font-size: 14px;
-    cursor: pointer; text-decoration: none; font-weight: 600;
+  color: var(--tl-green);
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
 }
-.links_registrarse:hover { color: #167834; text-decoration: underline; }
 
-/* === TOAST === */
+.links_registrarse:hover {
+  color: var(--tl-green-dark);
+  text-decoration: underline;
+}
+
+/* =========================================================
+   REGISTER — TOAST LOCAL
+   ========================================================= */
+
 .toast-notification {
-    position: fixed;
-    top: 20px; right: 20px; z-index: 1000;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-left: 5px solid; 
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    display: flex; align-items: center; gap: 15px;
-    min-width: 280px;
-    animation: slideIn 0.5s ease-out;
+  top: 20px;
+  right: 20px;
+  bottom: auto;
 }
-.toast-notification.success { border-left-color: #2ed573; }
-.toast-notification.success .toast-icon { color: #2ed573; }
-.toast-notification.error { border-left-color: #ff4757; }
-.toast-notification.error .toast-icon { color: #ff4757; }
-.toast-icon { font-size: 24px; }
-.toast-title { margin: 0; font-weight: 700; font-size: 14px; }
-.toast-message { margin: 2px 0 0 0; font-size: 12px; color: #ccc; }
 
-/* animaciiones */
-@keyframes expandirRightaLeft { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+/* =========================================================
+   REGISTER — ANIMACIONES
+   ========================================================= */
+
+@keyframes expandirRightaLeft {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   REGISTER — RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 992px) {
+  main {
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .EspacioLogin {
+    width: min(100%, 580px);
+    height: auto;
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+    padding: 30px 34px;
+    border-radius: 26px;
+    clip-path: none;
+    transform: none;
+    animation: zoomInMobile 0.45s ease forwards;
+    border: 1px solid rgba(46, 213, 115, 0.22);
+    box-shadow: var(--tl-shadow-panel);
+  }
+
+  .logo img {
+    width: 86px;
+  }
+
+  .logo h2 {
+    font-size: 1.55rem;
+  }
+}
+
+/* =========================================================
+   REGISTER — RESPONSIVE MOBILE
+   ========================================================= */
 
 @media (max-width: 768px) {
-    main { justify-content: center; padding: 15px; box-sizing: border-box; }
-    .EspacioLogin { width: 100%; max-width: 400px; height: auto; max-height: 95vh; padding: 30px 20px; clip-path: none; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transform-origin: center; animation: zoomInMobile 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; overflow-y: auto; }
-    .logo { margin-bottom: 15px; }
-    .logo img { width: 75px; }
-    .logo h2 { font-size: 1.3rem; }
-    .ValContra { width: 100%; font-size: 11px; margin-bottom: 2px; }
-    .login-btn { font-size: 15px; padding: 12px; }
-    .toast-notification { width: 90%; top: 15px; left: 50%; right: auto; transform: translateX(-50%); min-width: unset; }
+  main {
+    min-height: 100dvh;
+    height: auto;
+    overflow-y: auto;
+    padding: 16px;
+    background-position: center;
+  }
+
+  .EspacioLogin {
+    width: 100%;
+    max-height: none;
+    padding: 24px 20px;
+    border-radius: 22px;
+  }
+
+  .logo {
+    margin-bottom: 18px;
+  }
+
+  .logo img {
+    width: 76px;
+  }
+
+  .logo h2 {
+    font-size: 1.35rem;
+  }
+
+  form {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .inputUsu,
+  .inputContra {
+    min-height: 43px;
+    font-size: 0.9rem;
+  }
+
+  .reglas-container {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .login-btn {
+    min-height: 47px;
+    font-size: 0.9rem;
+  }
+
+  .toast-notification {
+    top: 16px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    min-width: 0;
+    transform: none;
+  }
 }
-@keyframes zoomInMobile { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* =========================================================
+   REGISTER — MOBILE PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+  main {
+    padding: 12px;
+  }
+
+  .EspacioLogin {
+    padding: 22px 16px;
+  }
+
+  .logo img {
+    width: 70px;
+  }
+
+  .logo h2 {
+    font-size: 1.25rem;
+  }
+
+  .links {
+    font-size: 0.78rem;
+  }
+
+  .ValContra {
+    font-size: 0.7rem;
+  }
+}

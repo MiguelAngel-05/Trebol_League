@@ -98,10 +98,6 @@ export class Menu {
     }, 500);
   }
 
-  verInfo() {
-    this.mostrarNotificacion('Versión Beta 1.0 - Trebol League', true);
-  }
-
   irAChat() {
     this.mostrarNotificacion('Abriendo Centro de Mensajes...', true);
     setTimeout(() => {

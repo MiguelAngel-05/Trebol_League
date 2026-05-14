@@ -1,299 +1,1148 @@
-body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
+/* =========================================================
+   CALENDARIO — BASE DE PANTALLA Y SCROLL INTERNO
+   ========================================================= */
 
-.main-container {
-  width: 100%; height: 100vh;
-  background-image: url("/Fondos/FondoEstandar.webp");
-  background-color: rgba(10, 20, 15, 0.9); background-blend-mode: overlay;
-  background-size: cover; background-position: center; 
-  display: flex; flex-direction: column; overflow: hidden; position: relative;
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
 }
 
-.main-header { background: transparent; width: 50%; height: 120px; position: absolute; top: 40px; right: 80px; display: flex; flex-direction: column; align-items: flex-start; z-index: 20; animation: slideDown 0.8s ease-out forwards; }
-.header-options.top-row { width: 100%; height: 50%; background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%); border-top-right-radius: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 160px 0 80px; box-sizing: border-box; }
-.header-optionsB.bottom-row { width: 100%; height: 50%; background: linear-gradient(90deg, #1f3327 0%, #15221b 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-around; padding: 0 160px 0 80px; box-sizing: border-box; }
-.separator-header { font-size: 2rem; color: #3b614b; font-weight: 300; margin: 0 10px; transform: skew(-20deg); }
-.option-group { display: flex; align-items: center; gap: 10px; color: white; font-weight: 600; }
-.icon { height: 22px; width: auto; }
-.pinchar { height: 26px; width: auto; cursor: pointer; transition: 0.2s; }
-.icon-hover:hover .pinchar { transform: scale(1.2); filter: drop-shadow(0 0 5px white); }
-
-.div-img-user { background: linear-gradient(to bottom, #1f8f5f, #156942); width: 140px; height: 100%; position: absolute; top: 0; right: 0; display: flex; align-items: center; justify-content: center; border-top-right-radius: 20px; border-bottom-left-radius: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 5; cursor: pointer; } 
-.img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; transition: 0.3s; }
-.div-img-user:hover .img-user { transform: scale(1.15); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
+.main-container {
+  height: 100dvh;
+  overflow: hidden;
+}
 
 .content-area {
-  margin-top: 190px; 
-  padding: 0 80px 30px 80px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0; 
+  min-height: 0;
+  overflow: hidden;
 }
 
 .calendar-glass-panel {
-  background: rgba(20, 30, 25, 0.75);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1; 
-  min-height: 0; 
-  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-  animation: slideInUp 0.6s ease forwards;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.calendar-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.month-title { color: white; font-size: 1.8rem; margin: 0; font-weight: 400; letter-spacing: 1px; }
-.toolbar-right { display: flex; gap: 15px; align-items: center; }
+/* =========================================================
+   CALENDARIO — TOOLBAR
+   ========================================================= */
 
-.nav-group { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
-.nav-btn { background: transparent; color: white; border: none; padding: 8px 15px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
-.nav-btn:hover { background: rgba(255,255,255,0.1); }
-.btn-hoy { border-left: 1px solid rgba(255,255,255,0.2); border-right: 1px solid rgba(255,255,255,0.2); font-weight: 600; }
+.calendar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 20px;
+  flex-shrink: 0;
+}
 
-.btn-generar { background: linear-gradient(135deg, #1f8f5f, #2ed573); color: #1a2b22; font-weight: 800; font-size: 0.9rem; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(46, 213, 115, 0.4); }
-.btn-generar:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(46, 213, 115, 0.6); }
-.btn-generar:disabled { opacity: 0.7; cursor: not-allowed; }
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-right {
+  gap: 15px;
+}
+
+.month-title {
+  color: var(--tl-white);
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   CALENDARIO — ESTADO SIN PARTIDOS
+   ========================================================= */
+
+.no-partidos {
+  text-align: center;
+  color: var(--tl-text-muted);
+  font-style: italic;
+  margin-top: 50px;
+  font-size: 1.2rem;
+}
+
+/* =========================================================
+   CALENDARIO — GRID DESKTOP
+   ========================================================= */
 
 .calendar-wrapper {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; 
-  border-top: 1px solid rgba(255,255,255,0.1);
-  border-left: 1px solid rgba(255,255,255,0.1);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-top: 1px solid var(--tl-border-soft);
+  border-left: 1px solid var(--tl-border-soft);
+  border-bottom: 1px solid var(--tl-border-soft);
   border-radius: 0 0 10px 10px;
 }
-.calendar-wrapper::-webkit-scrollbar { width: 6px; }
-.calendar-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-.calendar-wrapper::-webkit-scrollbar-thumb { background: rgba(46, 213, 115, 0.6); border-radius: 10px; }
 
-.grid-header { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: rgba(0,0,0,0.5); }
-.day-name { padding: 8px; text-align: center; color: #2ed573; font-weight: 600; font-size: 0.85rem; border-right: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
-
-.grid-body { flex: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-auto-rows: minmax(100px, auto); }
-
-.day-cell { border-right: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 6px; display: flex; flex-direction: column; transition: 0.2s; overflow: hidden; }
-.day-cell:hover { background: rgba(255,255,255,0.03); }
-
-.day-number { font-size: 1rem; color: white; font-weight: 500; margin-bottom: 5px; }
-
-.other-month { background: rgba(0,0,0,0.3); }
-.other-month .day-number { color: #666; }
-
-.is-today { background: rgba(46, 213, 115, 0.08); }
-.is-today .day-number { background: #2ed573; color: #1a2b22; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 800; font-size: 0.8rem; }
-
-.matches-list { flex: 1; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; padding-right: 2px; }
-.matches-list::-webkit-scrollbar { width: 2px; }
-.matches-list::-webkit-scrollbar-thumb { background: #2ed573; border-radius: 2px; }
-
-/* ========================================================
-   LA CURA DEFINITIVA PARA EL "BICHO VERDE" DE LOS PARTIDOS
-   ======================================================== */
-.match-pill { 
-    cursor: pointer; 
-    border-left: 3px solid #555; /* Borde izquierdo base */
-    transition: all 0.3s ease; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-    background: rgba(0,0,0,0.6); /* Fondo base */
-    padding: 6px 8px; 
-    border-radius: 4px;
+.grid-header {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 
-/* El Hover corregido: Sin manchas verdes fosforitas */
-.match-pill:hover { 
-    transform: translateX(4px); 
-    background: rgba(255, 255, 255, 0.15); /* Fondo gris claro elegante */
-    border-left-color: #2ed573; /* Solo el borde izquierdo se pinta verde */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.4); 
+.day-name {
+  padding: 8px;
+  text-align: center;
+  color: var(--tl-green);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-right: 1px solid var(--tl-border-soft);
+  border-bottom: 1px solid var(--tl-border-soft);
 }
 
-.dot { width: 5px; height: 5px; background: #2ed573; border-radius: 50%; flex-shrink: 0; }
+.grid-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(100px, auto);
+}
 
-.match-pill.pendiente { border-left-color: #2ed573; }
-.match-pill.pendiente .dot { background: #2ed573; }
+.day-cell {
+  border-right: 1px solid var(--tl-border-soft);
+  border-bottom: 1px solid var(--tl-border-soft);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s;
+  overflow: hidden;
+  min-width: 0;
+}
 
-.match-pill.en_curso { border-left-color: #ff4757; background: rgba(255, 71, 87, 0.15); border-radius: 4px; box-shadow: inset 0 0 10px rgba(255,71,87,0.2); }
-.match-pill.en_curso .dot { background: #ff4757; animation: blink 1s infinite alternate; }
-.match-pill.en_curso .match-teams { color: white; font-weight: 700; }
-.match-live { font-size: 0.65rem; color: #ff4757; font-weight: 800; display: flex; align-items: center; gap: 4px; flex-shrink: 0;}
-.pulse-ring { width: 6px; height: 6px; background: #ff4757; border-radius: 50%; box-shadow: 0 0 8px #ff4757; animation: pulse 1.5s infinite; }
+.day-cell:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
 
-.match-pill.finalizado { border-left-color: #888; opacity: 0.65; }
-.match-pill.finalizado .dot { background: #888; }
-.match-result { font-size: 0.75rem; color: #fff; font-weight: 800; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; flex-shrink: 0;}
+.day-number {
+  font-size: 1rem;
+  color: var(--tl-white);
+  font-weight: 500;
+  margin-bottom: 5px;
+  flex-shrink: 0;
+}
 
-.match-teams { flex: 1; font-size: 0.65rem; color: white; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.match-time { font-size: 0.65rem; color: #888; font-family: monospace; flex-shrink: 0; }
+.other-month {
+  background: rgba(0, 0, 0, 0.3);
+}
 
-.no-partidos { text-align: center; color: #aaa; font-style: italic; margin-top: 50px; font-size: 1.2rem; }
+.other-month .day-number {
+  color: #666;
+}
 
-/* MODALES GENERALES */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 99999; animation: fadeIn 0.3s ease forwards; }
-.modal-content { background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%); border: 1px solid rgba(46, 213, 115, 0.4); border-radius: 25px; padding: 30px; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(46, 213, 115, 0.1); display: flex; flex-direction: column; gap: 20px; animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-.modal-title { margin: 0; font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px; color: white;}
-.close-btn { color: #888; font-size: 2.2rem; line-height: 1; cursor: pointer; transition: 0.2s; }
-.close-btn:hover { color: #ff4757; transform: scale(1.1) rotate(90deg); }
-.modal-footer { display: flex; gap: 15px; margin-top: 15px; }
-.btn-cancelar, .btn-confirmar { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-family: 'Poppins', sans-serif;}
-.btn-cancelar { background: rgba(255,255,255,0.05); color: #ccc; border: 1px solid rgba(255,255,255,0.1); }
-.btn-cancelar:hover { background: rgba(255,71,87,0.2); border-color: #ff4757; color: white; }
-.btn-confirmar { background: linear-gradient(90deg, #1f8f5f, #2ed573); color: white; box-shadow: 0 5px 15px rgba(31, 143, 95, 0.4); display: flex; align-items: center; justify-content: center;}
-.btn-confirmar:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(31, 143, 95, 0.6); }
-.btn-confirmar:disabled { opacity: 0.6; cursor: not-allowed; }
+.is-today {
+  background: rgba(46, 213, 115, 0.08);
+}
 
-.toast-notification { position: fixed; bottom: 30px; right: 30px; z-index: 100000; background: #000; border-left: 5px solid #2ed573; padding: 15px 25px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-.toast-notification.error { border-left-color: #ff4757; }
-.toast-icon { font-size: 1.5rem; }
-.toast-message { margin: 0; font-size: 0.9rem; font-weight: 600; }
+.is-today .day-number {
+  background: var(--tl-green);
+  color: var(--tl-text-dark);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
 
+/* =========================================================
+   CALENDARIO — PARTIDOS
+   ========================================================= */
 
-/* ========================================================
-   MODAL DEL PARTIDO GIGANTE (CRÓNICA Y ALINEACIONES)
-   ======================================================== */
+.matches-list {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+}
+
+.match-pill {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  cursor: pointer;
+  border-left: 3px solid #555;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.match-pill:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-left-color: var(--tl-green);
+  box-shadow: inset 3px 0 0 var(--tl-green), 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  background: var(--tl-green);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.match-pill.pendiente {
+  border-left-color: var(--tl-green);
+}
+
+.match-pill.pendiente .dot {
+  background: var(--tl-green);
+}
+
+.match-pill.en_curso {
+  border-left-color: var(--tl-red);
+  background: rgba(255, 71, 87, 0.15);
+  box-shadow: inset 0 0 10px rgba(255, 71, 87, 0.2);
+}
+
+.match-pill.en_curso .dot {
+  background: var(--tl-red);
+  animation: blink 1s infinite alternate;
+}
+
+.match-pill.en_curso .match-teams {
+  color: var(--tl-white);
+  font-weight: 700;
+}
+
+.match-pill.finalizado {
+  border-left-color: #888;
+  opacity: 0.65;
+}
+
+.match-pill.finalizado .dot {
+  background: #888;
+}
+
+.match-teams {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.65rem;
+  color: var(--tl-white);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.match-time {
+  font-size: 0.65rem;
+  color: #888;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.match-live {
+  font-size: 0.65rem;
+  color: var(--tl-red);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pulse-ring {
+  width: 6px;
+  height: 6px;
+  background: var(--tl-red);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--tl-red);
+  animation: pulse 1.5s infinite;
+}
+
+.match-result {
+  font-size: 0.75rem;
+  color: var(--tl-white);
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   CALENDARIO — PARTIDOS CON ALTURA ESTABLE
+   ========================================================= */
+
+.match-pill {
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+}
+
+.match-teams {
+  line-height: 1.1;
+}
+
+.matches-list {
+  max-height: 100%;
+}
+
+.day-cell {
+  min-height: 112px;
+}
+
+.grid-body {
+  grid-auto-rows: minmax(112px, 1fr);
+}
+
+/* =========================================================
+   CALENDARIO — MODAL PARTIDO
+   ========================================================= */
+
 .modal-content-partido {
   background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%);
-  border: 1px solid rgba(46, 213, 115, 0.4);
-  border-radius: 20px;
-  width: 95%; 
-  max-width: 1000px; /* MODAL MUY ANCHO */
-  height: 85vh; /* CASI TODA LA PANTALLA */
-  display: flex; 
+  border: 1px solid var(--tl-border-green);
+  border-radius: var(--tl-radius-lg);
+  width: 95%;
+  max-width: 1000px;
+  height: 85dvh;
+  display: flex;
   flex-direction: column;
-  overflow: hidden; 
-  box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(46, 213, 115, 0.15);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(46, 213, 115, 0.15);
   animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-.modal-header-partido { 
-  display: flex; justify-content: space-between; align-items: center; 
-  background: rgba(0,0,0,0.5); padding: 25px 40px; 
-  border-bottom: 2px solid rgba(46, 213, 115, 0.4); position: relative;
+.modal-header-partido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 25px 40px;
+  border-bottom: 2px solid rgba(46, 213, 115, 0.4);
+  position: relative;
 }
 
-.close-btn-partido { position: absolute; top: 15px; right: 25px; color: #888; font-size: 2.5rem; line-height: 1; font-weight: 300; cursor: pointer; transition: 0.2s; }
-.close-btn-partido:hover { color: #ff4757; transform: scale(1.1) rotate(90deg); }
-
-.team { flex: 1; text-align: center; font-size: 1.6rem; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; }
-
-.score-board { display: flex; flex-direction: column; align-items: center; min-width: 200px; }
-.score { font-size: 4rem; font-weight: 900; color: #2ed573; text-shadow: 0 0 20px rgba(46, 213, 115, 0.5); line-height: 1; }
-.time-status { font-size: 1.1rem; color: #bbb; margin-top: 5px; font-weight: 600; text-align: center;}
-.live-status { color: #ff4757; display: flex; align-items: center; gap: 5px; justify-content: center; text-shadow: 0 0 10px rgba(255,71,87,0.4);}
-.final-status { color: #888; letter-spacing: 2px; }
-.pulsing-dot-small { width: 10px; height: 10px; background: #ff4757; border-radius: 50%; animation: pulse 1s infinite; }
-
-.modal-tabs { display: flex; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(255,255,255,0.1); }
-.modal-tabs .tab-btn { flex: 1; padding: 18px; background: transparent; border: none; color: #888; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-.modal-tabs .tab-btn:hover { color: white; background: rgba(255,255,255,0.05); }
-.modal-tabs .tab-btn.active { color: #2ed573; box-shadow: inset 0 -4px 0 #2ed573; background: rgba(46, 213, 115, 0.1); }
-
-/* CUERPO DEL MODAL (CRÓNICA) */
-.modal-body-partido { 
-  flex: 1; 
-  padding: 40px; 
-  overflow-y: auto; 
-  background: rgba(255,255,255,0.02); 
+.close-btn-partido {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #888;
+  font-size: 2.5rem;
+  line-height: 1;
+  font-weight: 300;
+  cursor: pointer;
+  transition: 0.2s;
 }
-.modal-body-partido::-webkit-scrollbar { width: 8px; }
-.modal-body-partido::-webkit-scrollbar-track { background: transparent; }
-.modal-body-partido::-webkit-scrollbar-thumb { background: rgba(46, 213, 115, 0.4); border-radius: 8px; }
 
-.no-empezado { text-align: center; color: #ccc; padding: 50px; font-size: 1.3rem; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.no-empezado p { margin: 0; line-height: 1.6; }
-.soccer-icon { font-size: 4rem; display: block; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));}
-.no-events { text-align: center; color: #aaa; font-style: italic; padding: 30px; font-size: 1.1rem;}
+.close-btn-partido:hover {
+  color: var(--tl-red);
+  transform: scale(1.1) rotate(90deg);
+}
 
-.timeline { display: flex; flex-direction: column; gap: 20px; position: relative; }
-.timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background: rgba(255,255,255,0.1); transform: translateX(-50%); }
+.team {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--tl-white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--tl-border-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-.timeline-event { display: flex; width: 100%; }
-.timeline-event.left { justify-content: flex-start; }
-.timeline-event.right { justify-content: flex-end; }
+.team.local {
+  border-left: 4px solid var(--tl-green);
+}
 
-.event-box { width: 45%; background: rgba(0,0,0,0.7); padding: 15px 20px; border-radius: 12px; border-left: 5px solid #555; display: flex; gap: 15px; align-items: center; position: relative; z-index: 2; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
-.timeline-event.left .event-box { border-left-color: #2ed573; flex-direction: row; }
-.timeline-event.right .event-box { border-left: none; border-right: 5px solid #2ed573; flex-direction: row-reverse; text-align: right; }
+.team.visit {
+  border-right: 4px solid var(--tl-blue);
+}
 
-.event-min { font-weight: 900; color: #2ed573; font-size: 1.5rem; min-width: 45px; text-align: center;}
-.event-details { flex: 1; }
-.event-title { font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 5px; }
-.event-desc { font-size: 0.95rem; color: #ccc; line-height: 1.4; }
+.score-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(46, 213, 115, 0.25);
+}
 
-/* Eventos centrados (Info del árbitro) */
-.timeline-event.center { justify-content: center; width: 100%; margin: 15px 0;}
-.timeline-event.center .event-box { width: 70%; text-align: center; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.8); flex-direction: column; gap: 8px; border-left: none; border-right: none;}
-.timeline-event.center .event-min { display: none; }
+.score {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--tl-green);
+  text-shadow: 0 0 20px rgba(46, 213, 115, 0.5);
+  line-height: 1;
+}
 
-/* --- ALINEACIONES --- */
-.alineaciones-container { display: flex; gap: 40px; animation: fadeIn 0.4s; }
-.alineacion-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-.alineacion-col.right-align { text-align: right; }
-.alineacion-divider { width: 2px; background: rgba(255,255,255,0.1); margin: 0 10px; }
+.time-status {
+  font-size: 1.1rem;
+  color: #bbb;
+  margin-top: 5px;
+  font-weight: 600;
+  text-align: center;
+}
 
-.alineacion-title { color: white; margin: 0 0 15px 0; font-size: 1.3rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; }
-.alineacion-title.banq { margin-top: 25px; color: #aaa; border-color: rgba(255,255,255,0.05); }
+.live-status {
+  color: var(--tl-red);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.4);
+}
 
-.jugador-linea { display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; transition: 0.2s;}
-.jugador-linea:hover { background: rgba(255,255,255,0.05); transform: scale(1.02); }
-.jugador-linea.rev { flex-direction: row; justify-content: flex-end; }
-.jugador-linea.suplente { opacity: 0.7; }
+.final-status {
+  color: #888;
+  letter-spacing: 2px;
+}
 
-.pos-mini { font-size: 0.75rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; color: white; }
-.pos-mini.dl { background: #ff4757; } .pos-mini.mc { background: #2ed573; color: #000; }
-.pos-mini.df { background: #1e90ff; } .pos-mini.pt { background: #ffa502; color: #000; }
+.pulsing-dot-small {
+  width: 10px;
+  height: 10px;
+  background: var(--tl-red);
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
 
-.jug-nombre { flex: 1; color: #ddd; font-size: 1.1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.jug-nombre.especial { color: #ffa502; font-weight: 800; text-shadow: 0 0 8px rgba(255,165,2,0.5); }
-.jug-nombre.ultra { color: #b145e9; font-weight: 800; text-shadow: 0 0 10px rgba(177,69,233,0.8); }
+.modal-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid var(--tl-border-soft);
+  flex-shrink: 0;
+}
 
-.jug-media { font-family: monospace; font-weight: 800; color: white; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; font-size: 1rem; }
+.modal-tabs .tab-btn {
+  flex: 1;
+  padding: 18px;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-family: var(--tl-font-main);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-/* ANIMACIONES */
-@keyframes blink { from { opacity: 0.3; } to { opacity: 1; } }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); } 70% { box-shadow: 0 0 0 8px rgba(255, 71, 87, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); } }
-@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-tabs .tab-btn:hover {
+  color: var(--tl-white);
+  background: rgba(255, 255, 255, 0.05);
+}
 
-/* RESPONSIVE MÓVIL */
+.modal-tabs .tab-btn.active {
+  color: var(--tl-green);
+  box-shadow: inset 0 -4px 0 var(--tl-green);
+  background: rgba(46, 213, 115, 0.1);
+}
+
+.modal-body-partido {
+  flex: 1;
+  min-height: 0;
+  padding: 40px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.no-empezado {
+  text-align: center;
+  color: var(--tl-text-soft);
+  padding: 50px;
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.no-empezado p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.soccer-icon {
+  font-size: 4rem;
+  display: block;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+}
+
+/* =========================================================
+   CALENDARIO — TIMELINE DEL PARTIDO
+   ========================================================= */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%);
+}
+
+.timeline-event {
+  display: flex;
+  width: 100%;
+}
+
+.timeline-event.left {
+  justify-content: flex-start;
+}
+
+.timeline-event.right {
+  justify-content: flex-end;
+}
+
+.timeline-event.center {
+  justify-content: center;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.event-box {
+  width: 45%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 15px 20px;
+  border-radius: var(--tl-radius-md);
+  border-left: 5px solid #555;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.timeline-event.left .event-box {
+  border-left-color: var(--tl-green);
+  flex-direction: row;
+  background: linear-gradient(90deg, rgba(46, 213, 115, 0.16), rgba(0, 0, 0, 0.72));
+}
+
+.timeline-event.right .event-box {
+  border-left: none;
+  border-right: 5px solid var(--tl-blue);
+  flex-direction: row-reverse;
+  text-align: right;
+  background: linear-gradient(270deg, rgba(30, 144, 255, 0.16), rgba(0, 0, 0, 0.72));
+}
+
+.timeline-event.center .event-box,
+.event-box.info-box {
+  width: 70%;
+  text-align: center;
+  border: 1px solid rgba(255, 165, 2, 0.35);
+  background: rgba(255, 165, 2, 0.08);
+  flex-direction: column;
+  gap: 8px;
+  border-left: none;
+  border-right: none;
+}
+
+.timeline-event.center .event-min {
+  display: none;
+}
+
+.event-min {
+  font-weight: 900;
+  color: var(--tl-green);
+  font-size: 1.3rem;
+  min-width: 48px;
+  text-align: center;
+  background: rgba(46, 213, 115, 0.12);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  border-radius: 999px;
+  padding: 5px 8px;
+}
+
+.event-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--tl-white);
+  margin-bottom: 5px;
+}
+
+.event-desc {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  line-height: 1.4;
+}
+
+.no-events {
+  text-align: center;
+  color: var(--tl-text-muted);
+  font-style: italic;
+  padding: 30px;
+  font-size: 1.1rem;
+}
+
+/* =========================================================
+   CALENDARIO — ALINEACIONES
+   ========================================================= */
+
+.alineaciones-container {
+  display: flex;
+  gap: 40px;
+  animation: fadeIn 0.4s;
+}
+
+.alineacion-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alineacion-col.right-align {
+  text-align: right;
+}
+
+.alineacion-divider {
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+.alineacion-title {
+  color: var(--tl-white);
+  margin: 0 0 15px;
+  font-size: 1.3rem;
+  border-bottom: 1px solid var(--tl-border-medium);
+  padding-bottom: 8px;
+}
+
+.alineacion-title.banq {
+  margin-top: 25px;
+  color: var(--tl-text-muted);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.jugador-linea {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: var(--tl-radius-sm);
+  transition: 0.2s;
+}
+
+.jugador-linea:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: scale(1.02);
+}
+
+.jugador-linea.rev {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.jugador-linea.suplente {
+  opacity: 0.7;
+}
+
+.pos-mini {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: var(--tl-white);
+  flex-shrink: 0;
+}
+
+.pos-mini.dl {
+  background: var(--tl-red);
+}
+
+.pos-mini.mc {
+  background: var(--tl-green);
+  color: #000;
+}
+
+.pos-mini.df {
+  background: var(--tl-blue);
+}
+
+.pos-mini.pt {
+  background: var(--tl-orange);
+  color: #000;
+}
+
+.jug-nombre {
+  flex: 1;
+  min-width: 0;
+  color: #ddd;
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jug-nombre.especial {
+  color: var(--tl-orange);
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(255, 165, 2, 0.5);
+}
+
+.jug-nombre.ultra {
+  color: var(--tl-purple);
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(177, 69, 233, 0.8);
+}
+
+.jug-media {
+  font-family: monospace;
+  font-weight: 800;
+  color: var(--tl-white);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   CALENDARIO — ALINEACIONES CON EQUIPO IDENTIFICADO
+   ========================================================= */
+
+.alineacion-team-label {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  color: var(--tl-white);
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--tl-border-soft);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.local-label {
+  border-left: 5px solid var(--tl-green);
+}
+
+.visit-label {
+  border-right: 5px solid var(--tl-blue);
+  text-align: right;
+}
+
+.alineacion-local .jugador-linea {
+  border-left: 3px solid rgba(46, 213, 115, 0.65);
+}
+
+.alineacion-visitante .jugador-linea {
+  border-right: 3px solid rgba(30, 144, 255, 0.65);
+}
+
+.alineacion-local .alineacion-title {
+  color: var(--tl-green);
+}
+
+.alineacion-visitante .alineacion-title {
+  color: var(--tl-blue);
+}
+
+/* =========================================================
+   CALENDARIO — RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .calendar-toolbar {
+    align-items: flex-start;
+  }
+
+  .toolbar-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .modal-header-partido {
+    padding: 20px 28px;
+  }
+
+  .team {
+    font-size: 1.15rem;
+  }
+
+  .score {
+    font-size: 3.4rem;
+  }
+}
+
+/* =========================================================
+   CALENDARIO — RESPONSIVE MOBILE
+   Vista de lista: solo muestra días con partidos
+   ========================================================= */
+
 @media (max-width: 768px) {
-  .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-top: 10px; }
-  .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
-  .div-img-user { display: none; }
-  
-  .content-area { margin-top: 10px; padding: 0 15px 15px 15px; height: auto; }
-  .calendar-glass-panel { padding: 15px; }
+  :host {
+    min-height: 100dvh;
+  }
 
-  .calendar-toolbar { flex-direction: column; gap: 15px; }
-  .toolbar-right { width: 100%; flex-direction: column; gap: 10px; }
-  .nav-group { width: 100%; display: flex; justify-content: space-between; }
-  .nav-btn { flex: 1; text-align: center; }
-  .btn-generar { width: 100%; }
+  .main-container {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
 
-  .calendar-wrapper { overflow-x: auto; border: none; }
-  .grid-header, .grid-body { min-width: 600px; }
-  
-  .modal-content-partido { width: 95%; max-width: 100%; height: 90vh; }
-  .modal-header-partido { padding: 15px 20px; }
-  .team { font-size: 1.2rem; }
-  .score { font-size: 2.8rem; }
-  
-  .modal-body-partido { padding: 20px; }
-  .event-box { width: 85%; padding: 10px; gap: 10px; }
-  .event-min { font-size: 1.2rem; }
-  .event-title { font-size: 1rem; }
-  .event-desc { font-size: 0.85rem; }
-  
-  .alineaciones-container { flex-direction: column; gap: 20px; }
-  .alineacion-divider { display: none; }
-  .jugador-linea.rev { flex-direction: row; justify-content: flex-start; }
+  .content-area {
+    overflow: visible;
+  }
+
+  .calendar-glass-panel {
+    padding: 15px;
+    overflow: visible;
+  }
+
+  .calendar-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .toolbar-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .month-title {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  .nav-group {
+    width: 100%;
+  }
+
+  .nav-btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  .btn-generar {
+    width: 100%;
+  }
+
+  .calendar-wrapper {
+    overflow: visible;
+    border: none;
+  }
+
+  .grid-header {
+    display: none;
+  }
+
+  .grid-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .day-cell {
+    width: 100%;
+    min-height: auto;
+    border: 1px solid var(--tl-border-soft);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+  }
+
+  .day-cell.other-month,
+  .day-cell:not(.has-matches) {
+    display: none;
+  }
+
+  .day-cell.has-matches {
+    display: flex;
+  }
+
+  .day-number {
+    width: auto;
+    height: auto;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: var(--tl-green);
+    font-weight: 800;
+  }
+
+  .is-today .day-number {
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+  }
+
+  .matches-list {
+    gap: 8px;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .match-pill {
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .match-teams {
+    font-size: 0.85rem;
+  }
+
+  .match-time,
+  .match-live,
+  .match-result {
+    font-size: 0.8rem;
+  }
+
+  .modal-content-partido {
+    width: 100%;
+    max-width: 100%;
+    height: 92dvh;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .modal-header-partido {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 18px;
+  }
+
+  .team {
+    width: 100%;
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .team.visit {
+    text-align: left;
+    border-right: none;
+    border-left: 4px solid var(--tl-blue);
+  }
+
+  .score-board {
+    width: 100%;
+    min-width: 0;
+    order: -1;
+  }
+
+  .score {
+    font-size: 2.7rem;
+  }
+
+  .close-btn-partido {
+    top: 8px;
+    right: 14px;
+    font-size: 2rem;
+  }
+
+  .modal-tabs .tab-btn {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+
+  .modal-body-partido {
+    padding: 18px;
+  }
+
+  .timeline {
+    gap: 12px;
+  }
+
+  .timeline::before {
+    display: none;
+  }
+
+  .timeline-event,
+  .timeline-event.left,
+  .timeline-event.right,
+  .timeline-event.center {
+    justify-content: stretch;
+  }
+
+  .event-box,
+  .timeline-event.center .event-box {
+    width: 100%;
+    margin-left: 0;
+    padding: 12px;
+    gap: 10px;
+    text-align: left;
+    border-radius: 12px;
+  }
+
+  .timeline-event.left .event-box {
+    border-left: 5px solid var(--tl-green);
+  }
+
+  .timeline-event.right .event-box {
+    flex-direction: row;
+    border-right: none;
+    border-left: 5px solid var(--tl-blue);
+    background: linear-gradient(90deg, rgba(30, 144, 255, 0.16), rgba(0, 0, 0, 0.72));
+  }
+
+  .timeline-event.center .event-box {
+    border-left: 5px solid var(--tl-orange);
+  }
+
+  .event-min {
+    font-size: 1rem;
+    min-width: 44px;
+    flex-shrink: 0;
+  }
+
+  .event-title {
+    font-size: 0.95rem;
+  }
+
+  .event-desc {
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
+
+  .alineaciones-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .alineacion-divider {
+    display: none;
+  }
+
+  .alineacion-col.right-align {
+    text-align: left;
+  }
+
+  .jugador-linea.rev {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .alineacion-team-label {
+    position: static;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .visit-label {
+    border-right: none;
+    border-left: 5px solid var(--tl-blue);
+    text-align: left;
+  }
+
+  .alineacion-local,
+  .alineacion-visitante {
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--tl-border-soft);
+  }
+
+  .alineacion-local {
+    border-left: 4px solid var(--tl-green);
+  }
+
+  .alineacion-visitante {
+    border-left: 4px solid var(--tl-blue);
+  }
+}
+
+/* =========================================================
+   CALENDARIO — RESPONSIVE MOBILE PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .calendar-glass-panel {
+    padding: 12px;
+  }
+
+  .day-cell {
+    padding: 10px;
+  }
+
+  .match-pill {
+    padding: 9px 10px;
+  }
+
+  .modal-header-partido {
+    padding: 14px 16px;
+  }
+
+  .close-btn-partido {
+    top: 8px;
+    right: 14px;
+    font-size: 2rem;
+  }
+
+  .team {
+    font-size: 0.9rem;
+  }
+
+  .score {
+    font-size: 2.2rem;
+  }
+
+  .modal-body-partido {
+    padding: 16px;
+  }
+
+  .jug-nombre {
+    font-size: 0.95rem;
+  }
 }

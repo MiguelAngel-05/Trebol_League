@@ -23,6 +23,10 @@ export class Ligas {
   mostrarModalUnirse: boolean = false; 
   activeMenuIndex: number | null = null;
 
+  mostrarModalSalirLiga: boolean = false;
+  ligaPendienteSalir: Liga | null = null;
+  indexLigaPendienteSalir: number | null = null;
+
   ligas: Liga[] = [];
 
   nombreNuevaLiga: string = '';
@@ -183,20 +187,40 @@ export class Ligas {
 
   salirDeLiga(index: number, event: Event) {
     event.stopPropagation();
-    const liga = this.ligas[index];
 
-    this.http.delete(`${this.apiBase}/api/ligas/${liga.id_liga}`, this.getAuthHeaders())
-      .subscribe({
-        next: () => {
-          this.ligas.splice(index, 1);
-          this.activeMenuIndex = null;
-          this.mostrarNotificacion(`Has salido de ${liga.nombre}`, true);
-        },
-        error: (err) => {
-          console.error(err);
-          this.mostrarNotificacion('Error al salir de la liga', false);
-        }
-      });
+    this.ligaPendienteSalir = this.ligas[index];
+    this.indexLigaPendienteSalir = index;
+    this.mostrarModalSalirLiga = true;
+    this.activeMenuIndex = null;
+  }
+
+  cerrarModalSalirLiga() {
+    this.mostrarModalSalirLiga = false;
+    this.ligaPendienteSalir = null;
+    this.indexLigaPendienteSalir = null;
+  }
+
+  confirmarSalirDeLiga() {
+    if (!this.ligaPendienteSalir || this.indexLigaPendienteSalir === null) return;
+
+    const liga = this.ligaPendienteSalir;
+    const index = this.indexLigaPendienteSalir;
+
+    this.http.delete<any>(
+      `${this.apiBase}/api/ligas/${liga.id_liga}/salir`,
+      this.getAuthHeaders()
+    ).subscribe({
+      next: (res) => {
+        this.ligas.splice(index, 1);
+        this.cerrarModalSalirLiga();
+        this.mostrarNotificacion(res.message || `Has salido de ${liga.nombre}`, true);
+      },
+      error: (err) => {
+        console.error(err);
+        this.cerrarModalSalirLiga();
+        this.mostrarNotificacion(err.error?.message || 'Error al salir de la liga', false);
+      }
+    });
   }
 
   @HostListener('document:click', ['$event'])

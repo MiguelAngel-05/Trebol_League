@@ -81,7 +81,7 @@
     }
     @if (mostrarModalUnirse) {
     <div class="modal-overlay" (click)="cerrarModalUnirse()">
-        <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-content modal-liga" (click)="$event.stopPropagation()">
             <div class="modal-header">
                 <h2>Unirse a Liga</h2>
                 <span class="close-btn" (click)="cerrarModalUnirse()">&times;</span>
@@ -89,9 +89,9 @@
 
             <div class="modal-body">
                 <label>Nombre de la liga:</label>
-                <input type="text" [(ngModel)]="NombreLigaUnirse" placeholder="Ej: Treboliners" autofocus>
+                <input type="text" class="input-liga" [(ngModel)]="NombreLigaUnirse" placeholder="Ej: Treboliners" autofocus>
                 <label>Clave de la liga:</label>
-                <input type="text" [(ngModel)]="claveLigaUnirse" placeholder="Ej: 1234abcd">
+                <input type="text" class="input-liga" [(ngModel)]="claveLigaUnirse" placeholder="Ej: 1234abcd">
             </div>
 
             <div class="modal-footer">
@@ -104,7 +104,7 @@
 
     @if (mostrarModal) {
   <div class="modal-overlay" (click)="cerrarModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content modal-liga" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h2>Crear Nueva Liga</h2>
         <span class="close-btn" (click)="cerrarModal()">&times;</span>
@@ -112,16 +112,48 @@
 
       <div class="modal-body">
         <label>Nombre de la liga:</label>
-        <input type="text" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
+        <input type="text" class="input-liga" [(ngModel)]="nombreNuevaLiga" placeholder="Ej: Los Galácticos" autofocus>
         <label>Usuarios máximos:</label>
-        <input type="number" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Máximo: 10" min="2" max="10">
+        <input type="number" class="input-liga" [(ngModel)]="maxUsuariosNuevaLiga" placeholder="Máximo: 10" min="2" max="10">
         <label>Clave de la liga:</label>
-        <input type="text" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd">
+        <input type="text" class="input-liga" [(ngModel)]="claveNuevaLiga" placeholder="Ej: 1234abcd">
       </div>
 
       <div class="modal-footer">
         <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
         <button class="btn-confirmar" (click)="confirmarCreacion()">Crear</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (mostrarModalSalirLiga && ligaPendienteSalir) {
+  <div class="modal-overlay" (click)="cerrarModalSalirLiga()">
+    <div class="modal-content modal-salir-liga" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Salir de la liga</h2>
+        <span class="close-btn" (click)="cerrarModalSalirLiga()">&times;</span>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-warning-text">
+          ¿Seguro que quieres salir de <strong>{{ ligaPendienteSalir.nombre }}</strong>?
+        </p>
+
+        <p class="modal-warning-subtext">
+          Se eliminarán tus jugadores, pujas, ofertas, mensajes y puntos dentro de esta liga.
+          Esta acción no eliminará la liga para el resto de usuarios.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cerrarModalSalirLiga()">
+          Cancelar
+        </button>
+
+        <button class="btn-confirmar btn-confirmar-salida" (click)="confirmarSalirDeLiga()">
+          Sí, salir
+        </button>
       </div>
     </div>
   </div>

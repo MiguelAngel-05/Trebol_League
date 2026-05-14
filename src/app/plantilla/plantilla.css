@@ -1,438 +1,1143 @@
-/* general */
-body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #0b1a12; }
+/* =========================================================
+   PLANTILLA — BASE DE PANTALLA
+   ========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+}
 
 .main-container {
-  width: 100%; height: 100vh;
-  background-image: url("/Fondos/FondoEstandar.webp");
-  background-color: rgba(10, 20, 15, 0.95); background-blend-mode: overlay;
-  background-size: cover; background-position: center;
-  display: flex; flex-direction: column; overflow: hidden;
-  padding: 20px 0; 
-  box-sizing: border-box;
-}
-
-/* q sean 3 columnas */
-.plantilla-layout {
-  display: flex;
   width: 100%;
-  height: 100%; 
-  padding: 0 20px;
-  gap: 20px;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  padding: 18px 0;
   box-sizing: border-box;
+  background-image: url("/Fondos/FondoEstandar.webp");
+  background-color: rgba(10, 20, 15, 0.92);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
 }
 
-/* sidebar izquierda */
+/* =========================================================
+   PLANTILLA — LAYOUT GENERAL
+   ========================================================= */
+
+.plantilla-layout {
+  width: fit-content;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 18px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 250px 740px 220px;
+  gap: 14px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* =========================================================
+   PLANTILLA — SIDEBAR IZQUIERDA
+   ========================================================= */
+
 .sidebar-izq {
-  width: 270px; 
-  background: rgba(30, 50, 40, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(46, 213, 115, 0.3);
-  border-radius: 20px;
-  padding: 20px;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(18, 34, 25, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(46, 213, 115, 0.26);
+  border-radius: 22px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  box-shadow: 10px 10px 30px rgba(0,0,0,0.6);
+  gap: 16px;
+  box-shadow:
+    10px 10px 30px rgba(0, 0, 0, 0.52),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
   z-index: 10;
+  overflow: hidden;
 }
 
-.btn-volver { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s ease; }
-.btn-volver:hover { background: rgba(255, 255, 255, 0.15); border-color: white; transform: translateX(-5px); }
-
-.club-text h2 { margin: 0; color: white; font-size: 1.3rem; font-weight: 700; }
-.formacion-texto { margin: 0; color: #2ed573; font-weight: 800; font-size: 1.1rem; }
-
-.stats-panel { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
-.stat-row { display: flex; align-items: center; justify-content: space-between; color: white; font-weight: 600; font-size: 0.85rem;}
-.stat-box { background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); font-family: monospace; font-size: 0.95rem; }
-.stat-box.val { color: #2ed573; }
-.stat-box.med { color: #ffd700; font-weight: 800; }
-
-.formacion-selector label { color: white; font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.85rem;}
-.formacion-selector select { width: 100%; padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #2ed573; font-weight: 700; font-size: 0.95rem; outline: none; cursor: pointer; }
-
-.btn-guardar { margin-top: auto; padding: 15px; background: linear-gradient(90deg, #1f8f5f, #2ed573); border: none; border-radius: 12px; color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4); width: 100%; }
-.btn-guardar:hover { transform: translateY(-3px); filter: brightness(1.2); }
-.parpadeo { animation: pulseWarning 1.5s infinite; background: linear-gradient(90deg, #ff4757, #ff6b81); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
-@keyframes pulseWarning { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
-
-/* cesped*/
-.campo-container {
-  flex: 1; 
+.btn-volver {
+  width: 100%;
+  min-height: 42px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--tl-border-medium);
+  color: var(--tl-white);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-family: var(--tl-font-main);
+  font-weight: 800;
+  font-size: 0.84rem;
+  cursor: pointer;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 9px;
+  transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+}
+
+.btn-volver:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.38);
+  transform: translateX(-3px);
+}
+
+.icon-back {
+  line-height: 1;
+}
+
+.club-info {
+  padding: 15px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(46, 213, 115, 0.14), transparent 42%),
+    rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--tl-border-soft);
+}
+
+.club-text h2 {
+  margin: 0;
+  color: var(--tl-white);
+  font-size: 1.18rem;
+  font-weight: 900;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.formacion-texto {
+  margin: 8px 0 0;
+  color: var(--tl-green);
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.4px;
+}
+
+/* =========================================================
+   PLANTILLA — ESTADÍSTICAS
+   ========================================================= */
+
+.stats-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--tl-white);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.stat-row span {
+  color: var(--tl-text-muted);
+}
+
+.stat-box {
+  min-width: 82px;
+  background: rgba(0, 0, 0, 0.46);
+  padding: 7px 9px;
+  border-radius: 12px;
+  border: 1px solid var(--tl-border-medium);
+  font-family: monospace;
+  font-size: 0.86rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.stat-box.val {
+  color: var(--tl-green);
+}
+
+.stat-box.med {
+  color: #ffd700;
+  font-weight: 900;
+  text-align: center;
+}
+
+.stat-box.med.media-alta {
+  color: var(--tl-green);
+  box-shadow: 0 0 12px rgba(46, 213, 115, 0.22);
+  border-color: rgba(46, 213, 115, 0.38);
+}
+
+/* =========================================================
+   PLANTILLA — SELECTOR DE FORMACIÓN
+   ========================================================= */
+
+.formacion-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formacion-selector label {
+  color: var(--tl-text-muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.formacion-selector select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(46, 213, 115, 0.34);
+  background: rgba(0, 0, 0, 0.52);
+  color: var(--tl-white);
+  font-family: var(--tl-font-main);
+  font-weight: 800;
+  font-size: 0.86rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.formacion-selector select:focus {
+  border-color: var(--tl-green);
+  box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.12);
+}
+
+/* =========================================================
+   PLANTILLA — BOTÓN GUARDAR
+   ========================================================= */
+
+.btn-guardar {
+  margin-top: auto;
+  width: 100%;
+  min-height: 48px;
+  border: none;
+  border-radius: 14px;
+  padding: 13px 14px;
+  font-family: var(--tl-font-main);
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: linear-gradient(90deg, var(--tl-green-dark), var(--tl-green));
+  color: var(--tl-text-dark);
+  box-shadow: 0 5px 15px rgba(31, 143, 95, 0.4);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+}
+
+.btn-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(31, 143, 95, 0.56);
+  color: var(--tl-white);
+}
+
+.btn-guardar.parpadeo {
+  animation: pulseWarning 1.5s infinite;
+  background: linear-gradient(90deg, var(--tl-red), var(--tl-red-soft));
+  color: var(--tl-white);
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.58);
+}
+
+/* =========================================================
+   PLANTILLA — CAMPO CENTRAL
+   ========================================================= */
+
+.campo-container {
+  justify-self: center;
+  align-self: stretch;
+  width: 740px;
+  flex-shrink: 0;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgba(46, 213, 115, 0.26);
+  box-shadow:
+    0 22px 56px rgba(0, 0, 0, 0.58),
+    0 0 28px rgba(46, 213, 115, 0.08);
+  background: rgba(0, 0, 0, 0.36);
 }
 
 .estadio-bg {
+  position: relative;
   width: 100%;
-  max-width: 1100px;
-  height: 98%; 
-  background: url('/Utensilios/campo-futbol.webp') center/cover no-repeat;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-  border: 3px solid rgba(255,255,255,0.2);
-  display: flex;
-  flex-direction: row-reverse; 
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 0 2%; 
-  box-sizing: border-box;
-}
-
-.fila-campo {
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly; 
-  height: 95%; 
-  gap: 5px; 
-  z-index: 10;
+  justify-content: space-between;
+  gap: clamp(6px, 1vh, 14px);
+  padding: 118px 72px 106px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.13)),
+    url("/Utensilios/campo-futbol.webp");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.hueco-wrapper { display: flex; justify-content: center; align-items: center; }
+.estadio-bg::before,
+.estadio-bg::after {
+  display: none;
+}
+
+/* =========================================================
+   PLANTILLA — FILAS DEL CAMPO
+   ========================================================= */
+
+.fila-campo {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.05vw, 18px);
+}
+
+.hueco-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   PLANTILLA — ZONAS DROP
+   Hueco algo mayor que la carta
+   ========================================================= */
 
 .zona-drop {
   position: relative;
-  width: 75px;  
-  height: 110px; 
-  display: flex; justify-content: center; align-items: center;
+  width: 96px;
+  height: 138px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 96px;
 }
 
 .recuadro-fondo {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  border: 2px dashed rgba(255, 255, 255, 0.6); background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px; pointer-events: none; transition: all 0.3s ease;
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.17);
+  box-shadow:
+    inset 0 0 16px rgba(0, 0, 0, 0.24),
+    0 6px 14px rgba(0, 0, 0, 0.2);
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
-.zona-drop.cdk-drop-list-receiving .recuadro-fondo { background: rgba(46, 213, 115, 0.4); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
+
+.zona-drop.cdk-drop-list-dragging .recuadro-fondo,
+.zona-drop.cdk-drop-list-receiving .recuadro-fondo {
+  background: rgba(46, 213, 115, 0.18);
+  border-color: rgba(46, 213, 115, 0.82);
+  box-shadow:
+    0 0 18px rgba(46, 213, 115, 0.34),
+    inset 0 0 16px rgba(46, 213, 115, 0.18);
+}
 
 .etiqueta-pos {
-  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-  background: #1a2b22; color: white; padding: 2px 6px; border-radius: 6px;
-  font-size: 0.7rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.2);
-  z-index: 5; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--tl-white);
+  background: rgba(0, 0, 0, 0.78);
+  border: 1px solid var(--tl-border-soft);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
 }
-.etiqueta-pos.dl { border-color: #ff4757; color: #ff6b81; }
-.etiqueta-pos.mc { border-color: #2ed573; color: #7bed9f; }
-.etiqueta-pos.df { border-color: #1e90ff; color: #70a1ff; }
-.etiqueta-pos.pt { border-color: #ffa502; color: #eccc68; }
+
+.etiqueta-pos.dl {
+  background: var(--tl-red);
+}
+
+.etiqueta-pos.mc {
+  background: var(--tl-green);
+  color: #06110a;
+}
+
+.etiqueta-pos.df {
+  background: var(--tl-blue);
+}
+
+.etiqueta-pos.pt {
+  background: var(--tl-orange);
+  color: #111;
+}
+
+/* =========================================================
+   PLANTILLA — CARTAS EN CAMPO
+   Cartas más grandes, pero contenidas dentro del hueco
+   ========================================================= */
 
 .carta-titular {
-  width: 100%; height: 100%;
-  position: absolute; top:0; left:0;
-  display: flex; justify-content: center; align-items: center;
-  cursor: grab; z-index: 20;
+  position: relative;
+  z-index: 4;
+  width: 90px;
+  height: 130px;
+  cursor: grab;
+  touch-action: none;
+  flex: 0 0 90px;
 }
-.carta-titular:active { cursor: grabbing; }
+
+.carta-titular:active {
+  cursor: grabbing;
+}
 
 .carta-escala-campo {
   position: absolute;
-  transform: scale(0.33); 
-  transform-origin: center center; 
-  pointer-events: none; 
-  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  left: 50%;
+  top: 50%;
+  width: 360px;
+  height: 540px;
+  transform: translate(-50%, -50%) scale(0.238);
+  transform-origin: center;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
-.carta-titular:hover .carta-escala-campo { transform: scale(0.36); z-index: 30; }
 
+.carta-titular:hover .carta-escala-campo {
+  transform: translate(-50%, -50%) scale(0.255);
+  z-index: 30;
+}
 
-/* sidebar dereca */
+/* =========================================================
+   PLANTILLA — JUGADOR 12
+   ========================================================= */
+
+.jugador-12-wrapper {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  z-index: 15;
+}
+
+.jugador-12-wrapper .zona-drop {
+  width: 82px;
+  height: 118px;
+  flex-basis: 82px;
+}
+
+.jugador-12-wrapper .carta-titular {
+  width: 76px;
+  height: 110px;
+  flex-basis: 76px;
+}
+
+.jugador-12-wrapper .carta-escala-campo {
+  transform: translate(-50%, -50%) scale(0.205);
+}
+
+.jugador-12-wrapper .carta-titular:hover .carta-escala-campo {
+  transform: translate(-50%, -50%) scale(0.222);
+}
+
+.totem-fondo {
+  border: 2px dashed var(--tl-purple);
+  background: rgba(177, 69, 233, 0.12);
+}
+
+.zona-drop.cdk-drop-list-receiving .totem-fondo {
+  background: rgba(177, 69, 233, 0.4);
+  border-color: #d68bff;
+  box-shadow: 0 0 15px rgba(177, 69, 233, 0.5);
+}
+
+.totem-label {
+  top: -11px;
+  font-size: 0.54rem;
+  background: linear-gradient(90deg, #8e2de2, #4a00e0);
+  border: 1px solid #d68bff;
+  color: var(--tl-white);
+  white-space: nowrap;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================================
+   PLANTILLA — BANQUILLO
+   ========================================================= */
+
 .sidebar-der {
-  width: 200px;
-  background: rgba(20, 30, 25, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(46, 213, 115, 0.3);
-  border-radius: 20px;
-  padding: 20px 10px;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(18, 34, 25, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(46, 213, 115, 0.26);
+  border-radius: 22px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  box-shadow: -10px 10px 30px rgba(0,0,0,0.6);
-  z-index: 10;
+  box-shadow:
+    -10px 10px 30px rgba(0, 0, 0, 0.48),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+  overflow: hidden;
 }
 
-.banquillo-header { 
-  color: #2ed573; font-weight: 800; text-transform: uppercase; 
-  margin-bottom: 15px; font-size: 1rem; letter-spacing: 1px;
-  text-align: center; border-bottom: 2px solid rgba(46,213,115,0.3); padding-bottom: 10px;
+.banquillo-header {
+  flex-shrink: 0;
+  padding: 0 0 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--tl-border-soft);
+  color: var(--tl-white);
+  font-size: 0.94rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .banquillo-scroll {
   flex: 1;
-  display: flex; 
-  flex-direction: column;
-  gap: 15px; 
-  overflow-y: auto; 
+  min-height: 0;
+  overflow-y: auto;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 10px 0;
+  gap: 12px;
+  padding: 4px 4px 12px;
 }
-.banquillo-scroll::-webkit-scrollbar { width: 6px; }
-.banquillo-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 4px; }
-.banquillo-scroll::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #1f8f5f, #2ed573); border-radius: 4px; }
 
 .carta-reserva {
-  width: 100px; 
-  height: 240px; 
   position: relative;
-  display: flex; justify-content: center; align-items: flex-start; 
-  flex-shrink: 0; cursor: grab;
+  width: 76px;
+  height: 112px;
+  flex: 0 0 112px;
+  cursor: grab;
+  touch-action: none;
 }
-.carta-reserva:active { cursor: grabbing; }
+
+.carta-reserva:active {
+  cursor: grabbing;
+}
 
 .carta-escala-banquillo {
   position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%) scale(0.45);
-  transform-origin: top center;
-  pointer-events: none;
-  transition: 0.2s;
+  left: 50%;
+  top: 50%;
+  width: 360px;
+  height: 540px;
+  transform: translate(-50%, -50%) scale(0.207);
+  transform-origin: center;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
-.carta-reserva:hover .carta-escala-banquillo { filter: drop-shadow(0 0 10px rgba(46, 213, 115, 0.8)); transform: translateX(-50%) scale(0.48); }
 
-.empty-banquillo { color: #888; font-style: italic; margin-top: 20px; font-size: 0.85rem; text-align: center;}
+.carta-reserva:hover .carta-escala-banquillo {
+  transform: translate(-50%, -50%) scale(0.225);
+}
 
+.empty-banquillo {
+  width: 100%;
+  padding: 28px 12px;
+  border-radius: 16px;
+  border: 1px dashed var(--tl-border-medium);
+  color: var(--tl-text-muted);
+  text-align: center;
+  font-weight: 700;
+}
 
-/* el contenedor sigue al raton - tenemos que terminarlo*/
+/* =========================================================
+   PLANTILLA — DRAG & DROP
+   ========================================================= */
+
+.drag-placeholder,
+.drag-placeholder-banquillo {
+  border-radius: 14px;
+  border: 2px dashed rgba(46, 213, 115, 0.75);
+  background: rgba(46, 213, 115, 0.12);
+}
+
+.drag-placeholder {
+  width: 96px;
+  height: 138px;
+}
+
+.drag-placeholder-banquillo {
+  width: 76px;
+  height: 112px;
+}
+
 .preview-escala-drag {
-  width: 90px;
-  height: 130px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 360px;
+  height: 540px;
+  transform: scale(0.28);
+  transform-origin: center;
+}
+
+.cdk-drag-preview {
+  z-index: 100000 !important;
   pointer-events: none;
-  position: relative;
 }
 
-/* la carta gigante la sacamos del con position: absolute para que no empuje la pantalla */
-.preview-escala-drag app-carta {
-  position: absolute;
-  transform: scale(0.20);
-  transform-origin: center center;
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+.cdk-drag-animating {
+  transition: transform 250ms ease;
 }
 
-.cdk-drag-preview { 
-  opacity: 0.95; 
-  z-index: 99999 !important; 
-}
-
-.drag-placeholder { background: rgba(0, 0, 0, 0.6); border: 2px dashed #aaa; border-radius: 10px; width: 75px; height: 110px; }
-.drag-placeholder-banquillo { background: rgba(0, 0, 0, 0.4); border: 2px dashed #888; border-radius: 8px; width: 110px; height: 160px; }
-
-.cdk-drag-animating { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
-.zona-drop.cdk-drop-list-dragging .carta-titular:not(.cdk-drag-placeholder) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
-.banquillo-scroll.cdk-drop-list-dragging .carta-reserva:not(.cdk-drag-placeholder-banquillo) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
-
-.modal-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 100000; animation: fadeIn 0.3s; }
-.modal-content { background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%); padding: 30px; border-radius: 20px; border: 1px solid #ff4757; text-align: center; max-width: 400px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.8); animation: zoomIn 0.3s; }
-.modal-content h2 { margin-top: 0; color: #ff4757; }
-.modal-botones { display: flex; gap: 15px; margin-top: 25px; }
-.btn-cancelar { flex: 1; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; font-weight: 600; cursor: pointer; transition: 0.3s;}
-.btn-cancelar:hover { background: rgba(255,255,255,0.2); }
-.btn-confirmar { flex: 1; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; font-weight: bold; cursor: pointer; transition: 0.3s;}
-.btn-confirmar:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
-
-.toast-notification { position: fixed; bottom: 30px; right: 30px; z-index: 99999; background: #000; border-left: 5px solid #2ed573; padding: 15px 25px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-.toast-notification.error { border-left-color: #ff4757; }
-.toast-icon { font-size: 1.5rem; font-weight: bold; }
-.toast-message { margin: 0; font-size: 0.95rem; }
-
+/* =========================================================
+   PLANTILLA — CARTAS ESPECIALES
+   ========================================================= */
 
 .carta-escala-campo app-carta.especial,
 .carta-escala-banquillo app-carta.especial {
-    filter: drop-shadow(0 0 15px rgba(255, 165, 2, 0.6)) brightness(1.1);
+  filter: drop-shadow(0 0 15px rgba(255, 165, 2, 0.6)) brightness(1.1);
 }
 
 .carta-escala-campo app-carta.ultra,
 .carta-escala-banquillo app-carta.ultra {
-    filter: drop-shadow(0 0 20px rgba(177, 69, 233, 0.8)) brightness(1.2);
+  filter: drop-shadow(0 0 20px rgba(177, 69, 233, 0.8)) brightness(1.2);
 }
 
-.carta-titular:has(.especial), .carta-titular:has(.ultra) {
-    animation: floatCard 3s infinite ease-in-out;
-}
-
-@keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
+.carta-titular:has(.especial),
+.carta-titular:has(.ultra) {
+  animation: floatCard 3s infinite ease-in-out;
 }
 
 .preview-escala-drag:has(.especial) {
-    filter: drop-shadow(0 0 30px rgba(255, 165, 2, 0.8));
+  filter: drop-shadow(0 0 30px rgba(255, 165, 2, 0.8));
 }
 
 .preview-escala-drag:has(.ultra) {
-    filter: drop-shadow(0 0 40px rgba(177, 69, 233, 0.9));
+  filter: drop-shadow(0 0 40px rgba(177, 69, 233, 0.9));
 }
 
-.btn-guardar.parpadeo {
-    animation: pulseWarning 1.5s infinite;
-    background: linear-gradient(90deg, #ff4757, #ff6b81);
-    box-shadow: 0 0 20px rgba(255, 71, 87, 0.6);
+/* =========================================================
+   PLANTILLA — MODAL SALIR SIN GUARDAR
+   ========================================================= */
+
+.modal-content h2 {
+  margin: 0;
+  color: var(--tl-red);
+  font-size: 1.45rem;
 }
 
-/* --- ESTILOS DEL JUGADOR 12 / TÓTEM --- */
+.modal-content p {
+  margin: 0;
+  color: var(--tl-text-soft);
+  line-height: 1.45;
+}
 
-.jugador-12-wrapper {
-    position: absolute;
+.modal-botones {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* =========================================================
+   PLANTILLA — ANIMACIONES
+   ========================================================= */
+
+@keyframes pulseWarning {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 12px rgba(255, 71, 87, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+  }
+}
+
+@keyframes floatCard {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* =========================================================
+   PLANTILLA — DESKTOP MEDIO
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .plantilla-layout {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    grid-template-columns: 220px 680px 200px;
+    gap: 12px;
+    padding: 0 14px;
+    justify-content: center;
+  }
+
+  .campo-container {
+    width: 680px;
+  }
+
+  .sidebar-izq,
+  .sidebar-der {
+    padding: 14px;
+  }
+
+  .estadio-bg {
+    padding: 108px 52px 98px;
+  }
+
+  .fila-campo {
+    gap: clamp(7px, 0.9vw, 14px);
+  }
+
+  .zona-drop {
+    width: 86px;
+    height: 124px;
+    flex-basis: 86px;
+  }
+
+  .carta-titular {
+    width: 80px;
+    height: 116px;
+    flex-basis: 80px;
+  }
+
+  .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.214);
+  }
+
+  .carta-titular:hover .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.232);
+  }
+
+  .jugador-12-wrapper {
+    top: 24px;
+    left: 24px;
+  }
+
+  .jugador-12-wrapper .zona-drop {
+    width: 74px;
+    height: 108px;
+    flex-basis: 74px;
+  }
+
+  .jugador-12-wrapper .carta-titular {
+    width: 68px;
+    height: 100px;
+    flex-basis: 68px;
+  }
+
+  .jugador-12-wrapper .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.185);
+  }
+
+  .carta-reserva {
+    width: 68px;
+    height: 104px;
+    flex-basis: 104px;
+  }
+
+  .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.19);
+  }
+
+  .carta-reserva:hover .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.207);
+  }
+}
+
+/* =========================================================
+   PLANTILLA — TABLET HORIZONTAL
+   ========================================================= */
+
+@media (max-width: 992px) and (min-width: 769px) {
+  .main-container {
+    padding: 12px 0;
+  }
+
+  .plantilla-layout {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    grid-template-columns: 185px 540px 165px;
+    gap: 8px;
+    padding: 0 10px;
+    justify-content: center;
+  }
+
+  .campo-container {
+    width: 540px;
+}
+
+  .sidebar-izq,
+  .sidebar-der {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .btn-volver,
+  .btn-guardar {
+    padding: 10px;
+    font-size: 0.74rem;
+  }
+
+  .club-text h2 {
+    font-size: 0.94rem;
+  }
+
+  .formacion-texto {
+    font-size: 0.86rem;
+  }
+
+  .stat-row {
+    font-size: 0.7rem;
+  }
+
+  .stat-box {
+    min-width: 64px;
+    font-size: 0.74rem;
+    padding: 6px 7px;
+  }
+
+  .formacion-selector label {
+    font-size: 0.7rem;
+  }
+
+  .formacion-selector select {
+    padding: 9px;
+    font-size: 0.76rem;
+  }
+
+  .estadio-bg {
+    padding: 96px 34px 88px;
+  }
+
+  .fila-campo {
+    gap: clamp(5px, 0.8vw, 10px);
+  }
+
+  .zona-drop {
+    width: 68px;
+    height: 100px;
+    flex-basis: 68px;
+  }
+
+  .carta-titular {
+    width: 62px;
+    height: 92px;
+    flex-basis: 62px;
+  }
+
+  .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.168);
+  }
+
+  .carta-titular:hover .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.184);
+  }
+
+  .etiqueta-pos {
+    font-size: 0.52rem;
+    padding: 2px 5px;
+    top: -8px;
+  }
+
+  .jugador-12-wrapper {
     top: 20px;
-    left: 20px; /* Esquina superior izquierda del campo */
-    z-index: 15;
+    left: 18px;
+  }
+
+  .jugador-12-wrapper .zona-drop {
+    width: 58px;
+    height: 86px;
+    flex-basis: 58px;
+  }
+
+  .jugador-12-wrapper .carta-titular {
+    width: 54px;
+    height: 82px;
+    flex-basis: 54px;
+  }
+
+  .jugador-12-wrapper .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.148);
+  }
+
+  .totem-label {
+    font-size: 0.48rem;
+  }
+
+  .banquillo-header {
+    font-size: 0.78rem;
+  }
+
+  .carta-reserva {
+    width: 58px;
+    height: 88px;
+    flex-basis: 88px;
+  }
+
+  .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.162);
+  }
+
+  .carta-reserva:hover .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.178);
+  }
 }
 
-/* El fondo del hueco cuando está vacío */
-.totem-fondo {
-    border: 2px dashed #b145e9;
-    background: rgba(177, 69, 233, 0.1);
-}
-
-/* El fondo cuando estás arrastrando una carta encima */
-.zona-drop.cdk-drop-list-receiving .totem-fondo {
-    background: rgba(177, 69, 233, 0.4); 
-    border-color: #d68bff; 
-    box-shadow: 0 0 15px rgba(177, 69, 233, 0.5);
-}
-
-/* Etiqueta especial */
-.totem-label {
-    background: linear-gradient(90deg, #8e2de2, #4a00e0);
-    border: 1px solid #d68bff;
-    color: white;
-    font-size: 0.65rem;
-    top: -12px;
-    white-space: nowrap;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-}
-
-/* Ajuste para móviles para que no se superponga con la portería */
-@media (max-width: 768px) {
-    .jugador-12-wrapper {
-        top: 10px;
-        left: 10px;
-    }
-}
-
-/* --- ESTILOS PARA CARTAS ESPECIALES EN EL CAMPO (Mantener) --- */
-.carta-escala-campo app-carta.especial,
-.carta-escala-banquillo app-carta.especial {
-    filter: drop-shadow(0 0 15px rgba(255, 165, 2, 0.6)) brightness(1.1);
-}
-
-.carta-escala-campo app-carta.ultra,
-.carta-escala-banquillo app-carta.ultra {
-    filter: drop-shadow(0 0 20px rgba(177, 69, 233, 0.8)) brightness(1.2);
-}
-
-.carta-titular:has(.especial), .carta-titular:has(.ultra) {
-    animation: floatCard 3s infinite ease-in-out;
-}
-
-@keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-.preview-escala-drag:has(.especial) {
-    filter: drop-shadow(0 0 30px rgba(255, 165, 2, 0.8));
-}
-
-.preview-escala-drag:has(.ultra) {
-    filter: drop-shadow(0 0 40px rgba(177, 69, 233, 0.9));
-}
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* =========================================================
+   PLANTILLA — MOBILE
+   Cartas más pequeñas
+   ========================================================= */
 
 @media (max-width: 768px) {
-    .main-container {
-        height: auto; 
-        min-height: 100vh;
-        overflow-y: auto; 
-        padding: 10px;
-    }
+  .main-container {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    padding: 10px;
+  }
 
-    .plantilla-layout {
-        flex-direction: column;
-        padding: 0;
-        gap: 15px;
-    }
+  .plantilla-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    gap: 16px;
+  }
 
-    .sidebar-izq {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box;
-    }
-    .stats-panel {
-        flex-direction: row;
-        gap: 10px;
-    }
-    .stat-row { flex: 1; flex-direction: column; gap: 5px; text-align: center; }
+  .sidebar-izq,
+  .sidebar-der {
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-    .campo-container {
-        width: 100%;
-        height: 550px; 
-    }
-    .estadio-bg {
-        flex-direction: column; 
-        padding: 15px 0;
-        background-size: cover; 
-    }
+  .sidebar-izq {
+    display: flex;
+    padding: 15px;
+    gap: 14px;
+  }
 
-    .fila-campo {
-        flex-direction: row;
-        width: 100%;
-        height: auto;
-        justify-content: space-evenly;
-        gap: 2px; 
-    }
+  .btn-volver,
+  .btn-guardar {
+    width: 100%;
+  }
 
-    .zona-drop {
-        width: 55px;  
-        height: 85px;
-    }
-    .carta-escala-campo {
-        transform: scale(0.24); 
-    }
-    .carta-titular:hover .carta-escala-campo { transform: scale(0.26); z-index: 30; }
-    
-    .etiqueta-pos {
-        font-size: 0.6rem;
-        padding: 2px 5px;
-        top: -8px;
-    }
+  .club-info {
+    padding: 14px;
+  }
 
-    .sidebar-der {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box;
-        margin-bottom: 20px;
-    }
-    .banquillo-scroll {
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        height: 140px;
-        padding-top: 10px;
-    }
-    .carta-reserva {
-        width: 75px;
-        height: 110px;
-    }
-    .carta-escala-banquillo {
-        transform: translateX(-50%) scale(0.32);
-    }
-    .carta-reserva:hover .carta-escala-banquillo { transform: translateX(-50%) scale(0.35); }
+  .club-text h2 {
+    font-size: 1.15rem;
+  }
 
-    /* 6. para arrastraas con el movil*/
-    .carta-titular, .carta-reserva {
-        touch-action: none; 
-    }
+  .stats-panel {
+    flex-direction: row;
+    gap: 10px;
+  }
 
-    .preview-escala-drag app-carta {
-        transform: scale(0.30);
-    }
-    .drag-placeholder { width: 55px; height: 85px; }
-    .drag-placeholder-banquillo { width: 75px; height: 110px; }
+  .stat-row {
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+    align-items: stretch;
+  }
 
-    .modal-content { width: 95%; padding: 20px; }
-    .modal-botones { flex-direction: column; }
-    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+  .stat-box {
+    min-width: 0;
+    text-align: center;
+  }
+
+  .campo-container {
+    width: 100%;
+    max-width: 430px;
+    height: 650px;
+    align-self: center;
+    border-radius: 18px;
+  }
+
+  .estadio-bg {
+    padding: 88px 16px 80px;
+    gap: 10px;
+    background-size: 100% 100%;
+    background-position: center;
+  }
+
+  .fila-campo {
+    width: 100%;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .zona-drop {
+    width: 58px;
+    height: 88px;
+    flex-basis: 58px;
+  }
+
+  .carta-titular {
+    width: 50px;
+    height: 76px;
+    flex-basis: 50px;
+  }
+
+  .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.168);
+  }
+
+  .carta-titular:hover .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.182);
+  }
+
+  .etiqueta-pos {
+    font-size: 0.52rem;
+    padding: 2px 5px;
+    top: -8px;
+  }
+
+  .jugador-12-wrapper {
+    top: 16px;
+    left: 12px;
+  }
+
+  .jugador-12-wrapper .zona-drop {
+    width: 54px;
+    height: 82px;
+    flex-basis: 54px;
+  }
+
+  .jugador-12-wrapper .carta-titular {
+    width: 48px;
+    height: 74px;
+    flex-basis: 48px;
+  }
+
+  .jugador-12-wrapper .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.158);
+  }
+
+  .totem-label {
+    font-size: 0.5rem;
+  }
+
+  .sidebar-der {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .banquillo-scroll {
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 128px;
+    padding: 10px 4px;
+    gap: 10px;
+  }
+
+  .carta-reserva {
+    width: 62px;
+    height: 94px;
+    flex: 0 0 62px;
+  }
+
+  .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.19);
+  }
+
+  .carta-reserva:hover .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.207);
+  }
+
+  .preview-escala-drag {
+    transform: scale(0.24);
+  }
+
+  .drag-placeholder {
+    width: 58px;
+    height: 88px;
+  }
+
+  .drag-placeholder-banquillo {
+    width: 62px;
+    height: 94px;
+  }
+
+  .modal-botones {
+    flex-direction: column;
+  }
+}
+
+/* =========================================================
+   PLANTILLA — MOBILE PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .stats-panel {
+    flex-direction: column;
+  }
+
+  .campo-container {
+    height: 590px;
+    max-width: 370px;
+  }
+
+  .estadio-bg {
+    padding: 82px 8px 74px;
+  }
+
+  .fila-campo {
+    gap: 5px;
+  }
+
+  .zona-drop,
+  .jugador-12-wrapper .zona-drop {
+    width: 50px;
+    height: 78px;
+    flex-basis: 50px;
+  }
+
+  .carta-titular,
+  .jugador-12-wrapper .carta-titular {
+    width: 44px;
+    height: 68px;
+    flex-basis: 44px;
+  }
+
+  .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.148);
+  }
+
+  .carta-titular:hover .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.162);
+  }
+
+  .jugador-12-wrapper .carta-escala-campo {
+    transform: translate(-50%, -50%) scale(0.142);
+  }
+
+  .banquillo-scroll {
+    height: 120px;
+  }
+
+  .carta-reserva {
+    width: 56px;
+    height: 86px;
+    flex-basis: 56px;
+  }
+
+  .carta-escala-banquillo {
+    transform: translate(-50%, -50%) scale(0.172);
+  }
 }

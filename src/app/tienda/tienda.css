@@ -1,166 +1,276 @@
-body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
+/* =========================================================
+   TIENDA — BASE DE PANTALLA
+   ========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+}
 
 .main-container {
-  width: 100%; height: 100vh;
-  background-image: url("/Fondos/FondoEstandar.webp");
-  background-color: rgba(10, 20, 15, 0.9); background-blend-mode: overlay;
-  background-size: cover; background-position: center; 
-  display: flex; flex-direction: column; overflow: hidden; position: relative;
+  height: 100dvh;
+  overflow: hidden;
 }
 
-/* header */
-.main-header {
-  background: transparent; width: 50%; height: 120px;
-  position: absolute; top: 40px; right: 80px;
-  display: flex; flex-direction: column; align-items: flex-start;
-  z-index: 20; animation: slideDown 0.8s ease-out forwards;
-}
-.header-options.top-row { width: 100%; height: 50%; background: linear-gradient(90deg, #253d2f 0%, #1a2b22 100%); border-top-right-radius: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 160px 0 80px; box-sizing: border-box; }
-.header-optionsB.bottom-row { width: 100%; height: 50%; background: linear-gradient(90deg, #1f3327 0%, #15221b 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%); display: flex; align-items: center; justify-content: space-around; padding: 0 160px 0 80px; box-sizing: border-box; }
-.separator-header { font-size: 2rem; color: #3b614b; font-weight: 300; margin: 0 10px; transform: skew(-20deg); }
-.option-group { display: flex; align-items: center; gap: 10px; color: white; font-weight: 600; }
-.icon { height: 22px; width: auto; }
-.pinchar { height: 26px; width: auto; cursor: pointer; transition: 0.2s; }
-.icon-hover:hover .pinchar { transform: scale(1.2); filter: drop-shadow(0 0 5px white); }
-.div-img-user { background: linear-gradient(to bottom, #1f8f5f, #156942); width: 140px; height: 100%; position: absolute; top: 0; right: 0; display: flex; align-items: center; justify-content: center; border-top-right-radius: 20px; border-bottom-left-radius: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 5; cursor: pointer; } 
-.img-user { width: 80px; height: 80px; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); object-fit: cover; transition: 0.3s; }
-.div-img-user:hover .img-user { transform: scale(1.15); border-color: #2ed573; box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
+/* =========================================================
+   TIENDA — LAYOUT PRINCIPAL
+   ========================================================= */
 
-
-/* tienda */
 .store-area {
+  width: 100%;
+  height: calc(100dvh - 230px);
   margin-top: 190px;
-  height: calc(100vh - 220px);
-  padding: 0 80px;
-  display: flex;
-  gap: 40px;
-  animation: fadeIn 0.8s ease forwards;
+  padding: 0 var(--tl-space-page) 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  min-height: 0;
+  box-sizing: border-box;
 }
 
-/* lista de sobres*/
+.store-left,
+.store-right {
+  min-width: 0;
+  min-height: 0;
+}
+
 .store-left {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.store-right {
   display: flex;
   flex-direction: column;
 }
 
-/* pestañas */
+/* =========================================================
+   TIENDA — TABS
+   ========================================================= */
+
 .store-tabs {
   display: flex;
-  gap: 5px;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  margin-bottom: 25px;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--tl-border-soft);
+  box-shadow: var(--tl-shadow-panel);
 }
-.tab-btn {
-  background: transparent;
+
+.store-tabs .tab-btn {
+  flex: 1;
+  min-height: 46px;
   border: none;
-  color: #889990;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 15px 30px;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--tl-text-muted);
+  font-family: var(--tl-font-main);
+  font-weight: 900;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
+  transition: 0.2s;
 }
-.tab-btn:hover { color: white; }
-.tab-btn.active { color: #2ed573; }
-.tab-btn.active::after {
-  content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px;
-  background: #2ed573; box-shadow: 0 0 10px rgba(46, 213, 115, 0.5);
+
+.store-tabs .tab-btn:hover {
+  color: var(--tl-white);
+  background: rgba(255, 255, 255, 0.06);
 }
+
+.store-tabs .tab-btn.active {
+  color: #06110a;
+  background: linear-gradient(135deg, var(--tl-green-dark), var(--tl-green));
+  box-shadow: 0 5px 18px rgba(46, 213, 115, 0.24);
+}
+
+/* =========================================================
+   TIENDA — GRID DE SOBRES
+   ========================================================= */
 
 .packs-grid {
-  display: flex;
-  gap: 25px;
-  overflow-x: auto; 
-  padding-top: 20px; 
-  padding-bottom: 20px;
-  height: 100%;
-  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
+  gap: 18px;
+  padding: 4px 8px 8px 4px;
 }
-.packs-grid::-webkit-scrollbar { height: 8px; }
-.packs-grid::-webkit-scrollbar-thumb { background: #3b614b; border-radius: 10px; }
 
-/* cada sobre */
+.packs-grid.tab-posiciones {
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+}
+
+/* =========================================================
+   TIENDA — ITEM DE SOBRE
+   ========================================================= */
+
 .pack-item {
-  min-width: 250px;
+  position: relative;
+  min-width: 0;
+  min-height: 410px;
+  border-radius: 24px;
+  padding: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  background:
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--glow-color) 18%, transparent), transparent 36%),
+    linear-gradient(145deg, rgba(25, 38, 31, 0.9), rgba(7, 13, 10, 0.96));
+  border: 1px solid color-mix(in srgb, var(--glow-color) 42%, rgba(255, 255, 255, 0.08));
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.48),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  opacity: 0.5;
-  filter: grayscale(40%);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
 }
 
-.pack-item.selected, .pack-item:hover {
+.pack-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 34%,
+      transparent 48%,
+      color-mix(in srgb, var(--glow-color) 14%, transparent) 72%,
+      transparent 100%
+    );
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.25s;
+}
+
+.pack-item:hover {
+  transform: translateY(-6px);
+  border-color: var(--glow-color);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.62),
+    0 0 24px color-mix(in srgb, var(--glow-color) 35%, transparent);
+}
+
+.pack-item:hover::before,
+.pack-item.selected::before {
   opacity: 1;
-  filter: grayscale(0%);
-  transform: translateY(-10px) scale(1.05);
 }
 
-/* titulo de arriba de la imagen */
+.pack-item.selected {
+  border-color: var(--glow-color);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.66),
+    0 0 0 2px color-mix(in srgb, var(--glow-color) 75%, transparent),
+    0 0 34px color-mix(in srgb, var(--glow-color) 44%, transparent);
+}
+
+.pack-item.pack-especial {
+  background:
+    radial-gradient(circle at 50% 8%, rgba(255, 145, 0, 0.28), transparent 38%),
+    linear-gradient(145deg, rgba(42, 30, 12, 0.92), rgba(9, 8, 6, 0.98));
+}
+
+.pack-item.pack-ultra {
+  background:
+    radial-gradient(circle at 50% 8%, rgba(177, 69, 233, 0.34), transparent 38%),
+    radial-gradient(circle at 18% 72%, rgba(0, 210, 255, 0.13), transparent 34%),
+    linear-gradient(145deg, rgba(34, 16, 54, 0.94), rgba(7, 7, 13, 0.98));
+}
+
+.pack-item.pack-ultra::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.18) 30%,
+    transparent 42%,
+    rgba(177, 69, 233, 0.13) 62%,
+    transparent 82%
+  );
+  mix-blend-mode: screen;
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+/* =========================================================
+   TIENDA — CONTENIDO DEL SOBRE
+   ========================================================= */
+
 .pack-top-title {
-  color: #ccc;
-  font-size: 1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-  text-align: center;
-  transition: 0.3s;
-}
-
-.pack-item.selected .pack-top-title {
-  color: white;
-  text-shadow: 0 0 10px var(--glow-color);
-}
-
-/* contenedor principal d la imagen */
-.pack-image-container {
-  width: 100%;
-  height: 320px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
-  margin-bottom: 15px;
+  z-index: 2;
+  margin: 0 0 12px;
+  color: var(--tl-white);
+  font-size: 1.18rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1.12;
+  letter-spacing: 0.4px;
+}
+
+.pack-image-container {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pack-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8));
-  transition: filter 0.3s ease;
+  filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.5));
+  transition: transform 0.22s ease, filter 0.22s ease;
 }
 
-.pack-item.selected .pack-image {
-  filter: drop-shadow(0 0 30px var(--glow-color)) drop-shadow(0 15px 15px rgba(0,0,0,0.5));
+.pack-item:hover .pack-image {
+  transform: scale(1.04) rotate(-1deg);
+  filter:
+    drop-shadow(0 22px 28px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--glow-color) 28%, transparent));
+}
+
+.pos-badge-floating {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 4;
+  min-width: 44px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: var(--tl-white);
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.42);
 }
 
 .pack-price-pill {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 20px;
-  padding: 8px 18px;
+  position: relative;
+  z-index: 2;
+  min-height: 44px;
+  margin-top: 14px;
+  padding: 9px 13px;
+  border-radius: 999px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: white;
+  justify-content: center;
+  gap: 9px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--tl-border-soft);
+  color: var(--tl-white);
   font-family: monospace;
-  font-size: 1.2rem;
-  font-weight: 700;
-  transition: 0.3s;
-}
-
-.pack-item.selected .pack-price-pill {
-  border-color: var(--glow-color);
-  box-shadow: 0 0 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.1);
+  font-size: 0.98rem;
+  font-weight: 900;
 }
 
 .tc-icon-small {
@@ -169,381 +279,1241 @@ body { margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
   object-fit: contain;
 }
 
-.pos-badge-floating {
-  position: absolute;
-  top: 0px;
-  right: 15px;
-  color: white;
-  font-weight: 900;
-  font-size: 1.2rem;
-  padding: 8px 12px;
-  border-radius: 8px;
-  z-index: 10;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-  border: 2px solid rgba(255,255,255,0.3);
-}
-.currency { color: #2ed573; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 800; }
-
-.store-right {
-  width: 380px;
-  display: flex;
-  flex-direction: column;
-}
+/* =========================================================
+   TIENDA — PANEL DERECHO DE INFORMACIÓN
+   ========================================================= */
 
 .info-panel {
-  background: linear-gradient(145deg, #15221b 0%, #0a100c 100%);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-top: 5px solid;
-  border-radius: 15px;
-  padding: 30px;
-  height: 100%;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 28px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--pack-color) 16%, transparent), transparent 38%),
+    linear-gradient(145deg, rgba(20, 30, 25, 0.86), rgba(7, 13, 10, 0.96));
+  border: 1px solid color-mix(in srgb, var(--pack-color) 38%, rgba(255, 255, 255, 0.08));
+  border-top: 5px solid var(--pack-color);
+  box-shadow: var(--tl-shadow-panel);
   display: flex;
   flex-direction: column;
-  animation: slideInRight 0.5s ease forwards;
+  overflow: hidden;
+  animation: slideInUp 0.45s ease forwards;
+}
+
+.info-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      125deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 34%,
+      transparent 48%,
+      color-mix(in srgb, var(--pack-color) 12%, transparent) 74%,
+      transparent 100%
+    );
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.info-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+.info-panel-ultra {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(177, 69, 233, 0.26), transparent 38%),
+    radial-gradient(circle at 20% 82%, rgba(0, 210, 255, 0.1), transparent 34%),
+    linear-gradient(145deg, rgba(32, 16, 52, 0.92), rgba(6, 7, 14, 0.98));
+}
+
+.info-panel-especial {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 145, 0, 0.22), transparent 38%),
+    linear-gradient(145deg, rgba(42, 30, 12, 0.88), rgba(8, 8, 6, 0.98));
 }
 
 .info-title {
-  color: white; font-size: 1.8rem; font-weight: 800; margin: 0 0 20px 0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: 0.5px;
+  margin: 0 0 16px;
+  color: var(--tl-white);
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.08;
 }
 
 .info-desc {
-  color: #aaa; font-size: 1rem; line-height: 1.6; margin: 0 0 30px 0;
+  margin: 0 0 20px;
+  color: #d1d8d4;
+  font-size: 0.98rem;
+  line-height: 1.55;
 }
 
 .info-contents {
-  background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 3px solid #2ed573;
-  margin-bottom: auto;
-  display: flex; flex-direction: column; gap: 5px;
+  margin-top: auto;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid var(--tl-border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
-.contents-label { color: #889990; font-size: 0.8rem; text-transform: uppercase; font-weight: 700; }
-.contents-value { color: white; font-size: 1.1rem; font-weight: 600; }
+
+.contents-label {
+  color: var(--tl-text-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.contents-value {
+  color: var(--tl-white);
+  font-weight: 900;
+  line-height: 1.35;
+}
 
 .buy-section {
-  background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px;
-  border: 1px solid rgba(255,255,255,0.05); margin-top: 30px;
-  display: flex; flex-direction: column; gap: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.price-display { display: flex; flex-direction: column; align-items: center; }
-.price-label { color: #889990; font-size: 0.9rem; text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
-.price-amount { color: white; font-size: 2.2rem; font-weight: 900; font-family: monospace; text-shadow: 0 2px 5px rgba(0,0,0,0.5); line-height: 1; }
-.price-amount small { font-family: 'Poppins', sans-serif; font-size: 1rem; color: #2ed573; }
+.price-display {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid var(--tl-border-soft);
+}
+
+.price-label {
+  display: block;
+  color: var(--tl-text-muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.price-amount {
+  display: block;
+  color: var(--tl-green);
+  font-family: monospace;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.price-amount small {
+  color: var(--tl-white);
+  font-size: 0.8rem;
+}
 
 .btn-comprar {
-  background: linear-gradient(135deg, #2ed573, #1f8f5f);
-  color: white; border: none; padding: 18px; border-radius: 12px;
-  font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;
-  cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--tl-green-dark), var(--tl-green));
+  color: #06110a;
+  font-family: var(--tl-font-main);
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(46, 213, 115, 0.25);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
 }
-.btn-comprar:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 25px rgba(46, 213, 115, 0.6); background: linear-gradient(135deg, #32e87d, #24a870);
+
+.btn-comprar:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(46, 213, 115, 0.42);
 }
+
 .btn-comprar:disabled {
-  background: #333; color: #666; cursor: not-allowed; transform: none; box-shadow: none; border: 1px solid #444;
+  background: rgba(255, 255, 255, 0.08);
+  color: #8a948e;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* Animaciones */
-@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-/* animacion*/
+/* =========================================================
+   TIENDA — ARENA DE APERTURA
+   ========================================================= */
 
 .pack-opening-arena {
-  position: absolute;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  background: radial-gradient(circle at center, #1a2b22 0%, #050a08 80%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  min-height: 100dvh;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(46, 213, 115, 0.18), transparent 32%),
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.045), transparent 26%),
+    linear-gradient(145deg, #07100b, #000);
+  isolation: isolate;
 }
 
 .pack-opening-arena::before {
-  content: ''; position: absolute; width: 200vw; height: 200vw;
-  background: conic-gradient(from 0deg, transparent 0deg, rgba(46, 213, 115, 0.1) 60deg, transparent 120deg, rgba(255, 215, 0, 0.05) 180deg, transparent 240deg, rgba(46, 213, 115, 0.1) 300deg, transparent 360deg);
-  animation: rotateLights 20s linear infinite;
-  z-index: 1; pointer-events: none;
+  content: '';
+  position: absolute;
+  width: 210vmax;
+  height: 210vmax;
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(46, 213, 115, 0.12) 48deg,
+      transparent 96deg,
+      rgba(255, 215, 0, 0.08) 150deg,
+      transparent 210deg,
+      rgba(46, 213, 115, 0.12) 300deg,
+      transparent 360deg
+    );
+  animation: arenaRotate 18s linear infinite;
+  z-index: 0;
+  pointer-events: none;
 }
 
+.pack-opening-arena::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 18%, rgba(255, 255, 255, 0.045) 19%, transparent 20%),
+    radial-gradient(circle at 50% 50%, transparent 0 36%, rgba(46, 213, 115, 0.07) 37%, transparent 38%);
+  opacity: 0.7;
+  animation: arenaBreath 2.6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Especial */
+.pack-opening-arena.arena-especial {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 145, 0, 0.32), transparent 34%),
+    radial-gradient(circle at 18% 70%, rgba(255, 215, 0, 0.13), transparent 32%),
+    linear-gradient(145deg, #170e04, #000);
+}
+
+.pack-opening-arena.arena-especial::before {
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 145, 0, 0.18) 42deg,
+      transparent 90deg,
+      rgba(255, 215, 0, 0.15) 160deg,
+      transparent 230deg,
+      rgba(255, 69, 0, 0.16) 310deg,
+      transparent 360deg
+    );
+  animation-duration: 12s;
+}
+
+.pack-opening-arena.arena-especial::after {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 18%, rgba(255, 145, 0, 0.11) 19%, transparent 20%),
+    radial-gradient(circle at 50% 50%, transparent 0 36%, rgba(255, 215, 0, 0.09) 37%, transparent 38%);
+}
+
+/* Ultra */
+.pack-opening-arena.arena-ultra {
+  animation: ultraScreenShake 0.14s linear infinite;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(177, 69, 233, 0.48), transparent 34%),
+    radial-gradient(circle at 20% 70%, rgba(0, 210, 255, 0.18), transparent 32%),
+    radial-gradient(circle at 78% 22%, rgba(255, 0, 128, 0.16), transparent 34%),
+    linear-gradient(145deg, #10041b, #000);
+}
+
+.pack-opening-arena.arena-ultra::before {
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(177, 69, 233, 0.25) 38deg,
+      transparent 78deg,
+      rgba(0, 210, 255, 0.16) 145deg,
+      transparent 205deg,
+      rgba(255, 0, 128, 0.2) 285deg,
+      transparent 360deg
+    );
+  animation: arenaRotate 5s linear infinite;
+  opacity: 1;
+}
+
+.pack-opening-arena.arena-ultra::after {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 15%, rgba(177, 69, 233, 0.18) 16%, transparent 17%),
+    radial-gradient(circle at 50% 50%, transparent 0 30%, rgba(0, 210, 255, 0.13) 31%, transparent 32%),
+    radial-gradient(circle at 50% 50%, transparent 0 48%, rgba(255, 0, 128, 0.11) 49%, transparent 50%);
+  animation: ultraRings 1.2s ease-in-out infinite;
+}
+
+/* Flash */
+.flash-bang {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.flash-bang.active {
+  animation: flashBang 0.55s ease forwards;
+}
+
+/* =========================================================
+   TIENDA — ALERTA ESPECIAL / ULTRA
+   ========================================================= */
+
+.alerta-especial-container {
+  position: relative;
+  z-index: 20;
+  padding: 34px 42px;
+  border-radius: 24px;
+  text-align: center;
+  border: 1px solid rgba(255, 145, 0, 0.55);
+  background: rgba(20, 10, 4, 0.86);
+  box-shadow:
+    0 0 50px rgba(255, 145, 0, 0.38),
+    inset 0 0 35px rgba(255, 145, 0, 0.08);
+  animation: specialAlertShake 0.95s ease-in-out infinite alternate;
+}
+
+.alerta-especial-container.alerta-morada {
+  border-color: rgba(177, 69, 233, 0.78);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(177, 69, 233, 0.26), transparent 48%),
+    rgba(16, 4, 27, 0.9);
+  box-shadow:
+    0 0 70px rgba(177, 69, 233, 0.65),
+    0 0 120px rgba(0, 210, 255, 0.18),
+    inset 0 0 55px rgba(177, 69, 233, 0.22);
+  animation: ultraAlertShake 0.55s ease-in-out infinite alternate;
+}
+
+.alerta-titulo {
+  margin: 0 0 10px;
+  color: var(--tl-white);
+  font-size: clamp(2rem, 5vw, 4.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 24px rgba(255, 145, 0, 0.55);
+}
+
+.alerta-morada .alerta-titulo {
+  color: #f4e7ff;
+  text-shadow:
+    0 0 18px rgba(177, 69, 233, 1),
+    0 0 42px rgba(0, 210, 255, 0.6),
+    0 0 70px rgba(255, 0, 128, 0.45);
+}
+
+.alerta-sub {
+  margin: 0;
+  color: #d1d8d4;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.alerta-morada .alerta-sub {
+  color: #d68bff;
+  text-shadow: 0 0 12px rgba(177, 69, 233, 0.8);
+}
+
+/* =========================================================
+   TIENDA — REVEAL POSICIÓN / ESCUDO / MEDIA
+   ========================================================= */
+
 .reveal-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
+  position: relative;
   z-index: 10;
+  width: min(92vw, 720px);
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 900px;
+}
+
+.reveal-container::before {
+  content: '';
+  position: absolute;
+  width: min(72vw, 430px);
+  height: min(72vw, 430px);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(46, 213, 115, 0.24), transparent 58%);
+  filter: blur(4px);
+  animation: revealHalo 1.4s ease-in-out infinite;
+  z-index: -1;
+}
+
+.reveal-container.reveal-especial::before {
+  background: radial-gradient(circle, rgba(255, 145, 0, 0.32), transparent 58%);
+}
+
+.reveal-container.reveal-ultra::before {
+  width: min(86vw, 540px);
+  height: min(86vw, 540px);
+  background:
+    radial-gradient(circle, rgba(177, 69, 233, 0.44), transparent 54%),
+    radial-gradient(circle, rgba(0, 210, 255, 0.18), transparent 68%);
+  animation: ultraHalo 0.9s ease-in-out infinite;
 }
 
 .reveal-item {
-  animation: dropAndBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  position: absolute;
   opacity: 0;
-  transform: translateY(-100px) scale(0.5);
+  transform: translateY(24px) scale(0.68) rotateX(22deg);
+  animation: cinematicReveal 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
+}
+
+.reveal-special-item {
+  animation:
+    cinematicRevealSpecial 1.18s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    specialMicroShake 0.12s linear 0.55s 5;
+}
+
+.reveal-ultra-item {
+  animation:
+    cinematicRevealUltra 1.28s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    ultraItemShake 0.08s linear 0.52s 9;
 }
 
 .reveal-text {
   font-family: 'Arial Black', Impact, sans-serif;
-  font-size: 6rem;
-  color: white;
-  text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.3);
+  font-size: clamp(4rem, 12vw, 8rem);
+  color: var(--tl-white);
   line-height: 1;
   text-transform: uppercase;
+  text-align: center;
+  letter-spacing: -0.04em;
+  text-shadow:
+    0 14px 26px rgba(0, 0, 0, 0.85),
+    0 0 30px rgba(255, 255, 255, 0.24);
+}
+
+.reveal-position {
+  padding: 0.06em 0.22em;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reveal-rating {
+  font-size: clamp(5.2rem, 15vw, 10rem);
+}
+
+.reveal-shield-wrap {
+  width: clamp(140px, 26vw, 220px);
+  height: clamp(140px, 26vw, 220px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal-shield-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  border: 1px solid rgba(46, 213, 115, 0.28);
+  box-shadow:
+    0 0 30px rgba(46, 213, 115, 0.25),
+    inset 0 0 30px rgba(46, 213, 115, 0.08);
+  animation: shieldRing 1.6s ease-in-out infinite;
 }
 
 .reveal-shield {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
+  filter:
+    drop-shadow(0 18px 28px rgba(0, 0, 0, 0.75))
+    drop-shadow(0 0 18px rgba(46, 213, 115, 0.28));
+}
+
+/* Glow por rareza */
+.glow-gold {
+  color: #ffd700;
+  text-shadow:
+    0 14px 26px rgba(0, 0, 0, 0.85),
+    0 0 36px rgba(255, 215, 0, 0.7),
+    0 0 70px rgba(255, 215, 0, 0.28);
+}
+
+.glow-orange {
+  color: #ff9100;
+  text-shadow:
+    0 14px 26px rgba(0, 0, 0, 0.85),
+    0 0 42px rgba(255, 145, 0, 0.85),
+    0 0 90px rgba(255, 69, 0, 0.38);
+}
+
+.glow-purple {
+  color: #f1ddff;
+  text-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.9),
+    0 0 36px rgba(177, 69, 233, 1),
+    0 0 74px rgba(0, 210, 255, 0.48),
+    0 0 120px rgba(255, 0, 128, 0.36);
+}
+
+/* =========================================================
+   TIENDA — ANIMACIONES KEYFRAMES
+   ========================================================= */
+
+@keyframes arenaRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes arenaBreath {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 0.82;
+  }
+}
+
+@keyframes ultraRings {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.32;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: scale(0.92);
+    opacity: 0.32;
+  }
+}
+
+@keyframes flashBang {
+  0% {
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.95;
+  }
+
+  35% {
+    opacity: 0.18;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes specialAlertShake {
+  0% {
+    transform: translate3d(-1px, 1px, 0) rotate(-0.2deg) scale(1);
+  }
+
+  100% {
+    transform: translate3d(1px, -1px, 0) rotate(0.2deg) scale(1.015);
+  }
+}
+
+@keyframes ultraAlertShake {
+  0% {
+    transform: translate3d(-3px, 2px, 0) rotate(-0.4deg) scale(1);
+  }
+
+  100% {
+    transform: translate3d(3px, -2px, 0) rotate(0.4deg) scale(1.025);
+  }
+}
+
+@keyframes ultraScreenShake {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate3d(1px, -1px, 0);
+  }
+
+  50% {
+    transform: translate3d(-1px, 1px, 0);
+  }
+
+  75% {
+    transform: translate3d(1px, 1px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes revealHalo {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.52;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes ultraHalo {
+  0%,
+  100% {
+    transform: scale(0.9) rotate(0deg);
+    opacity: 0.58;
+    filter: blur(4px);
+  }
+
+  50% {
+    transform: scale(1.08) rotate(8deg);
+    opacity: 1;
+    filter: blur(1px);
+  }
+}
+
+@keyframes cinematicReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(36px) scale(0.64) rotateX(28deg);
+    filter: blur(10px);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateY(-12px) scale(1.08) rotateX(0deg);
+    filter: blur(0);
+  }
+
+  72% {
+    transform: translateY(4px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes cinematicRevealSpecial {
+  0% {
+    opacity: 0;
+    transform: translateY(46px) scale(0.58) rotateZ(-4deg);
+    filter: blur(12px) brightness(1.2);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(-18px) scale(1.14) rotateZ(2deg);
+    filter: blur(0) brightness(1.35);
+  }
+
+  70% {
+    transform: translateY(4px) scale(0.98) rotateZ(-1deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateZ(0deg);
+    filter: blur(0) brightness(1.08);
+  }
+}
+
+@keyframes cinematicRevealUltra {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.42) rotateZ(-8deg) rotateX(42deg);
+    filter: blur(18px) brightness(1.8) saturate(1.6);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-30px) scale(1.28) rotateZ(4deg) rotateX(0deg);
+    filter: blur(0) brightness(2) saturate(1.8);
+  }
+
+  54% {
+    transform: translateY(10px) scale(0.92) rotateZ(-2deg);
+    filter: brightness(1.35) saturate(1.4);
+  }
+
+  76% {
+    transform: translateY(-6px) scale(1.07) rotateZ(1deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateZ(0deg);
+    filter: blur(0) brightness(1.18) saturate(1.25);
+  }
+}
+
+@keyframes specialMicroShake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 1px -1px;
+  }
+}
+
+@keyframes ultraItemShake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  25% {
+    translate: 2px -1px;
+  }
+
+  50% {
+    translate: -2px 1px;
+  }
+
+  75% {
+    translate: 1px 2px;
+  }
+}
+
+@keyframes shieldRing {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   TIENDA — ALERTA ESPECIAL / ULTRA
+   ========================================================= */
+
+.alerta-especial-container {
+  position: relative;
+  z-index: 8;
+  padding: 34px 42px;
+  border-radius: 24px;
+  text-align: center;
+  border: 1px solid rgba(255, 145, 0, 0.5);
+  background: rgba(20, 10, 4, 0.82);
+  box-shadow: 0 0 50px rgba(255, 145, 0, 0.35);
+  animation: alertPop 0.5s ease forwards;
+}
+
+.alerta-especial-container.alerta-morada {
+  border-color: rgba(177, 69, 233, 0.65);
+  background: rgba(16, 4, 27, 0.86);
+  box-shadow: 0 0 60px rgba(177, 69, 233, 0.45);
+}
+
+.alerta-titulo {
+  margin: 0 0 10px;
+  color: var(--tl-white);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.alerta-sub {
+  margin: 0;
+  color: #d1d8d4;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+@keyframes alertPop {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   TIENDA — REVEAL
+   ========================================================= */
+
+.reveal-container {
+  position: relative;
+  z-index: 6;
+  min-width: min(90vw, 620px);
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal-item {
+  animation: revealPop 0.45s ease forwards;
+}
+
+.reveal-text {
+  color: var(--tl-white);
+  font-size: clamp(4rem, 12vw, 8rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+}
+
+.reveal-shield {
+  width: clamp(110px, 20vw, 190px);
+  height: clamp(110px, 20vw, 190px);
+  object-fit: contain;
+  filter: drop-shadow(0 20px 28px rgba(0, 0, 0, 0.58));
 }
 
 .glow-gold {
   color: #ffd700;
-  text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 50px rgba(255, 215, 0, 0.6);
-  font-size: 8rem;
+  text-shadow: 0 0 18px rgba(255, 215, 0, 0.65);
 }
 
 .glow-orange {
-      color: #ff4500;
-      text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 50px rgba(255, 69, 0, 0.9);
-      font-size: 8rem;
-    }
-
-.flash-bang {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: white; z-index: 9999;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.1s ease-out;
+  color: #ff9100;
+  text-shadow: 0 0 22px rgba(255, 145, 0, 0.72);
 }
-.flash-bang.active { opacity: 1; transition: opacity 0.1s ease-in; }
+
+.glow-purple {
+  color: #f1ddff;
+  text-shadow:
+    0 0 18px rgba(177, 69, 233, 0.85),
+    0 0 34px rgba(0, 210, 255, 0.35);
+}
+
+@keyframes revealPop {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* =========================================================
+   TIENDA — RESULTADO FINAL
+   ========================================================= */
 
 .final-card-container {
-  z-index: 10;
+  position: relative;
+  z-index: 7;
+  width: min(94vw, 720px);
+  max-height: 96dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
-  animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: revealPop 0.5s ease forwards;
 }
 
 .confetti {
-  color: #ffd700; font-size: 1.5rem; font-weight: 800; font-family: 'Poppins';
-  text-shadow: 0 0 20px rgba(255,215,0,0.8); letter-spacing: 2px;
-}
-
-.btn-continuar {
-  background: linear-gradient(135deg, #2ed573, #1f8f5f);
-  color: white; border: none; padding: 15px 40px; border-radius: 30px;
-  font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;
-  cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
-}
-.btn-continuar:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 30px rgba(46, 213, 115, 0.8); }
-
-.alerta-especial-container {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  background: radial-gradient(circle at center, #200000 0%, #000000 100%);
-  z-index: 500;
-  animation: alarmaRoja 0.8s ease-in-out infinite alternate;
-}
-
-.alerta-titulo {
-  font-family: 'Arial Black', Impact, sans-serif;
-  font-size: 5rem;
-  color: #fff;
+  margin-bottom: 8px;
+  color: var(--tl-white);
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  font-weight: 900;
   text-transform: uppercase;
   text-align: center;
-  letter-spacing: 5px;
-  text-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500;
-  animation: temblorViolento 0.1s infinite;
+  text-shadow: 0 0 22px rgba(46, 213, 115, 0.55);
+}
+
+.confetti.ultra-text {
+  color: #f1ddff;
+  text-shadow:
+    0 0 20px rgba(177, 69, 233, 0.95),
+    0 0 34px rgba(0, 210, 255, 0.45);
+}
+
+.final-card-container app-carta {
+  transform: scale(0.86);
+  transform-origin: top center;
+  margin-bottom: -52px;
+}
+
+.player-details {
+  width: min(100%, 560px);
+  margin-top: 8px;
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(10, 16, 12, 0.78);
+  border: 1px solid var(--tl-border-soft);
+  box-shadow: var(--tl-shadow-panel);
+  text-align: center;
+}
+
+.player-name {
+  margin: 0 0 6px;
+  color: var(--tl-white);
+  font-size: 1.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.player-team {
+  margin: 0 0 12px;
+  color: var(--tl-green);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.player-desc {
   margin: 0;
+  color: var(--tl-text-soft);
+  font-size: 0.94rem;
+  line-height: 1.5;
 }
 
-.alerta-sub {
-  color: #ff9100;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 15px;
-  text-transform: uppercase;
-  text-shadow: 0 0 10px #ff0000;
-  letter-spacing: 3px;
-  animation: fadeIn 1s ease-in forwards;
-}
-
-.pack-opening-arena.arena-especial {
-  background: radial-gradient(circle at center, #2b1505 0%, #080402 80%);
-  transition: background 1s ease-in-out;
-}
-
-.pack-opening-arena.arena-especial::before {
-  background: conic-gradient(
-    from 0deg, 
-    transparent 0deg, 
-    rgba(255, 69, 0, 0.15) 60deg, 
-    transparent 120deg, 
-    rgba(255, 140, 0, 0.1) 180deg, 
-    transparent 240deg, 
-    rgba(255, 69, 0, 0.15) 300deg, 
-    transparent 360deg
-  );
-}
-
-/* --- PANEL DE HABILIDAD ESPECIAL --- */
 .habilidad-panel {
-  background: linear-gradient(180deg, rgba(255, 69, 0, 0.15) 0%, rgba(0, 0, 0, 0.6) 100%);
-  border: 1px solid rgba(255, 145, 0, 0.5);
-  border-top: 3px solid #ff4500;
-  border-radius: 12px;
-  padding: 15px 25px;
-  max-width: 400px;
+  width: min(100%, 560px);
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 145, 0, 0.12);
+  border: 1px solid rgba(255, 145, 0, 0.42);
   text-align: center;
-  box-shadow: 0 10px 30px rgba(255, 69, 0, 0.2);
-  animation: slideUpFade 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  margin-bottom: 10px;
+}
+
+.habilidad-panel.panel-ultra {
+  background: rgba(177, 69, 233, 0.14);
+  border-color: rgba(177, 69, 233, 0.58);
 }
 
 .habilidad-panel h4 {
-  margin: 0 0 8px 0;
-  color: #ff9100;
-  font-family: 'Arial Black', Impact, sans-serif;
-  font-size: 1.3rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  margin: 0 0 8px;
+  color: var(--tl-white);
+  font-size: 1.05rem;
 }
 
 .habilidad-panel p {
   margin: 0;
-  color: #e0e0e0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  font-weight: 500;
+  color: var(--tl-text-soft);
+  line-height: 1.45;
 }
 
-/* Color del número de la Media en Ultra */
-.glow-purple {
-    color: #b145e9;
-    text-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 50px rgba(177, 69, 233, 0.9);
-    font-size: 8rem;
+.btn-continuar {
+  width: min(100%, 420px);
+  min-height: 52px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--tl-green-dark), var(--tl-green));
+  color: #06110a;
+  font-family: var(--tl-font-main);
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(46, 213, 115, 0.32);
+  transition: 0.22s;
 }
 
-/* El texto de "Leyenda del Trébol" en Ultra */
-.ultra-text {
-    color: #b145e9;
-    text-shadow: 0 0 20px rgba(177, 69, 233, 0.8);
-    font-size: 1.8rem !important;
+.btn-continuar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(46, 213, 115, 0.48);
 }
 
-/* Fondo de la Arena si toca Ultra */
-.pack-opening-arena.arena-ultra {
-    background: radial-gradient(circle at center, #1a052b 0%, #07020a 80%);
-    transition: background 1s ease-in-out;
+/* =========================================================
+   TIENDA — RESULTADO ULTRA MÁS ESPECTACULAR
+   ========================================================= */
+
+.pack-opening-arena.arena-ultra .final-card-container {
+  animation:
+    revealPop 0.5s ease forwards,
+    ultraFinalAura 1.4s ease-in-out infinite;
 }
 
-.pack-opening-arena.arena-ultra::before {
-    background: conic-gradient(
-      from 0deg, 
-      transparent 0deg, 
-      rgba(177, 69, 233, 0.15) 60deg, 
-      transparent 120deg, 
-      rgba(255, 0, 255, 0.1) 180deg, 
-      transparent 240deg, 
-      rgba(177, 69, 233, 0.15) 300deg, 
-      transparent 360deg
-    );
+.pack-opening-arena.arena-ultra .confetti.ultra-text {
+  color: #f1ddff;
+  text-shadow:
+    0 0 18px rgba(177, 69, 233, 1),
+    0 0 42px rgba(0, 210, 255, 0.6),
+    0 0 72px rgba(255, 0, 128, 0.48);
+  animation: ultraTitlePulse 0.9s ease-in-out infinite alternate;
 }
 
-/* Panel de Habilidad si es Ultra */
-.habilidad-panel.panel-ultra {
-    background: linear-gradient(180deg, rgba(177, 69, 233, 0.15) 0%, rgba(0, 0, 0, 0.6) 100%);
-    border-color: rgba(177, 69, 233, 0.5);
-    border-top-color: #b145e9;
-    box-shadow: 0 10px 30px rgba(177, 69, 233, 0.2);
-}
-.habilidad-panel.panel-ultra h4 { color: #d68bff; text-shadow: 0 2px 4px rgba(177, 69, 233, 0.8); }
-
-/* La pantalla temblorosa en modo Ultra (Morado galáctico) */
-.alerta-especial-container.alerta-morada {
-    animation: alarmaMorada 0.8s ease-in-out infinite alternate;
+.pack-opening-arena.arena-ultra .final-card-container app-carta {
+  filter:
+    drop-shadow(0 0 24px rgba(177, 69, 233, 0.85))
+    drop-shadow(0 0 46px rgba(0, 210, 255, 0.35));
 }
 
-@keyframes alarmaMorada {
-    from { box-shadow: inset 0 0 50px rgba(177, 69, 233, 0.2); }
-    to { 
-      box-shadow: inset 0 0 200px rgba(177, 69, 233, 0.9); 
-      background: radial-gradient(circle at center, #2e0040 0%, #000000 100%); 
-    }
-}
-.alerta-morada .alerta-titulo { text-shadow: 0 0 20px #8e2de2, 0 0 40px #4a00e0; }
-.alerta-morada .alerta-sub { color: #d68bff; text-shadow: 0 0 10px #8e2de2; }
-
-@keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+.pack-opening-arena.arena-ultra .habilidad-panel.panel-ultra {
+  border-color: rgba(177, 69, 233, 0.75);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(177, 69, 233, 0.25), transparent 50%),
+    rgba(16, 4, 27, 0.86);
+  box-shadow:
+    0 0 30px rgba(177, 69, 233, 0.42),
+    inset 0 0 22px rgba(177, 69, 233, 0.12);
 }
 
-@keyframes alarmaRoja {
-  from { box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.2); }
-  to { 
-    box-shadow: inset 0 0 200px rgba(255, 0, 0, 0.9); 
-    background: radial-gradient(circle at center, #500000 0%, #000000 100%); 
+@keyframes ultraFinalAura {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 18px rgba(177, 69, 233, 0.34));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 42px rgba(0, 210, 255, 0.34));
   }
 }
 
-@keyframes temblorViolento {
-  0% { transform: translate(3px, 2px) rotate(0deg); }
-  10% { transform: translate(-2px, -3px) rotate(-1deg); }
-  20% { transform: translate(-4px, 0px) rotate(1deg); }
-  30% { transform: translate(0px, 4px) rotate(0deg); }
-  40% { transform: translate(2px, -2px) rotate(1deg); }
-  50% { transform: translate(-2px, 3px) rotate(-1deg); }
-  60% { transform: translate(-4px, 2px) rotate(0deg); }
-  70% { transform: translate(3px, 2px) rotate(-1deg); }
-  80% { transform: translate(-2px, -2px) rotate(1deg); }
-  90% { transform: translate(3px, 3px) rotate(0deg); }
-  100% { transform: translate(2px, -3px) rotate(-1deg); }
+@keyframes ultraTitlePulse {
+  from {
+    transform: scale(1);
+    letter-spacing: 0;
+  }
+
+  to {
+    transform: scale(1.035);
+    letter-spacing: 0.04em;
+  }
 }
+
+/* =========================================================
+   TIENDA — TOAST LOCAL
+   ========================================================= */
+
+.toast-notification {
+  z-index: 100000;
+}
+
+/* =========================================================
+   TIENDA — RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .store-area {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 22px;
+  }
+
+  .packs-grid {
+    grid-template-columns: repeat(2, minmax(190px, 1fr));
+  }
+
+  .packs-grid.tab-posiciones {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+
+  .pack-item {
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 992px) {
+  .main-container {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .store-area {
+    height: auto;
+    min-height: calc(100dvh - 170px);
+    margin-top: 20px;
+    padding: 0 24px 24px;
+    grid-template-columns: 1fr;
+  }
+
+  .packs-grid,
+  .packs-grid.tab-posiciones {
+    overflow: visible;
+    grid-template-columns: repeat(2, minmax(190px, 1fr));
+  }
+
+  .info-panel {
+    min-height: auto;
+  }
+}
+
+/* =========================================================
+   TIENDA — RESPONSIVE MOBILE
+   ========================================================= */
 
 @media (max-width: 768px) {
-  .alerta-titulo { font-size: 2.5rem; }
-  .alerta-sub { font-size: 1rem; }
+  .main-container {
+    display: flex;
+    min-height: 100dvh;
+    padding: 10px;
+  }
+
+  .store-area {
+    margin-top: 0;
+    padding: 0;
+    gap: 16px;
+  }
+
+  .store-tabs {
+    overflow-x: auto;
+  }
+
+  .store-tabs .tab-btn {
+    flex: 0 0 auto;
+    min-width: 160px;
+    padding: 0 14px;
+  }
+
+  .packs-grid,
+  .packs-grid.tab-posiciones {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 0;
+  }
+
+  .pack-item {
+    min-height: 340px;
+    border-radius: 20px;
+    padding: 16px;
+  }
+
+  .pack-image-container {
+    min-height: 220px;
+  }
+
+  .pack-price-pill {
+    min-height: 42px;
+  }
+
+  .info-panel {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .info-title {
+    font-size: 1.35rem;
+    text-align: center;
+  }
+
+  .info-desc {
+    text-align: center;
+    font-size: 0.92rem;
+  }
+
+  .price-amount {
+    font-size: 1.22rem;
+  }
+
+  .pack-opening-arena {
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  .alerta-especial-container {
+    width: 100%;
+    padding: 26px 20px;
+  }
+
+  .reveal-text {
+    font-size: clamp(4rem, 20vw, 6.2rem);
+  }
+
+  .final-card-container {
+    width: 100%;
+    max-height: 96dvh;
+  }
+
+  .final-card-container app-carta {
+    transform: scale(0.74);
+    margin-bottom: -104px;
+  }
+
+  .player-details,
+  .habilidad-panel {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .player-name {
+    font-size: 1.35rem;
+  }
+
+  .btn-continuar {
+    min-height: 48px;
+  }
 }
 
-@keyframes rotateLights { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+/* =========================================================
+   TIENDA — MOBILE PEQUEÑO
+   ========================================================= */
 
-@keyframes dropAndBounce {
-  0% { opacity: 0; transform: translateY(-150px) scale(0.5); }
-  60% { opacity: 1; transform: translateY(20px) scale(1.1); }
-  80% { transform: translateY(-10px) scale(0.95); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
+@media (max-width: 480px) {
+  .store-tabs .tab-btn {
+    min-width: 150px;
+    font-size: 0.82rem;
+  }
 
-@media (max-width: 768px) {
-    .main-container { overflow-y: auto; padding-top: 10px; }
-    .main-header { position: relative; width: 100%; height: auto; top: 0; right: 0; margin-bottom: 10px; }
-    .header-options.top-row, .header-optionsB.bottom-row { padding: 10px 15px; clip-path: none; border-radius: 12px; margin-bottom: 5px; justify-content: space-evenly; }
-    .div-img-user { display: none; }
-    
-    .store-area { flex-direction: column; margin-top: 10px; height: auto; padding: 0 15px 30px 15px; gap: 20px; }
-    .store-left { width: 100%; }
-    .store-tabs { justify-content: center; }
-    .tab-btn { padding: 10px 15px; font-size: 0.9rem; }
-    
-    .pack-item { min-width: 180px; }
-    .pack-image-container { height: 240px; }
-    
-    .store-right { width: 100%; }
-    .info-panel { padding: 20px; box-sizing: border-box; }
-    .info-title { font-size: 1.5rem; text-align: center; }
-    .info-desc { text-align: center; font-size: 0.9rem; }
-    
-    .reveal-text { font-size: 4rem; }
-    .glow-gold { font-size: 5rem; }
-    .reveal-shield { width: 100px; height: 100px; }
-    .final-card-container app-carta { transform: scale(0.85); transform-origin: top center; }
-    
-    .toast-notification { width: 90%; left: 50%; right: auto; transform: translateX(-50%); bottom: 20px; }
+  .pack-item {
+    min-height: 318px;
+  }
+
+  .pack-image-container {
+    min-height: 200px;
+  }
+
+  .pack-top-title {
+    font-size: 1rem;
+  }
+
+  .pack-price-pill {
+    font-size: 0.88rem;
+  }
+
+  .final-card-container app-carta {
+    transform: scale(0.66);
+    margin-bottom: -136px;
+  }
+
+  .player-details {
+    margin-top: 0;
+  }
+
+  .player-name {
+    font-size: 1.18rem;
+  }
+
+  .player-desc,
+  .habilidad-panel p {
+    font-size: 0.86rem;
+  }
 }

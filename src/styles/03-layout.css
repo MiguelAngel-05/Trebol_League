@@ -1,0 +1,97 @@
+/* =========================================================
+   TREBOL LEAGUE — LAYOUT GENERAL
+   ========================================================= */
+
+/* Contenedor principal de pantalla */
+.main-container {
+  width: 100%;
+  min-height: 100dvh;
+  background-image: url("/Fondos/FondoEstandar.webp");
+  background-color: rgba(10, 20, 15, 0.9);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Área de contenido estándar */
+.content-area {
+  margin-top: 190px;
+  padding: 0 var(--tl-space-page) 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Paneles de cristal reutilizables */
+.glass-panel,
+.calendar-glass-panel,
+.panel-privados,
+.panel-chat {
+  background: var(--tl-bg-panel);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--tl-border-soft);
+  box-shadow: var(--tl-shadow-panel);
+}
+
+/* Panel principal tipo tarjeta */
+.calendar-glass-panel {
+  border-radius: var(--tl-radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  animation: slideInUp 0.6s ease forwards;
+}
+
+/* Paneles laterales / de app */
+.panel-privados,
+.panel-chat {
+  border-radius: var(--tl-radius-xl);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideInUp 0.6s ease forwards;
+}
+
+/* Cabecera interna de panel */
+.panel-header {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.panel-header h2 {
+  margin: 0;
+  color: var(--tl-white);
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* Layout de dos columnas usado en mensajes y pantallas similares */
+.two-column-layout,
+.mensajes-layout {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  margin-top: 190px;
+  height: calc(100dvh - 230px);
+  padding: 0 var(--tl-space-page) 30px;
+}
+
+.panel-privados {
+  flex: 6;
+}
+
+.panel-chat {
+  flex: 4;
+}

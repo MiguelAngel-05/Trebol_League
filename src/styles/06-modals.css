@@ -1,0 +1,84 @@
+/* =========================================================
+   TREBOL LEAGUE — MODALES GLOBALES
+   ========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.modal-content {
+  background: linear-gradient(145deg, #1f3327 0%, #0f1a14 100%);
+  border: 1px solid var(--tl-border-green);
+  border-radius: var(--tl-radius-xl);
+  padding: 30px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: var(--tl-shadow-modal), 0 0 20px rgba(46, 213, 115, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--tl-border-soft);
+  padding-bottom: 15px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--tl-white);
+}
+
+.modal-body {
+  color: var(--tl-white);
+}
+
+.modal-footer {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.close-btn {
+  color: #888;
+  font-size: 2.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--tl-red);
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* Variante de modal destructivo */
+.modal-content--danger {
+  border-color: var(--tl-red);
+  box-shadow: 0 0 30px rgba(255, 71, 87, 0.2);
+}
+
+.modal-title--danger {
+  color: var(--tl-red);
+}
+
+.modal-title--success {
+  color: var(--tl-green);
+}

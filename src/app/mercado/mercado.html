@@ -78,11 +78,21 @@
 
         <div class="players-list-container">
           <div class="list-header">
-            <span style="flex: 2;">Jugador</span>
-            <span style="flex: 1; text-align: right;">Precio de Salida</span>
+            <span class="list-col-player">Jugador</span>
+            <span class="list-col-price">Precio de Salida</span>
+          </div>
+          <div *ngIf="isLoading" class="loading-state">
+            <div class="loading-orb">
+              <span>🍀</span>
+            </div>
+
+            <div class="loading-copy">
+              <h3>Actualizando mercado</h3>
+              <p>Estamos sincronizando jugadores, pujas y últimas operaciones</p>
+            </div>
           </div>
 
-          <div class="list-scroll" [class.fade-out]="isAnimatingFilter">
+          <div class="list-scroll" [class.fade-out]="isAnimatingFilter" *ngIf="!isLoading">
             
             <div
               class="player-row"
@@ -166,7 +176,7 @@
         <span class="close-btn" (click)="cerrarModales()">&times;</span>
       </div>
       <div class="modal-body">
-        <div class="player-summary" style="margin-bottom: 15px;">
+        <div class="player-summary">
           <div class="team-token large">
             <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="team-img">
           </div>
@@ -209,7 +219,7 @@
         <span class="close-btn" (click)="cerrarModales()">&times;</span>
       </div>
       <div class="modal-body">
-        <div class="player-summary" style="margin-bottom: 15px;">
+        <div class="player-summary">
           <div class="team-token large">
             <img [src]="obtenerRutaEscudo(jugadorSeleccionado.equipo)" class="team-img">
           </div>

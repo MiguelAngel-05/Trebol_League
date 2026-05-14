@@ -29,7 +29,7 @@
     <div class="panel-privados">
       <div class="panel-header">
         <h2>Buzón Privado</h2>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div class="panel-header-actions">
           <span class="badge-contador" *ngIf="sinLeerCount > 0">{{ sinLeerCount }} Sin leer</span>
           <button class="btn-clear" (click)="abrirModalBorrarBuzon()" *ngIf="mensajesPrivados.length > 0">🗑️ Vaciar</button>
         </div>

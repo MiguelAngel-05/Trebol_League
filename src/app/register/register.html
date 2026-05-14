@@ -58,9 +58,9 @@
                     @for (rule of passwordRules; track $index) {
                         <p class="ValContra">
                             @if (rule.pattern.test(contra?.value || '')) {
-                                <span style="color:#2ed573">✔ {{rule.label}}</span>
+                                <span class="rule-valid">✔ {{rule.label}}</span>
                             } @else {
-                                <span style="color:#777">• {{rule.label}}</span> 
+                                <span class="rule-empty">• {{rule.label}}</span> 
                             }
                         </p>
                     }
@@ -94,7 +94,7 @@
                     <span class="errorNoCoincide">Los correos no coinciden</span>
                 }
                 @if (registerForm.errors?.['noCoincide'] && (contraRep?.touched || contraRep?.dirty)) {
-                    <span class="errorNoCoincide" style="margin-top: 5px;">Las contraseñas no coinciden</span>
+                    <span class="errorNoCoincide errorsNoCoincide-spaced">Las contraseñas no coinciden</span>
                 }
             </div>
 
