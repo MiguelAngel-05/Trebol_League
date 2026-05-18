@@ -1,0 +1,67 @@
+@if (mostrarBoton) {
+  <button class="pwa-floating-btn" (click)="abrirAyuda()" title="Instalar Trebol League">
+    📲
+  </button>
+}
+
+@if (mostrarModal) {
+  <div class="pwa-modal-overlay" (click)="cerrarModal()">
+    <div class="pwa-modal" (click)="$event.stopPropagation()">
+
+      <button class="pwa-close" (click)="cerrarModal()">×</button>
+
+      <div class="pwa-icon">📲</div>
+
+      <h2>Instala Trebol League</h2>
+
+      @if (esIOS) {
+        <p>
+          En iPhone o iPad puedes añadir Trebol League a tu pantalla de inicio.
+        </p>
+
+        <div class="pwa-steps">
+          <div class="pwa-step">
+            <span>1</span>
+            Pulsa el botón <strong>Compartir</strong> de Safari
+          </div>
+
+          <div class="pwa-step">
+            <span>2</span>
+            Elige <strong>Añadir a pantalla de inicio</strong>
+          </div>
+
+          <div class="pwa-step">
+            <span>3</span>
+            Pulsa <strong>Añadir</strong>
+          </div>
+        </div>
+      } @else {
+        <p>
+          Puedes instalar Trebol League como una app para abrirla más rápido y sin buscarla en el navegador.
+        </p>
+
+        <div class="pwa-steps">
+          <div class="pwa-step">
+            <span>1</span>
+            Pulsa el icono de instalación del navegador
+          </div>
+
+          <div class="pwa-step">
+            <span>2</span>
+            Confirma <strong>Instalar</strong>
+          </div>
+
+          <div class="pwa-step">
+            <span>3</span>
+            Abre Trebol League desde tu escritorio o pantalla de inicio
+          </div>
+        </div>
+      }
+
+      <button class="pwa-main-btn" (click)="cerrarModal()">
+        Entendido
+      </button>
+
+    </div>
+  </div>
+}
