@@ -1585,6 +1585,10 @@
   .ranking-row {
     grid-template-columns: 56px minmax(160px, 1.8fr) repeat(5, 54px) 78px;
   }
+
+  .club-modal {
+    width: min(94vw, 940px);
+  }
 }
 
 @media (max-width: 992px) {
@@ -1592,14 +1596,18 @@
     height: auto;
     min-height: 100dvh;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .content-area {
+    width: 100%;
+    min-height: 0;
     overflow: visible;
   }
 
   .modern-panel {
     min-height: auto;
+    overflow: visible;
   }
 
   .modern-tabs {
@@ -1607,6 +1615,15 @@
     overflow-y: hidden;
     flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .modern-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .modern-tabs::-webkit-scrollbar-thumb {
+    background: rgba(46, 213, 115, 0.35);
+    border-radius: 999px;
   }
 
   .m-tab {
@@ -1644,10 +1661,6 @@
     overflow: visible;
   }
 
-  .club-modal {
-    width: min(94vw, 900px);
-  }
-
   .stats-bento {
     grid-template-columns: 1fr;
   }
@@ -1660,32 +1673,58 @@
 @media (max-width: 768px) {
   .main-container {
     display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
     min-height: 100dvh;
     padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 
   .content-area {
+    width: 100%;
+    min-width: 0;
     padding: 0;
     margin-top: 0;
+    overflow: visible;
   }
 
   .modern-panel {
+    width: 100%;
+    min-width: 0;
     border-radius: 18px;
+    overflow: hidden;
   }
 
   .modern-tabs {
     padding-bottom: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
   }
 
   .m-tab {
-    min-width: 145px;
+    flex: 0 0 auto;
+    min-width: 142px;
     padding: 14px 12px;
-    font-size: 0.86rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
   }
 
   .m-content {
+    width: 100%;
+    min-width: 0;
     padding: 16px;
+    box-sizing: border-box;
+    overflow: visible;
   }
+
+  /* =========================================================
+     LISTA GENERAL / RANKING JORNADA
+     ========================================================= */
 
   .user-row {
     display: grid;
@@ -1708,6 +1747,7 @@
 
   .user-info {
     width: calc(100% - 52px);
+    min-width: 0;
   }
 
   .avatar-container {
@@ -1717,6 +1757,7 @@
   }
 
   .username {
+    max-width: 100%;
     font-size: 1rem;
   }
 
@@ -1756,86 +1797,283 @@
     font-size: 1.05rem;
   }
 
-  .modern-list-container.ranking-list,
+  /* =========================================================
+     TABLAS MOBILE — ALINEACIONES Y CLASIFICACIÓN CLUBES
+     ========================================================= */
+
   .modern-list-container {
+    width: 100%;
+    min-width: 0;
     overflow-x: auto;
     overflow-y: visible;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .modern-list-container::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .modern-list-container::-webkit-scrollbar-thumb {
+    background: rgba(46, 213, 115, 0.35);
+    border-radius: 999px;
   }
 
   .list-header,
   .list-row {
-    min-width: 620px;
+    width: 660px;
+    min-width: 660px;
+    grid-template-columns: minmax(180px, 1.8fr) 58px minmax(104px, 0.9fr) minmax(190px, 1.1fr) 58px;
+    gap: 8px;
+  }
+
+  .list-header {
+    padding: 11px 12px;
+    font-size: 0.68rem;
+  }
+
+  .list-body {
+    width: 660px;
+    min-width: 660px;
+    overflow: visible;
+    padding: 10px;
+  }
+
+  .list-row {
+    padding: 11px 12px;
+  }
+
+  .col-stats {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .stat-pill {
+    min-height: 26px;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
+
+  .price-tag {
+    font-size: 0.78rem;
+  }
+
+  .pts-number {
+    font-size: 0.95rem;
+  }
+
+  .ranking-list {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
   }
 
   .ranking-header,
   .ranking-row {
-    min-width: 700px;
+    width: 720px;
+    min-width: 720px;
+    grid-template-columns: 52px minmax(170px, 1.6fr) repeat(5, 54px) 78px;
+    gap: 8px;
   }
 
+  .ranking-list .list-body {
+    width: 720px;
+    min-width: 720px;
+  }
+
+  .ranking-row .rank-badge {
+    position: static;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    font-size: 0.82rem;
+    border-radius: 11px;
+  }
+
+  .club-shield {
+    width: 30px;
+    height: 30px;
+  }
+
+  .club-name {
+    font-size: 0.88rem;
+  }
+
+  .col-mini,
+  .col-total,
+  .col-rank {
+    font-size: 0.82rem;
+  }
+
+  /* =========================================================
+     MODAL CLUB — ARREGLO SCROLL MOBILE
+     ========================================================= */
+
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .modal-content.club-modal,
   .club-modal {
     width: 100%;
-    height: 92dvh;
+    height: 94dvh;
     max-width: none;
-    max-height: 92dvh;
-    border-radius: 20px 20px 0 0;
-  }
-
-  .club-hero-section {
-    min-height: auto;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    text-align: center;
-    padding: 28px 54px 22px 18px;
-  }
-
-  .club-shield-frame {
-    width: 104px;
-    height: 104px;
-    margin-inline: auto;
-    border-radius: 22px;
-  }
-
-  .big-shield {
-    width: 78px;
-    height: 78px;
-  }
-
-  .club-title {
-    font-size: 1.55rem;
-  }
-
-  .lore-box {
-    text-align: left;
+    max-height: 94dvh;
+    margin: 0;
+    border-radius: 22px 22px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .club-close-btn {
     right: 12px;
     top: 10px;
+    z-index: 30;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    font-size: 1.8rem;
+  }
+
+  .club-hero-section {
+    flex: 0 0 auto;
+    min-height: auto;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+    text-align: left;
+    padding: 22px 56px 18px 16px;
+  }
+
+  .club-shield-frame {
+    width: 76px;
+    height: 76px;
+    margin: 0;
+    border-radius: 18px;
+  }
+
+  .big-shield {
+    width: 58px;
+    height: 58px;
+  }
+
+  .club-kicker {
+    margin-bottom: 6px;
+    font-size: 0.62rem;
+  }
+
+  .club-title {
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+    line-height: 1.05;
+  }
+
+  .lore-box {
+    padding: 10px 12px;
+    text-align: left;
+    gap: 8px;
+  }
+
+  .quote-icon {
+    font-size: 1.25rem;
+  }
+
+  .club-lore {
+    font-size: 0.78rem;
+    line-height: 1.35;
   }
 
   .layout-modal-body {
-    height: calc(92dvh - 260px);
-    padding: 16px;
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    padding: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   .club-tabs-container {
+    position: sticky;
+    top: 0;
+    z-index: 12;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
     overflow-x: auto;
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(8px);
+    -webkit-overflow-scrolling: touch;
   }
 
   .club-tab {
     flex: 0 0 auto;
-    min-width: 126px;
+    min-width: 112px;
+    min-height: 38px;
+    font-size: 0.78rem;
   }
+
+  /* =========================================================
+     MODAL CLUB — PLANTILLA
+     ========================================================= */
 
   .stats-bento {
     grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .club-stat-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .club-stat-card .stat-icon {
+    font-size: 1.45rem;
+  }
+
+  .stat-label {
+    font-size: 0.66rem;
+  }
+
+  .stat-player {
+    font-size: 0.88rem;
+  }
+
+  .stat-number {
+    font-size: 0.78rem;
+  }
+
+  .roster-header-container,
+  .section-header-simple {
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .roster-title {
+    font-size: 1.08rem;
+  }
+
+  .roster-count {
+    font-size: 0.7rem;
+    padding: 4px 9px;
+  }
+
+  .roster-list {
+    overflow: visible;
+    padding-right: 0;
+    padding-bottom: 12px;
   }
 
   .club-player-row {
     grid-template-columns: 1fr;
     gap: 10px;
+    padding: 12px;
   }
 
   .pr-left,
@@ -1844,13 +2082,28 @@
     flex-wrap: wrap;
   }
 
-  .last-match-score {
-    grid-template-columns: 1fr;
+  .pr-right {
+    justify-content: flex-start;
   }
 
-  .last-match-columns {
-    grid-template-columns: 1fr;
+  .pr-center .player-name {
+    font-size: 0.92rem;
   }
+
+  .estado-baja {
+    white-space: normal;
+    line-height: 1.25;
+  }
+
+  .mini-stat {
+    min-width: auto;
+    font-size: 0.72rem;
+    padding: 5px 7px;
+  }
+
+  /* =========================================================
+     MODAL CLUB — NOTICIAS
+     ========================================================= */
 
   .club-news-layout {
     display: flex;
@@ -1860,7 +2113,14 @@
   }
 
   .club-news-section {
+    min-height: auto;
+    padding: 13px;
+    border-radius: 16px;
     overflow: visible;
+  }
+
+  .section-subtitle {
+    font-size: 0.74rem;
   }
 
   .bajas-list,
@@ -1872,10 +2132,24 @@
   .baja-card {
     align-items: flex-start;
     flex-direction: column;
+    gap: 10px;
+    padding: 12px;
   }
 
   .baja-main {
     width: 100%;
+    min-width: 0;
+  }
+
+  .baja-player {
+    min-width: 0;
+  }
+
+  .baja-player .player-name,
+  .baja-desc {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
 
   .baja-meta {
@@ -1883,6 +2157,75 @@
     justify-content: flex-start;
   }
 
+  .news-item {
+    padding: 12px;
+  }
+
+  .news-item p {
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  .compact-empty {
+    min-height: 120px;
+    padding: 18px;
+  }
+
+  /* =========================================================
+     MODAL CLUB — ÚLTIMO PARTIDO
+     ========================================================= */
+
+  .last-match-card {
+    overflow: visible;
+  }
+
+  .last-match-score {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px;
+  }
+
+  .last-match-score span {
+    white-space: normal;
+  }
+
+  .last-match-score strong {
+    font-size: 1.35rem;
+  }
+
+  .last-match-columns {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .last-match-row {
+    padding: 10px 11px;
+  }
+
+  /* =========================================================
+     MODAL USUARIO / MENSAJE
+     ========================================================= */
+
+  .modal-content:not(.club-modal) {
+    width: calc(100vw - 24px);
+    max-height: 88dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-user-heading {
+    min-width: 0;
+  }
+
+  .modal-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
 }
 
 /* =========================================================
@@ -1891,8 +2234,9 @@
 
 @media (max-width: 480px) {
   .m-tab {
-    min-width: 132px;
-    font-size: 0.78rem;
+    min-width: 128px;
+    padding: 13px 10px;
+    font-size: 0.76rem;
   }
 
   .m-content {
@@ -1925,41 +2269,91 @@
   }
 
   .list-header,
-  .list-row {
-    min-width: 590px;
+  .list-row,
+  .list-body {
+    width: 620px;
+    min-width: 620px;
   }
 
   .ranking-header,
-  .ranking-row {
-    min-width: 660px;
+  .ranking-row,
+  .ranking-list .list-body {
+    width: 680px;
+    min-width: 680px;
+  }
+
+  .club-modal {
+    height: 95dvh;
+    max-height: 95dvh;
+  }
+
+  .club-hero-section {
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 11px;
+    padding: 18px 50px 14px 14px;
+  }
+
+  .club-shield-frame {
+    width: 62px;
+    height: 62px;
+    border-radius: 15px;
+  }
+
+  .big-shield {
+    width: 48px;
+    height: 48px;
   }
 
   .club-title {
-    font-size: 1.5rem;
+    font-size: 1.12rem;
+  }
+
+  .club-lore {
+    font-size: 0.72rem;
+  }
+
+  .lore-box {
+    padding: 8px 10px;
   }
 
   .layout-modal-body {
-    padding: 14px;
+    padding: 12px;
   }
 
-  .club-title {
-    font-size: 1.35rem;
-  }
-
-  .layout-modal-body {
-    height: calc(92dvh - 280px);
-    padding: 14px;
+  .club-tab {
+    min-width: 104px;
+    min-height: 36px;
+    font-size: 0.74rem;
   }
 
   .club-stat-card {
-    padding: 13px;
+    padding: 11px;
   }
 
   .roster-title {
-    font-size: 1.15rem;
+    font-size: 1rem;
+  }
+
+  .roster-count {
+    font-size: 0.66rem;
   }
 
   .mini-stat {
-    font-size: 0.74rem;
+    font-size: 0.68rem;
+  }
+
+  .badge {
+    min-width: 36px;
+    padding: 5px 7px;
+    font-size: 0.7rem;
+  }
+
+  .baja-pill {
+    font-size: 0.68rem;
+    padding: 4px 7px;
+  }
+
+  .news-item p {
+    font-size: 0.82rem;
   }
 }
