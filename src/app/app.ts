@@ -1,10 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Login } from "./login/login";
 import { HttpClientModule } from '@angular/common/http';
 import { PwaInstall } from './pwa-install/pwa-install';
-
-
+import { AppUpdateService } from './services/app-update';
 
 @Component({
   selector: 'app-root',
@@ -14,4 +13,10 @@ import { PwaInstall } from './pwa-install/pwa-install';
 })
 export class App {
   protected readonly title = signal('Trebol_League');
+
+  private appUpdateService = inject(AppUpdateService);
+
+  constructor() {
+    this.appUpdateService.init();
+  }
 }
